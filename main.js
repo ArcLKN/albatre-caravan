@@ -181,6 +181,6 @@ var Phases = [
 	"travel", // Choose caravan destination. Caravan can stay on the same location.
 	"endResolve" //  Meeting the needs of the crew. If the caravan doesn't move it reduces the caravan water needs by 2. Each lacking water unit causes the death of one person. If crewTotal = 0, game over.
 	// famineTurn resolves
-	]
+];
 var gamePhase;
 var moralDecrease: 0.05;

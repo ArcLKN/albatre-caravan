@@ -150,7 +150,7 @@ var locations = [
 			price: 200
 		}
 		],
-		sellableGoods: [{
+		sellableGoods: [
 		{
 			type: "weapon",
 			name: "Sword",
@@ -184,3 +184,19 @@ var Phases = [
 ];
 var gamePhase;
 var moralDecrease: 0.05;
+
+var listOfNames = {
+	firstname: {
+		male: ["Jonathan", "Ethan", "Raphael"],
+		female: ["Neyla", "Joanne"]
+	},
+	surname: ["Joestar"]
+};
+var genderArr = ["male", "female"];
+function defineUnit () {
+	var newUnit = {};
+	newUnit["gender"] = genderArr[Math.floor(genderArr.length * Math.random())];
+	newUnit["firstName"] = listOfNames["firstname"][newUnit["gender"]][Math.floor(listOfNames["firstname"][newUnit["gender"]].length * Math.random())];
+	newUnit["surname"] = listOfNames["surname"][Math.floor(listOfNames["surname"].length * Math.random())];
+	return newUnit;
+}

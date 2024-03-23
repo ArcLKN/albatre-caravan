@@ -150,7 +150,7 @@ var locations = [
 			price: 200
 		}
 		],
-		sellableGoods: [{
+		sellableGoods: [
 		{
 			type: "weapon",
 			name: "Sword",
@@ -177,10 +177,26 @@ var probabilityRandomOasis = 0.10;
 var Phases = [
 	"event", // Determine if an event is activated such as fight etc.
 	"assignement", // Every crew assignement goes back to 0, apart of scouts. 
-	"resolves", // After assignement, the collect is executed and the decrease of the location's yield too.
+	"resolves", // After assignement, the collect of ressources is executed depending of assignements and the decrease of the location's yield too.
 	"travel", // Choose caravan destination. Caravan can stay on the same location.
 	"endResolve" //  Meeting the needs of the crew. If the caravan doesn't move it reduces the caravan water needs by 2. Each lacking water unit causes the death of one person. If crewTotal = 0, game over.
 	// famineTurn resolves
 ];
 var gamePhase;
 var moralDecrease: 0.05;
+
+var listOfNames = {
+	firstname: {
+		male: ["Jonathan", "Ethan", "Raphael"],
+		female: ["Neyla", "Joanne"]
+	},
+	surname: ["Joestar"]
+};
+var genderArr = ["male", "female"];
+function defineUnit () {
+	var newUnit = {};
+	newUnit["gender"] = genderArr[Math.floor(genderArr.length * Math.random())];
+	newUnit["firstName"] = listOfNames["firstname"][newUnit["gender"]][Math.floor(listOfNames["firstname"][newUnit["gender"]].length * Math.random())];
+	newUnit["surname"] = listOfNames["surname"][Math.floor(listOfNames["surname"].length * Math.random())];
+	return newUnit;
+}

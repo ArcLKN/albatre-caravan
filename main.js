@@ -21,6 +21,7 @@ var neededPorterage; // Weight of all the items transported by the caravan.
 function moraleYieldDef() {}
 // The severals yields decrease by one if harvested each turn.
 var playerLocation;
+var possibleDestinations;
 var locations = [
 	{
 		type: "nil_shore",
@@ -198,5 +199,15 @@ function defineUnit () {
 	newUnit["gender"] = genderArr[Math.floor(genderArr.length * Math.random())];
 	newUnit["firstName"] = listOfNames["firstname"][newUnit["gender"]][Math.floor(listOfNames["firstname"][newUnit["gender"]].length * Math.random())];
 	newUnit["surname"] = listOfNames["surname"][Math.floor(listOfNames["surname"].length * Math.random())];
+	newUnit["age"] = 18 + Math.floor(60 * Math.random());
 	return newUnit;
+}
+
+function defineNewDestinations() {
+	possibleDestinations = []
+	for (let i = 0; i < locations[playerLocation]["possibleDestinations"].length; i++) {
+		if locations[playerLocation]["possibleDestinations"][i]["luck"] >= Math.random() {
+			possibleDestinations.push(locations[playerLocation]["possibleDestinations"][i]["type"])
+		}
+	}
 }

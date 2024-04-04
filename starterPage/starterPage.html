@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="styles.css">
+
   <title>Albatre Caravan</title>
   <style>
     body {
@@ -19,7 +21,7 @@
     }
     .title {
       font-size: 48px; /* Increase font size */
-      color: #fff; /* Change text color to white */
+      color: #f4150d; /* Change text color to white */
       margin: 20px 0; /* Add margin to the top and bottom */
     }
     .container {
@@ -53,19 +55,26 @@
   </style>
 </head>
 <body>
-  <h1 class="title">Albatre Caravan</h1> <!-- Mega Title -->
-  <div class="container">
-    <div class="box" onclick="location.href='#'">
+  <div class="box-title">
+    <h2>Title</h2>
+</div>
+  <audio controls autoplay>
+    <source src="nassam.mp3" type="audio/mpeg">
+  </audio>
+  <div class="container-style">
+    <div class="box-style"> <!-- Play -->
       <h2>Play</h2>
     </div>
-    <div class="box" onclick="location.href='#'">
-      <h2>Settings &#9881;</h2>
+    <div class="box-style"> <!-- Settings -->
+      <h2>Settings</h2>
     </div>
-    <div class="box" onclick="location.href='#'">
-      <h2>Quit &#128545;</h2>
+    <div class="box-style"> <!-- Exit -->
+      <h2>Exit</h2>
     </div>
-    <div class="box" onclick="location.href='#'">
+    <div class="box-credits"> <!-- Credits -->
       <h2>Credits</h2>
     </div>
+  </div>
+  
 </body>
 </html>

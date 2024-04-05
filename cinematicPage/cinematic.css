@@ -1,0 +1,18 @@
+body {
+background-color: black;
+text-align: center;
+margin: 0px 0px 0px 0px;
+padding: 0px 0px 0px 0px;
+}
+
+img {
+  height: 90vh
+}
+
+div[id='top footer'] {
+  height: 5vh;
+}
+
+div[id='bottom footer'] {
+  height: 5vh;
+}

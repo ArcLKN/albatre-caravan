@@ -1,4 +1,4 @@
-var cinematicLength = [7, 15];
+var cinematicLength = [0, 15];
 var storyNumber = 0;
 var interval = 3000;
 var ScreenImage = document.getElementById("center-image");
@@ -9,7 +9,7 @@ function changeImage(storyNumber) {
     if (++currentPos > cinematicLength[storyNumber]) {
         if (storyNumber == 0) {
             storyNumber++;
-            window.location.href = "html.html";
+            window.location.href = "../mainPage/gamePage.html";
         }
     }
     ScreenImage.src = "Images/cine-"+String(storyNumber+1)+"-"+String(currentPos)+".png";

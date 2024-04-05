@@ -11,18 +11,18 @@ function save(varName, value) {
 
 // Used to get all the new values from the sessionStorage.
 function loadSessionStorage() {
-	var crewTotal = sessionStorage.getItem("crewTotal")
-	var crewTypes = sessionStorage.getItem("crewTypes")
-	var idleCrew = sessionStorage.getItem("idleCrew")
-	var morale = sessionStorage.getItem("morale")
-	var money = sessionStorage.getItem("money")
-	var authority = sessionStorage.getItem("authority")
-	var water = sessionStorage.getItem("water")
-	var numberOfTurns = sessionStorage.getItem("numberOfTurns")
-	var famineTurns = sessionStorage.getItem("famineTurns")
-	var inventory = sessionStorage.getItem("inventory")
-	var playerLocation = sessionStorage.getItem("playerLocation")
-	var gatherer = sessionStorage.getItem("gatherer")
+	crewTotal = sessionStorage.getItem("crewTotal")
+	crewTypes = JSON.parse(sessionStorage.getItem("crewTypes"))
+	idleCrew = sessionStorage.getItem("idleCrew")
+	morale = sessionStorage.getItem("morale")
+	money = sessionStorage.getItem("money")
+	authority = sessionStorage.getItem("authority")
+	water = sessionStorage.getItem("water")
+	numberOfTurns = sessionStorage.getItem("numberOfTurns")
+	famineTurns = sessionStorage.getItem("famineTurns")
+	inventory = JSON.parse(sessionStorage.getItem("inventory"))
+	playerLocation = JSON.parse(sessionStorage.getItem("playerLocation"))
+	gatherer = JSON.parse(sessionStorage.getItem("gatherer"))
 }
 
 // All the variables we want to save and share through every JS files.
@@ -218,7 +218,7 @@ var Phases = [
 	// famineTurn resolves
 ];
 var gamePhase;
-var moralDecrease: 0.05;
+var moralDecrease = 0.05;
 var listOfNames = {
 	firstname: {
 		male: ["Jonathan", "Ethan", "Raphael"],
@@ -266,10 +266,10 @@ function onLoad() {
 	tempIDs.push("narration_text");
 	tempIDs.push("narration_button");
 	centerImage = document.getElementById("center-image");
-	centerImage.src = "cine-1-7.png";
+	centerImage.src = "Images/cine-1-7.png";
 	currentTextNumber = 1;
 	currentTextPos = 0;
-	var node = document.getElementById("bottom menu");
+	var node = document.getElementById("actionMenu");
 	var newText = document.createElement("p");
 	newText.setAttribute("id", "narration_text");
 	newText.textContent = textList["id_"+String(currentTextNumber)][currentTextPos];
@@ -282,6 +282,7 @@ function onLoad() {
 	node.appendChild(newText);
 	node.appendChild(newButton);
 	loadSessionStorage();
+	console.log(playerLocation)
 }
 
 // Create item depending of itemName.
@@ -314,7 +315,7 @@ function defineUnit () {
 
 function yourTurn(phase) {
 	console.log("YOUR TURN");
-	var node = document.getElementById("bottom menu");
+	var node = document.getElementById("actionMenu");
 	if (phase == "special") {
 		var newButton = document.createElement('button');
 		tempIDs.push("yourTurn_trade");
@@ -350,7 +351,7 @@ function yourTurn(phase) {
 	}
 	else if (phase == "travel") {
 		tempIDs.push("yourTurn_travel");
-		var node = document.getElementById("bottom menu");
+		var node = document.getElementById("actionMenu");
 		var newButton = document.createElement('button');
 		newButton.setAttribute("id", "yourTurn_travel");
 		newButton.textContent = "Travel";
@@ -382,7 +383,7 @@ function changeLocation(button_id) {
 // Function: define which destinations will be avaible to the player and creates the buttons associated with those destinations.
 function defineNewDestinations(changeMenuCallback) {
 	tempIDs.push("possibleDestinations");
-	var node = document.getElementById("bottom menu");
+	var node = document.getElementById("actionMenu");
 	var possibleDestinationText = document.createElement("h1");
 	possibleDestinationText.innerHTML = "Possible destinations: ";
 	possibleDestinationText.setAttribute("id", "possibleDestinations");
@@ -419,7 +420,7 @@ function changeTextNarration() {
 	if (++currentTextPos >= textList["id_"+String(currentTextNumber)].length) {
 		removeTempIDs();
 		centerImage = document.getElementById("center-image");
-		centerImage.src = "ancientEgyptArt.jpg";
+		centerImage.src = "Images/Illustration.jpg";
 		changeMenu("special");
 	}
 	else if (currentTextPos == textList["id_"+String(currentTextNumber)].length -1) {
@@ -444,7 +445,7 @@ function gatherResolution () {
 		var ressourceObtained = document.createElement("p");
 		ressourceObtained.innerHTML = "No one was assigned to ressource gathering this turn!"
 		ressourceObtained.setAttribute("id", "nothingObtained");
-		document.getElementById("bottom menu").appendChild(ressourceObtained);
+		document.getElementById("actionMenu").appendChild(ressourceObtained);
 		tempIDs.push("nothingObtained");
 	}
 
@@ -454,7 +455,7 @@ function gatherResolution () {
 		var newRessources = gatherer[job]*playerLocation["gatheringValues"][job+"Yield"];
 		ressourceObtained.innerHTML = String(newRessources) + " " + Capitalize(job)+" obtained from "+gatherer[job]+" people !";
 		ressourceObtained.setAttribute("id", job+"Obtained");
-		document.getElementById("bottom menu").appendChild(ressourceObtained);
+		document.getElementById("actionMenu").appendChild(ressourceObtained);
 		tempIDs.push(job+"Obtained");
 
 		playerLocation["gatheringValues"][job+"Yield"]-=1;
@@ -485,10 +486,22 @@ function gatherResolution () {
 	continueButton.addEventListener("click", function () {changeMenu("ressourcesConsumption");})
 	continueButton.setAttribute("id", "continueButton");
 	continueButton.innerHTML = "Continue";
-	document.getElementById("bottom menu").appendChild(continueButton);
+	document.getElementById("actionMenu").appendChild(continueButton);
 }
 
-nt.getElementById(VID+"Input");
+function manageDeployDistribution() {
+	return yourTurn("gathering");
+}
+
+// Function to check if player can assign more or less units to each yield.
+// VID is the ressource yield the player want to assign units to, so it can be food, water or morale.
+// VValue is the new value given by the player to this yield.
+// I don't remember what V stands for.
+function checkRessource(VID, VValue) {
+	// First thing is to round the value in case player put a float, and user isn't supposed to assign a limb to such a task.
+    VValue = Math.round(VValue);
+    // From the VID we can search the corresponding node, bc the id of those input elements have the same format name_of_ressource + "Input".
+    var inputNode = document.getElementById(VID+"Input");
     // Then I'm making sure the VID is in those values. It's pretty useless but it is in can case we need specific actions for specific values. Might delete.
     if (["water", "food", "morale"].includes(VID)) {
     	// If it isn't, then I'm first checking bro isn't trying to put negative values, if he is then I'm putting the value back to what it was before.
@@ -512,7 +525,7 @@ nt.getElementById(VID+"Input");
 function manageGatherDistribution() {
 	["idleCrewText","tempDiv", "resolveButton"].forEach(e => tempIDs.push(e));
 
-	var bottomNode = document.getElementById("bottom menu");
+	var bottomNode = document.getElementById("actionMenu");
 
 	var idleCrewText = document.createElement("p");
 	idleCrewText.innerHTML = "Idle crew: "+String(idleCrew);
@@ -561,7 +574,7 @@ function manageGatherDistribution() {
 		newDiv.appendChild(tempLabel);
 		newDiv.appendChild(tempInput);
 	})
-	document.getElementById("bottom menu").appendChild(resolveButton);
+	document.getElementById("actionMenu").appendChild(resolveButton);
 }
 
 function changeMenu(newMenu="None") {

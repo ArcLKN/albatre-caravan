@@ -8,7 +8,7 @@ function save(varName, value) {
 }
 
 // Define starting values.
-function saveSessionStorage () {
+function initSessionStorage () {
 	// Number of people player has, thus number of people he can use.
 	save("crewTotal", 10);
 	// Distribution of the crew, the total can't be > crewTotal.
@@ -21,7 +21,22 @@ function saveSessionStorage () {
 	save("numberOfTurns", 0);
 	save("famineTurns", 0);
 	save("inventory", [{name: "food", quantity: 0}]);
-	save("playerLocation", 10);
+	save("playerLocation", {
+		type: "desert",
+		name: "Desert",
+		isTradable: false,
+		description: "Bunch of sand.",
+		gatheringValues: {
+		},
+		possibleEvents: [],
+		possibleDestinations: [
+			{type: "village", luck: 0.1}, 
+			{type: "nil_shore", luck: 0.3}, 
+			{type: "desert", luck: 1}, 
+			{type: "oasis", luck: 0.1}, 
+			{type: "desert_city", luck: 0.1}
+			]
+	});
 	save("gatherer", {water: 0,food: 0,morale: 0})
 }
 
@@ -30,3 +45,4 @@ function goPlay() {
 }
 
 document.getElementById("play").onclick = goPlay;
+initSessionStorage();

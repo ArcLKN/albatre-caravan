@@ -26,29 +26,33 @@ var locations = [
 	{
 		type: "nil_shore",
 		name: "Nil shore",
-		isTradable: False,
+		isTradable: false,
 		description: "A fertile place escaping the harsh life of the desert. In this place you can freely gather high quantity of water and decent quantity of food.",
 		gatheringValues: {
 			waterYield: 3,
 			foodYield: 1
 		},
 		possibleEvents: [],
-		possibleDestinations: [{type: "village", luck = 0.5}, {type: "nil_shore", luck = 1}, {type: "desert", luck = 1}, {type: "fluvial_city", luck = 0.2}]
+		possibleDestinations: [
+		{type: "village", luck : 0.5}, 
+		{type: "nil_shore", luck : 1},
+		{type: "desert", luck : 1},
+		{type: "fluvial_city", luck : 0.2}]
 	},
 	{
 		type: "village",
 		name: "Village",
-		isTradable: True,
+		isTradable: true,
 		description: "A bunch of organized houses near the shore of the Nil assuring your caravan a bit of peace in the desert. Don't hesitate to find a local merchant to buy useful items for the lowest prices of the country.",
 		gatheringValues: {
 			waterYield: 2,
-			moraleYield: True
+			moraleYield: true
 		},
 		possibleEvents: [],
 		possibleDestinations: [
-			{type: "village", luck = 0.1}, 
-			{type: "nil_shore", luck = 0.8}, 
-			{type: "desert", luck = 1}
+			{type: "village", luck: 0.1}, 
+			{type: "nil_shore", luck: 0.8}, 
+			{type: "desert", luck: 1}
 			],
 		buyableGoods: [{
 			type: "food",
@@ -67,33 +71,33 @@ var locations = [
 	{
 		type: "desert",
 		name: "Desert",
-		isTradable: False,
+		isTradable: false,
 		description: "Bunch of sand.",
 		gatheringValues: {
 		},
 		possibleEvents: [],
 		possibleDestinations: [
-			{type: "village", luck = 0.1}, 
-			{type: "nil_shore", luck = 0.3}, 
-			{type: "desert", luck = 1}, 
-			{type: "oasis", luck = 0.1}, 
-			{type: "desert_city", luck = 0.1}
+			{type: "village", luck: 0.1}, 
+			{type: "nil_shore", luck: 0.3}, 
+			{type: "desert", luck: 1}, 
+			{type: "oasis", luck: 0.1}, 
+			{type: "desert_city", luck: 0.1}
 			]
 	},
 	{
 		type: "desert_city",
 		name: "Desert city",
-		isTradable: False,
+		isTradable: false,
 		description: "In the middle of the desert, majestic buildings made of polished sandstones rise from the sand welcoming your caravan.",
 		gatheringValues: {
-			moraleYield: True
+			moraleYield: true
 		},
 		possibleEvents: [],
 		possibleDestinations: [
-			{type: "nil_shore", luck = 0.3},
-			{type: "desert", luck = 1},
-			{type: "oasis", luck = 0.1},
-			{type: "desert_city", luck = 0.1}
+			{type: "nil_shore", luck: 0.3},
+			{type: "desert", luck: 1},
+			{type: "oasis", luck: 0.1},
+			{type: "desert_city", luck: 0.1}
 			],
 		buyableGoods: [{
 			type: "food",
@@ -120,17 +124,17 @@ var locations = [
 	{
 		type: "fluvial_city",
 		name: "Fluvial City",
-		isTradable: True,
+		isTradable: true,
 		description: "A city which whole economy resolves on the manufacture of writing materials from the papyrus plant, thanks to the fertility of the Nil shore.",
 		gatheringValues: {
-			waterYield: 3
-			moraleYield: True
+			waterYield: 3,
+			moraleYield: true
 		},
 		possibleEvents: [],
 		possibleDestinations: [
-			{type: "village", luck = 0.1}, 
-			{type: "nil_shore", luck = 1}, 
-			{type: "desert", luck = 1}
+			{type: "village", luck: 0.1}, 
+			{type: "nil_shore", luck: 1}, 
+			{type: "desert", luck: 1}
 			],
 		buyableGoods: [{
 			type: "food",
@@ -163,14 +167,14 @@ var locations = [
 	{
 		type: "oasis",
 		name: "Oasis",
-		isTradable: False,
+		isTradable: false,
 		description: "In the middle of the desert it's the closest thing to what you could call Paradise.",
 		gatheringValues: {
 			waterYield: 3,
 			foodYield: 3
 		},
 		possibleEvents: [],
-		possibleDestinations: [{type: "village", luck = 0.5}, {type: "nil_shore", luck = 1}, {type: "desert", luck = 1}, {type: "fluvial_city", luck = 0.2}]
+		possibleDestinations: [{type: "village", luck: 0.5}, {type: "nil_shore", luck: 1}, {type: "desert", luck: 1}, {type: "fluvial_city", luck: 0.2}]
 	}
 ];
 var probabilityRandomOasis = 0.10;
@@ -203,11 +207,66 @@ function defineUnit () {
 	return newUnit;
 }
 
+// Function: Erases all previously created buttons with certain id.
+function erasePreviousDestinations() {
+	// querySelectorAll : search for all entry in document with selected arguments
+	// arguments here are Id start with 'dest_'
+	// forEach takes each element returned by the query and remove them.
+	// e is each element and it applies what's after => to the e
+	document.querySelectorAll('[id^="dest_"]').forEach(e => e.remove());
+}
+
+// Function: Change player location and do what has to been done after the movement
+// TO BE MODIFIED -> not the same inner HTML
+function changeLocation(button_id, defineNewDestinationsCallback) {
+	// slice (cut the string in several part, here it deletes the 5 first caracters) the button id to get the right string.
+	playerLocation = button_id.slice(5);
+	document.getElementById("title").innerHTML = "Location: " + playerLocation;
+	erasePreviousDestinations();
+	defineNewDestinationsCallback();
+}
+
+// Function: define which destinations will be avaible to the player and creates the buttons associated with those destinations.
 function defineNewDestinations() {
-	possibleDestinations = []
-	for (let i = 0; i < locations[playerLocation]["possibleDestinations"].length; i++) {
-		if locations[playerLocation]["possibleDestinations"][i]["luck"] >= Math.random() {
-			possibleDestinations.push(locations[playerLocation]["possibleDestinations"][i]["type"])
+	document.getElementById("testText").innerHTML = "Possible destinations: "
+	possibleDestinations = [];
+	var playerLocationEntry;
+	// from actualPlayerLocation search possible Destinations
+	for (let i = 0; i < locations.length; i++) {
+		if (locations[i]["type"] == playerLocation) {
+			playerLocationEntry = locations[i]
+			break;
 		}
+	}
+	// For each destination roll a number to see if destination should be.
+	for (let i = 0; i < playerLocationEntry["possibleDestinations"].length; i++) {
+		if (playerLocationEntry["possibleDestinations"][i]["luck"] >= Math.random()) {
+			possibleDestinations.push(playerLocationEntry["possibleDestinations"][i]["type"]);
+		}
+	}
+	console.log(possibleDestinations)
+	// Create button for each destination.
+	for (var i = 0; i < possibleDestinations.length; i++) {
+		// TO BE MODIFIED -> ID will not be the same and text append too.
+		document.getElementById("testText").innerHTML = document.getElementById("testText").innerHTML + possibleDestinations[i];
+		if (i < (possibleDestinations.length - 1)) {
+			document.getElementById("testText").innerHTML = document.getElementById("testText").innerHTML + ", "
+		}
+		// Creates a new button entity.
+		const newButton = document.createElement('button');
+		// Gives the button a text content which is equal to name of the new destination.
+		newButton.textContent = possibleDestinations[i];
+		// Appends the button to the body of the document.
+		// TO BE MODIFIED -> We don't want to append it to the body of the doc.
+		document.body.appendChild(newButton);
+		// set attribute ID to dest_ + name of the destination to easily get the value back when the player click the button.
+		newButton.setAttribute("id", "dest_"+possibleDestinations[i]);
+		buttonID = "dest_"+possibleDestinations[i]
+		newButton.addEventListener('click', function() {
+			changeLocation(
+				this.id,
+				defineNewDestinations 
+				);
+		});
 	}
 }

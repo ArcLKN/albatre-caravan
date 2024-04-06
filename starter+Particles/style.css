@@ -1,0 +1,112 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url('ancient-egypt-wallpaper.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column; /* Set flex direction to column */
+  align-items: flex-start; /* Align items to the left */
+  height: 100vh;
+}
+.title {
+  font-size: 48px; /* Increase font size */
+  color: #c506ff; /* Change text color to white */
+  margin: 20px 0; /* Add margin to the top and bottom */
+}
+.container {
+  display: flex;
+  flex-direction: column; /* Set flex direction to column */
+  align-items: flex-start; /* Align to the left */
+  margin-left: 20px; /* Add some margin for spacing */
+}
+.box {
+  width: 250px;
+  height: 75px;
+  background-image: url('PlayButton2.png');
+  background-size: cover;
+  background-color: lightblue;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  margin-bottom: 20px;
+}
+.box:hover {
+  transform: scale(1.05);
+}
+.box:hover h2 {
+  color: burlywood;
+}
+.container-style {
+  display: flex;
+  flex-direction: column; /* Set flex direction to column */
+  align-items: flex-start; /* Align to the left */
+  margin-left: 20px; /* Add some margin for spacing */
+  margin-top: 75px; /* Increase the distance from the top */
+}
+.box-title {
+  font-size: 48px;
+  width: 400px;
+  height: 120px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  position: absolute;
+  top: 20px; /* Adjust as needed */
+  left: 50%; /* Position at the center horizontally */
+  transform: translateX(-50%); /* Center horizontally */
+  display: flex; /* Center text horizontally and vertically */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+.box-style {
+  width: 334px; /* Adjusted width */
+  height: 120px;
+  background-image: url('PlayButton2.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  margin-bottom: 20px;
+  display: flex; /* Center text horizontally and vertically */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+.box-style:hover {
+  transform: scale(1.05);
+}
+
+.box-style:hover h2 {
+  color: burlywood;
+}
+
+h2 {
+  color: #000;
+}
+
+.box-credits {
+  width: 334px;
+  height: 120px;
+  background-image: url('PlayButton2.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  position: absolute;
+  bottom: 20px; /* Adjust as needed */
+  right: 20px; /* Adjust as needed */
+  display: flex; /* Center text horizontally and vertically */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+

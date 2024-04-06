@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <style>
+    body, html {
+        margin: 0;
+        overflow: hidden;
+        height: 100%;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <title>Alabaster Caravan</title>
+</head>
+<body>
+  <div class="box-title">
+    <h2>Title</h2>
+  </div>
+  <audio controls autoplay>
+    <source src="nassam.mp3" type="audio/mpeg">
+  </audio>
+  <div class="container-style">
+    <div id="play" class="box-style"> <!-- Play -->
+      <h2>Play</h2>
+    </div>
+    <div class="box-style"> <!-- Settings -->
+      <h2>Settings</h2>
+    </div>
+    <div class="box-style"> <!-- Exit -->
+      <h2>Exit</h2>
+    </div>
+    <div id="credits" class="box-credits"> <!-- Credits -->
+      <h2>Credits</h2>
+    </div>
+  </div>
+  
+  <canvas id="canvas"></canvas>
+
+  
+  
+  <!-- Custom JavaScript for particle animation -->
+  <script src="particles.js"></script>
+</body>
+<script src="starterScript.js"></script>
+</html>

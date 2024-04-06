@@ -1,0 +1,78 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* GLOBAL */
+#roleTab {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    background-color: blue;
+}
+
+#role {
+    width: 20%;
+    height: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+#crewMembers {
+    width: 80%;
+    height: 100%;
+    background-color: white;
+}
+
+/* ROLES */
+
+#role h2 {
+    padding: 16px 0;
+    text-align: center;
+}
+
+#role button {
+    border: none;
+    padding: 16px;
+}
+
+#role button:hover {
+    background-color: grey;
+}
+
+/* CREW */
+
+#crewMembers h2 {
+    padding: 16px 0;
+    text-align: center;
+}
+
+.member {
+    box-sizing: border-box;
+    background-color: beige;
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.member img {
+    width: 40px;
+    height: 40px;
+}
+
+.member .member-about {
+    display: flex;
+}
+
+.member .member-about .description {
+    padding-left: 24px;
+}
+
+.member input[type="checkbox"] {
+    display: block;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+}

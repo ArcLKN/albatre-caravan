@@ -12,7 +12,7 @@ function changeImage(storyNumber) {
             window.location.href = "../mainPage/gamePage.html";
         }
     }
-    ScreenImage.src = "Images/cine-"+String(storyNumber+1)+"-"+String(currentPos)+".png";
+    ScreenImage.src = "../Images/cine-"+String(storyNumber+1)+"-"+String(currentPos)+".png";
 }
 
 changeImage(0);

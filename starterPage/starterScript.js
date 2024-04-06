@@ -31,7 +31,7 @@ function initSessionStorage () {
 		possibleEvents: [],
 		possibleDestinations: [
 			{type: "village", luck: 0.1}, 
-			{type: "nil_shore", luck: 0.3}, 
+			{type: "nil_shore", luck: 1}, 
 			{type: "desert", luck: 1}, 
 			{type: "oasis", luck: 0.1}, 
 			{type: "desert_city", luck: 0.1}

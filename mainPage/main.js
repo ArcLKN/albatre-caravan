@@ -1,6 +1,5 @@
 // The fonction used to save the files in the user session using sessionStorage.setItem();
 function save(varName, value) {
-	console.log(typeof value);
 	if (typeof value == "number") {value = String(value);}
 	else if (typeof value == "object") {value = JSON.stringify(value);}
 	else if (typeof value == "boolean") {value = String(value);}
@@ -11,18 +10,18 @@ function save(varName, value) {
 
 // Used to get all the new values from the sessionStorage.
 function loadSessionStorage() {
-	crewTotal = sessionStorage.getItem("crewTotal")
-	crewTypes = JSON.parse(sessionStorage.getItem("crewTypes"))
-	idleCrew = sessionStorage.getItem("idleCrew")
-	morale = sessionStorage.getItem("morale")
-	money = sessionStorage.getItem("money")
-	authority = sessionStorage.getItem("authority")
-	water = sessionStorage.getItem("water")
-	numberOfTurns = sessionStorage.getItem("numberOfTurns")
-	famineTurns = sessionStorage.getItem("famineTurns")
-	inventory = JSON.parse(sessionStorage.getItem("inventory"))
-	playerLocation = JSON.parse(sessionStorage.getItem("playerLocation"))
-	gatherer = JSON.parse(sessionStorage.getItem("gatherer"))
+	crewTotal = parseInt(sessionStorage.getItem("crewTotal"));
+	crewTypes = JSON.parse(sessionStorage.getItem("crewTypes"));
+	idleCrew = sessionStorage.getItem("idleCrew");
+	morale = sessionStorage.getItem("morale");
+	money = sessionStorage.getItem("money");
+	authority = sessionStorage.getItem("authority");
+	water = sessionStorage.getItem("water");
+	numberOfTurns = sessionStorage.getItem("numberOfTurns");
+	famineTurns = parseInt(sessionStorage.getItem("famineTurns"));
+	inventory = JSON.parse(sessionStorage.getItem("inventory"));
+	playerLocation = JSON.parse(sessionStorage.getItem("playerLocation"));
+	gatherer = JSON.parse(sessionStorage.getItem("gatherer"));
 }
 
 // All the variables we want to save and share through every JS files.
@@ -209,15 +208,15 @@ var locations = [
 	}
 ];
 var probabilityRandomOasis = 0.10;
-var Phases = [
-	"event", // Determine if an event is activated such as fight etc.
-	"assignement", // Every crew assignement goes back to 0, apart of scouts. 
-	"resolves", // After assignement, the collect of ressources is executed depending of assignements and the decrease of the location's yield too.
-	"travel", // Choose caravan destination. Caravan can stay on the same location.
-	"endResolve" //  Meeting the needs of the crew. If the caravan doesn't move it reduces the caravan water needs by 2. Each lacking water unit causes the death of one person. If crewTotal = 0, game over.
-	// famineTurn resolves
+var allItems = [
+{
+	type: "food",
+	name: "food",
+	quantity: 0,
+	value: 10,
+	description: "Miam miam"
+}
 ];
-var gamePhase;
 var moralDecrease = 0.05;
 var listOfNames = {
 	firstname: {
@@ -244,7 +243,6 @@ var tempIDs = [];
 // This choice here makes use of the CPU and not the RAM.
 // Well this isn't very impactful here, bc it's so small what we are doing.
 function removeTempIDs() {
-	console.log(tempIDs)
 	tempIDs.forEach(e => {if (document.getElementById(e)) {document.getElementById(e).remove()}});
 	tempIDs = [];
 }
@@ -266,7 +264,7 @@ function onLoad() {
 	tempIDs.push("narration_text");
 	tempIDs.push("narration_button");
 	centerImage = document.getElementById("center-image");
-	centerImage.src = "Images/cine-1-7.png";
+	centerImage.src = "../Images/cine-1-7.png";
 	currentTextNumber = 1;
 	currentTextPos = 0;
 	var node = document.getElementById("actionMenu");
@@ -282,25 +280,17 @@ function onLoad() {
 	node.appendChild(newText);
 	node.appendChild(newButton);
 	loadSessionStorage();
-	console.log(playerLocation)
 }
 
 // Create item depending of itemName.
-// Probably making it easier.
-// It actually mostly works as an encyclopedia of all the items in the game.
-// I'll maybe put the allItems var outside of the function bc it can be useful.
 function createItem(nameItem) {
-	var allItems = [
-	{
-		type: "food",
-		name: "food",
-		quantity: 0,
-		value: 10,
-		description: "Miam miam"
-	}
-	];
 	for (var eachItem in allItems) {
 		if (allItems[eachItem]['name'] == nameItem) {return allItems[eachItem];}
+	}
+}
+function findItemInv(nameItem) {
+	for (var eachItem in allItems) {
+		if (inventory[eachItem]['name'] == nameItem) {return inventory[eachItem];}
 	}
 }
 // Create randomized person.
@@ -359,6 +349,15 @@ function yourTurn(phase) {
 		newButton.addEventListener('click', function() {
 			changeMenu(this.id);
 		});
+		tempIDs.push("yourTurn_Stay");
+		var node = document.getElementById("actionMenu");
+		var newButton = document.createElement('button');
+		newButton.setAttribute("id", "yourTurn_Stay");
+		newButton.textContent = "Stay";
+		node.appendChild(newButton);
+		newButton.addEventListener('click', function() {
+			changeMenu("ressourcesConsumption", false);
+		});
 	}
 }
 
@@ -374,10 +373,11 @@ function erasePreviousDestinations() {
 // Function: Change player location and do what has to been done after the movement
 // TO BE MODIFIED -> maybe not the same inner HTML
 function changeLocation(button_id) {
+	console.log("CHANGE LOCATION");
 	// slice (cut the string in several part, here it deletes the 5 first caracters) the button id to get the right string.
-	playerLocation = returnLocationData(button_id.slice(5));
-	document.getElementById("title").innerHTML = "Location: " + playerLocation['name'];
-	yourTurn();
+	playerLocation = JSON.parse(JSON.stringify(returnLocationData(button_id.slice(5))));
+	//document.getElementById("title").innerHTML = "Location: " + playerLocation['name'];
+	changeMenu("ressourcesConsumption", true);
 }
 
 // Function: define which destinations will be avaible to the player and creates the buttons associated with those destinations.
@@ -401,13 +401,14 @@ function defineNewDestinations(changeMenuCallback) {
 			possibleDestinationText.innerHTML = possibleDestinationText.innerHTML + ", "
 		}
 		var newDestination = document.createElement('img');
-		newDestination.src = possibleDestinations[i]+".png";
+		newDestination.src = "../Images/"+possibleDestinations[i]+".png";
 		newDestination.style.height = "100px";
 		newDestination.style.width = "100px";
 		newDestination.style.margin = "10px";
 		node.appendChild(newDestination);
 		newDestination.setAttribute("id", "dest_"+possibleDestinations[i]);
 		buttonID = "dest_"+possibleDestinations[i]
+		tempIDs.push(buttonID);
 		newDestination.addEventListener('click', function() {
 			changeLocation(this.id);
 		});
@@ -420,7 +421,7 @@ function changeTextNarration() {
 	if (++currentTextPos >= textList["id_"+String(currentTextNumber)].length) {
 		removeTempIDs();
 		centerImage = document.getElementById("center-image");
-		centerImage.src = "Images/Illustration.jpg";
+		centerImage.src = "../Images/Illustration.jpg";
 		changeMenu("special");
 	}
 	else if (currentTextPos == textList["id_"+String(currentTextNumber)].length -1) {
@@ -429,8 +430,39 @@ function changeTextNarration() {
 	text.textContent = textList["id_"+String(currentTextNumber)][currentTextPos];
 }
 
-function ressourcesConsumption () {
-	return;
+function killPeople(numberOfDeath) {
+	console.log("Death", numberOfDeath);
+	crewTotal -= numberOfDeath;
+	idleCrew = crewTotal;
+}
+
+function ressourcesConsumption (doTravel) {
+	console.log("Crew Total", crewTotal, famineTurns);
+	if (doTravel) {
+		water -= crewTotal;
+	}
+	else {
+		water -= Math.floor(crewTotal / 2);
+	}
+	if (findItemInv("food")['quantity'] >= crewTotal)
+		{findItemInv("food")['quantity'] -= crewTotal;}
+	else {famineTurns += 1;morale -= 10;killPeople(Math.pow(2, famineTurns)-2)}
+	morale /= 1.05;
+	if (water <= 0) {
+		killPeople(water*-1);
+		water = 0;
+	}
+	if (crewTotal <= 0) {
+		return changeMenu("Defeat", "Death");
+	}
+	if (morale < 0) {
+		if (authority > morale * 1 + 1) {
+			morale = 1;
+			authority += morale;
+		}
+		else {return changeMenu("Defeat", "Revolt");}
+	}
+	return changeMenu("special");
 }
 
 function gatherResolution () {
@@ -457,7 +489,10 @@ function gatherResolution () {
 		ressourceObtained.setAttribute("id", job+"Obtained");
 		document.getElementById("actionMenu").appendChild(ressourceObtained);
 		tempIDs.push(job+"Obtained");
+		idleCrew += gatherer[job];
+		gatherer[job] = 0;
 
+		// Depletion
 		playerLocation["gatheringValues"][job+"Yield"]-=1;
 
 		if (job == "morale") {
@@ -483,7 +518,7 @@ function gatherResolution () {
 	}
 
 	var continueButton = document.createElement("button");
-	continueButton.addEventListener("click", function () {changeMenu("ressourcesConsumption");})
+	continueButton.addEventListener("click", function () {changeMenu("travel");})
 	continueButton.setAttribute("id", "continueButton");
 	continueButton.innerHTML = "Continue";
 	document.getElementById("actionMenu").appendChild(continueButton);
@@ -577,7 +612,15 @@ function manageGatherDistribution() {
 	document.getElementById("actionMenu").appendChild(resolveButton);
 }
 
-function changeMenu(newMenu="None") {
+function Defeat (option) {
+	tempIDs.push("dyingText");
+	var dyingText = document.createElement("p");
+	dyingText.setAttribute("id", "dyingText");
+	dyingText.innerHTML = "You died.";
+	document.getElementById("actionMenu").appendChild(dyingText);
+}
+
+function changeMenu(newMenu="None", option=null) {
 	removeTempIDs();
 	if (newMenu == "special") {
 		if (playerLocation["isTradable"]) {return yourTurn("trade");} else {return changeMenu("crewAssignment");}
@@ -587,8 +630,10 @@ function changeMenu(newMenu="None") {
 	if (newMenu == "gathering") {return yourTurn(newMenu);}
 	if (newMenu == "yourTurn_gather") {return manageGatherDistribution();}
 	if (newMenu == "gatherResolution") {return gatherResolution();}
-	if (newMenu == "ressourcesConsumption") {return ressourcesConsumption();}
-	if (newMenu == "travel") {return defineNewDestinations(changeMenu);}
+	if (newMenu == "travel") {return yourTurn(newMenu);}
+	if (newMenu == "yourTurn_travel") {return defineNewDestinations(changeMenu);}
+	if (newMenu == "ressourcesConsumption") {return ressourcesConsumption(option);}
+	if (newMenu == "Defeat") {return Defeat(option);}
 	else if (newMenu.slice(0, 5) == "dest_") {
 		changeLocation(
 				newMenu,

@@ -1,0 +1,65 @@
+.inventory-container {
+    border: 3px solid #ccc; /* Add border around inventory container */
+    padding: 10px; /* Add padding inside the border */
+}
+
+.inventory-group {
+    border: 1px solid #ccc; /* Add border around each group container */
+    margin-bottom: 20px; /* Add margin between group containers */
+    padding: 10px; /* Add padding inside the border */
+}
+
+/* Apply styles to item containers */
+.inventory-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 3px solid #ccc;
+    cursor: pointer;
+}
+
+/* Styles for item images */
+.inventory-item img {
+    width: 80px;
+    height: 80px;
+    margin-right: 20px;
+}
+
+/* Styles for item details */
+.item-details {
+    flex-grow: 1;
+    text-align: center;
+}
+
+/* Styles for item name */
+.item-details h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+/* Styles for description */
+.description {
+    display: none;
+    text-align: margin-left;
+    font-style: italic;
+    color: #000000;
+}
+
+/* Rarity colors */
+.rarity-common {
+    background-color: 	#A9A9A9; /* Light gray for common items */
+}
+
+.rarity-rare {
+    background-color: #add8e6; /* Light blue for rare items */
+}
+
+.rarity-legendary {
+    background-color: #ffd700; /* Gold for legendary items */
+}
+
+.rarity-epic {
+    background-color: #8A2BE2; /* Tomato red for epic items */
+}

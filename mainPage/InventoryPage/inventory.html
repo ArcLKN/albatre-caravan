@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Inventory</title>
+    <link rel="stylesheet" href="inventory.css">
+</head>
+<body>
+    
+    <div class="inventory-filter">
+        <label for="item-type-select">Filter by Item Type:</label>
+        <select id="item-type-select">
+            <option value="all">All Items</option>
+            <option value="health">Health Items</option>
+            <option value="weapon">Weapon Items</option>
+            <option value="armor">Armor Items</option>
+        </select>
+    </div>
+
+    <div class="inventory-container">
+        <div class="inventory-group" id="health-group">
+            <h2>Health Items</h2>
+            <ul id="health-list"></ul>
+        </div>
+        <div class="inventory-group" id="weapon-group">
+            <h2>Weapon Items</h2>
+            <ul id="weapon-list"></ul>
+        </div>
+        <div class="inventory-group" id="armor-group">
+            <h2>Armor Items</h2>
+            <ul id="armor-list"></ul>
+        </div>
+    </div>
+
+    <script src="inventory.js"></script>
+</body>
+</html>

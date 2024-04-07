@@ -621,7 +621,7 @@ function manageGatherDistribution() {
 	if (ressources == 0) {
 		tempIDs.push("noRessourceText");
 		var noRessourceText = document.createElement("p");
-		noRessourceText.innerHTML = "There is no ressources in this sunken place.";
+		noRessourceText.innerHTML = "There is no ressources in this forgotten place.";
 		noRessourceText.setAttribute("id", "noRessourceText");
 		bottomNode.appendChild(noRessourceText);
 	}

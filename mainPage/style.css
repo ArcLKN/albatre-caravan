@@ -4,6 +4,7 @@ body {
   text-align: center;
   margin: 0px 0px 0px 0px;
   padding: 0px 0px 0px 0px;
+font-family: "Franklin Gothic", Arial;
 }
 
 h1 {
@@ -25,12 +26,19 @@ li {
     border: 1px grey solid;
     width: 20vw;
     background-color: #ebdfd1;
+	display: flex;
+  flex-direction: row;
+align-content: center;
+  flex-wrap: wrap;
+justify-content: space-evenly;
+  align-items: center;
 }
 
 ul li img{
   margin: 0px 0px 0px 0px;
   width: 20px;
   height: 20px;
+align-content: center;
 }
 
 div[id='top menu'] {
@@ -48,14 +56,12 @@ div[id='bottom menu'] {
   display: flex;
   flex-direction: row;
   height: 30vh;
-  text-align: center;
 }
-div[id='bottom menu'] button {
-  background-color: brown;
-  color: white;
+div[id='actionMenu'] button {
+  background-color: cream;
+  color: black;
   font-size: 16px;
-  border-radius: 10px;
-  color: white;
+  border-radius: 1px;
   width: 500px;
   height: 50px;
 }
@@ -71,20 +77,30 @@ div.buttons {
 
 div.strangeButton {
   height: 10vh;
-  margin: 5px 5px 0px 5px;
-  background-color: #ebdfd1;
-  align-content: center;
+
+  margin: 1px 1px 0px 1px;
+ background-color: #ebdfd1;
+display: flex;
+
+align-items: center;
+justify-content: center;
 }
 
 #actionMenu {
-  margin: 5px 5px 5px 0px;
+  margin: 1px 1px 1px 0px;
   width: 97vw;
   height: 30vh;
-  background-color: #ebdfd1;
+  background-color: OldLace;
   display: flex;
   flex-direction: column;
   align-content: center;
   flex-wrap: wrap;
+justify-content: center;
+align-items: center
+}
+
+#actionMenu button {
+  margin: 5px;
 }
 
 .ressources {
@@ -97,7 +113,11 @@ div.strangeButton {
 }
 
 #escapeBox {
-  align-content: center;
+
+display: flex;
+
+align-items: center;
+justify-content: center;
   width: 3vw;
   margin: 0px 0px 0px 0px;
   background-color: white;
@@ -121,5 +141,16 @@ div.strangeButton {
 }
 #tempDiv input {
   margin: 10px;
+}
+
+#yieldNode {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-around;
+}
+
+#yieldNode p {
+	margin: 0px 10px 0px 10px;
 }
 

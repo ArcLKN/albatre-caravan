@@ -4,7 +4,6 @@ function save(varName, value) {
 	else if (typeof value == "object") {value = JSON.stringify(value);}
 	else if (typeof value == "boolean") {value = String(value);}
 	else {value = String(value);}
-
 	sessionStorage.setItem(String(varName), value);
 }
 
@@ -227,11 +226,15 @@ var listOfNames = {
 };
 var genderArr = ["male", "female"];
 var textList = {
-	id_1: ["...",
-		"Ma fille... ce salop... je le tuerais et je reprendrais ma seule famille.",
-		"Comment puis-je faire..",
-		"Je n'ai pas grand chose, il me faut des moyens, de l'argent et de la puissance."
-		]
+	"id_1": [
+"(The man is slowly awakening from his loss of consciousness, he looks around him with anxiety. He realizes that his beloved daughter has been kidnapped by King Rhamsouk IV. He rises, his heart, heavy with grief and worry.)",
+"...",
+"By the gods, how could this happen to us? Where is my daughter, my most precious treasure?",
+"Rhamsouk IV, this ruthless trash, has dared to snatch her away to forcibly marry her. His arrogance and lust must know no bounds.",
+"(He looks around him, the scorching desert streching as far as the eye can see, the crushing sun accentuating his sense of helplessness.)",
+"My dear child, taken from me towards a fate I can scarcely bear to imagine. I have always strived to protect you, but now, I feel powerless against the tyranny of this mad king.",
+"But I swear by Osiris and all the gods of Egypt, I will do whatever is in my power to bring you back home."
+]
 }
 var currentTextPos = 0;
 var currentTextNumber = 1;
@@ -257,6 +260,14 @@ function returnLocationData(location) {
 	}
 }
 
+function updateRessourcesDisplay () {
+	document.getElementById("nb_water").textContent = String(water);
+	document.getElementById("nb_food").textContent = String(findItemInv("food")["quantity"]);
+	document.getElementById("nb_money").textContent = String(money); 
+	document.getElementById("nb_morale").textContent = String(morale);
+	document.getElementById("nb_crew").textContent = String(crewTotal); 
+}
+
 // Only function that is called when page is being shown.
 // It manages what to do afterward.
 // Maybe it could be put at the root, but I just prefer to put things in function, if it isn't a variable.
@@ -280,6 +291,7 @@ function onLoad() {
 	node.appendChild(newText);
 	node.appendChild(newButton);
 	loadSessionStorage();
+	updateRessourcesDisplay();
 }
 
 // Create item depending of itemName.
@@ -302,6 +314,8 @@ function defineUnit () {
 	newUnit["age"] = 18 + Math.floor(60 * Math.random());
 	return newUnit;
 }
+
+
 
 function yourTurn(phase) {
 	console.log("YOUR TURN");
@@ -376,7 +390,7 @@ function changeLocation(button_id) {
 	console.log("CHANGE LOCATION");
 	// slice (cut the string in several part, here it deletes the 5 first caracters) the button id to get the right string.
 	playerLocation = JSON.parse(JSON.stringify(returnLocationData(button_id.slice(5))));
-	//document.getElementById("title").innerHTML = "Location: " + playerLocation['name'];
+	document.getElementById("locationName").textContent = playerLocation['name'];
 	changeMenu("ressourcesConsumption", true);
 }
 
@@ -558,14 +572,12 @@ function checkRessource(VID, VValue) {
 }
 
 function manageGatherDistribution() {
-	["idleCrewText","tempDiv", "resolveButton"].forEach(e => tempIDs.push(e));
+	["idleCrewText","tempDiv", "resolveButton", "yieldNode"].forEach(e => tempIDs.push(e));
 
 	var bottomNode = document.getElementById("actionMenu");
-
-	var idleCrewText = document.createElement("p");
-	idleCrewText.innerHTML = "Idle crew: "+String(idleCrew);
-	idleCrewText.setAttribute("id", "idleCrewText");
-	bottomNode.appendChild(idleCrewText);
+	var yieldNode = document.createElement("div");
+	yieldNode.setAttribute("id", "yieldNode");
+	bottomNode.appendChild(yieldNode);
 
 	ressources = [];
 	if ("waterYield" in playerLocation["gatheringValues"] && playerLocation["gatheringValues"]["waterYield"] > 0) {ressources.push("water");}
@@ -575,9 +587,14 @@ function manageGatherDistribution() {
 		var ressourceYield = document.createElement("p");
 		ressourceYield.innerHTML = Capitalize(e)+"yield: "+String(playerLocation["gatheringValues"][e+"Yield"]);
 		ressourceYield.setAttribute("id", e+"Yield");
-		bottomNode.appendChild(ressourceYield);
+		yieldNode.appendChild(ressourceYield);
 		tempIDs.push(e+"Yield");
 	})
+
+	var idleCrewText = document.createElement("p");
+	idleCrewText.innerHTML = "Idle crew: " + String(idleCrew);
+	idleCrewText.setAttribute("id", "idleCrewText");
+	bottomNode.appendChild(idleCrewText);
 
 	var newDiv = document.createElement("div");
 	newDiv.setAttribute("id", "tempDiv");
@@ -621,10 +638,12 @@ function Defeat (option) {
 }
 
 function changeMenu(newMenu="None", option=null) {
+	updateRessourcesDisplay();
 	removeTempIDs();
 	if (newMenu == "special") {
-		if (playerLocation["isTradable"]) {return yourTurn("trade");} else {return changeMenu("crewAssignment");}
+		if (playerLocation["isTradable"]) {return yourTurn("special");} else {return changeMenu("crewAssignment");}
 	}
+	if (newMenu == "yourTurn_trade") {return manageTrade();}
 	if (newMenu == "crewAssignment") {return yourTurn("crewAssignment");}
 	if (newMenu == "yourTurn_deploy") {return manageDeployDistribution();}
 	if (newMenu == "gathering") {return yourTurn(newMenu);}

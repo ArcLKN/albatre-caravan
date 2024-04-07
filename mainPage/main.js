@@ -233,7 +233,12 @@ var textList = {
 "Rhamsouk IV, this ruthless trash, has dared to snatch her away to forcibly marry her. His arrogance and lust must know no bounds.",
 "(He looks around him, the scorching desert streching as far as the eye can see, the crushing sun accentuating his sense of helplessness.)",
 "My dear child, taken from me towards a fate I can scarcely bear to imagine. I have always strived to protect you, but now, I feel powerless against the tyranny of this mad king.",
-"But I swear by Osiris and all the gods of Egypt, I will do whatever is in my power to bring you back home."
+"But I swear by Osiris and all the gods of Egypt, I will do whatever is in my power to bring you back home.",
+"(He rises, his heavy footsteps echoing in the oppressive silence of the desert.)",
+"I will traverse every grain of sand in this arid desert, I will defy even the deities themselves if need be, to find my beloved daughter. May the gods guide me and grant me the strength to overcome this trial. My daughter, hold fast, I am coming for you, and no king, however mighty, shall break the bond that binds us.",
+"But I must not rely solely on divine intervention.",
+"I will use every resource at my disposal to ensure your safe return, my child. I will build upon my caravan trade, expanding it to become one of the wealthiest and most influential enterprises in all of Egypt. With this wealth and power, I will have the means to challenge Rhamsouk IV and rescue you from his clutches.",
+"Our reunion will not be a mere dream, but a reality forged through my unwavering determination and the strength of our love. Prepare yourself, my daughter, for I am about to embark on a journey that will shake the very foundations of this kingdom."
 ]
 }
 var currentTextPos = 0;
@@ -268,17 +273,21 @@ function updateRessourcesDisplay () {
 	document.getElementById("nb_crew").textContent = String(crewTotal); 
 }
 
-// Only function that is called when page is being shown.
-// It manages what to do afterward.
-// Maybe it could be put at the root, but I just prefer to put things in function, if it isn't a variable.
-function onLoad() {
-	tempIDs.push("narration_text");
-	tempIDs.push("narration_button");
+function prepareNarration() {
+	["narration_text", "narration_button", "narration_div"].forEach(e => tempIDs.push(e));
+
 	centerImage = document.getElementById("center-image");
 	centerImage.src = "../Images/cine-1-7.png";
 	currentTextNumber = 1;
 	currentTextPos = 0;
+
 	var node = document.getElementById("actionMenu");
+
+	var narration_div = document.createElement("div");
+	narration_div.style.width = "50%";
+	node.appendChild(narration_div);
+	
+
 	var newText = document.createElement("p");
 	newText.setAttribute("id", "narration_text");
 	newText.textContent = textList["id_"+String(currentTextNumber)][currentTextPos];
@@ -288,8 +297,15 @@ function onLoad() {
 	newButton.addEventListener('click', function() {
 			changeTextNarration();
 		});
-	node.appendChild(newText);
-	node.appendChild(newButton);
+	narration_div.appendChild(newText);
+	narration_div.appendChild(newButton);
+}
+
+// Only function that is called when page is being shown.
+// It manages what to do afterward.
+// Maybe it could be put at the root, but I just prefer to put things in function, if it isn't a variable.
+function onLoad() {
+	prepareNarration();
 	loadSessionStorage();
 	updateRessourcesDisplay();
 }
@@ -314,8 +330,6 @@ function defineUnit () {
 	newUnit["age"] = 18 + Math.floor(60 * Math.random());
 	return newUnit;
 }
-
-
 
 function yourTurn(phase) {
 	console.log("YOUR TURN");
@@ -384,6 +398,26 @@ function erasePreviousDestinations() {
 	document.querySelectorAll('[id^="dest_"]').forEach(e => e.remove());
 }
 
+function turnX () {
+	["turnX", "turnX_button"].forEach(e => tempIDs.push(e));
+
+	var node = document.getElementById("actionMenu");
+
+	var newText = document.createElement("h1");
+	newText.setAttribute("id", "turnX");
+	newText.textContent = "Turn " + String(numberOfTurns);
+
+	var newButton = document.createElement("button");
+	newButton.setAttribute("id", "turnX_button");
+	newButton.innerHTML = "Next";
+	newButton.addEventListener('click', function() {
+			changeMenu("special");
+		});
+
+	node.appendChild(newText);
+	node.appendChild(newButton);
+}
+
 // Function: Change player location and do what has to been done after the movement
 // TO BE MODIFIED -> maybe not the same inner HTML
 function changeLocation(button_id) {
@@ -436,7 +470,7 @@ function changeTextNarration() {
 		removeTempIDs();
 		centerImage = document.getElementById("center-image");
 		centerImage.src = "../Images/Illustration.jpg";
-		changeMenu("special");
+		changeMenu("turnX");
 	}
 	else if (currentTextPos == textList["id_"+String(currentTextNumber)].length -1) {
 		document.getElementById("narration_button").innerHTML = "End";
@@ -476,7 +510,8 @@ function ressourcesConsumption (doTravel) {
 		}
 		else {return changeMenu("Defeat", "Revolt");}
 	}
-	return changeMenu("special");
+	numberOfTurns++;
+	return changeMenu("turnX");
 }
 
 function gatherResolution () {
@@ -583,49 +618,56 @@ function manageGatherDistribution() {
 	if ("waterYield" in playerLocation["gatheringValues"] && playerLocation["gatheringValues"]["waterYield"] > 0) {ressources.push("water");}
 	if ("foodYield" in playerLocation["gatheringValues"] && playerLocation["gatheringValues"]["foodYield"] > 0) {ressources.push("food");}
 	if ("moraleYield" in playerLocation["gatheringValues"] && playerLocation["gatheringValues"]["moraleYield"] > 0) {ressources.push("morale");}
-	ressources.forEach(e => {
-		var ressourceYield = document.createElement("p");
-		ressourceYield.innerHTML = Capitalize(e)+"yield: "+String(playerLocation["gatheringValues"][e+"Yield"]);
-		ressourceYield.setAttribute("id", e+"Yield");
-		yieldNode.appendChild(ressourceYield);
-		tempIDs.push(e+"Yield");
-	})
-
-	var idleCrewText = document.createElement("p");
-	idleCrewText.innerHTML = "Idle crew: " + String(idleCrew);
-	idleCrewText.setAttribute("id", "idleCrewText");
-	bottomNode.appendChild(idleCrewText);
-
-	var newDiv = document.createElement("div");
-	newDiv.setAttribute("id", "tempDiv");
-	bottomNode.appendChild(newDiv);
-
+	if (ressources == 0) {
+		tempIDs.push("noRessourceText");
+		var noRessourceText = document.createElement("p");
+		noRessourceText.innerHTML = "There is no ressources in this sunken place.";
+		noRessourceText.setAttribute("id", "noRessourceText");
+		bottomNode.appendChild(noRessourceText);
+	}
+	else {
+		ressources.forEach(e => {
+			var ressourceYield = document.createElement("p");
+			ressourceYield.innerHTML = Capitalize(e)+"yield: "+String(playerLocation["gatheringValues"][e+"Yield"]);
+			ressourceYield.setAttribute("id", e+"Yield");
+			yieldNode.appendChild(ressourceYield);
+			tempIDs.push(e+"Yield");
+		})
+	
+		var idleCrewText = document.createElement("p");
+		idleCrewText.innerHTML = "Idle crew: " + String(idleCrew);
+		idleCrewText.setAttribute("id", "idleCrewText");
+		bottomNode.appendChild(idleCrewText);
+	
+		var newDiv = document.createElement("div");
+		newDiv.setAttribute("id", "tempDiv");
+		bottomNode.appendChild(newDiv);
+	
+		ressources.forEach(e => {
+			var tempLabel = document.createElement("label");
+			tempIDs.push(e+"Label");
+			tempLabel.setAttribute("id", e+"Label");
+	
+			var tempInput = document.createElement("input");
+			tempIDs.push(e+"Input");
+					tempInput.setAttribute("id", e+"Input");
+			
+			tempInput.setAttribute("id", e+"Input");
+			tempInput.maxLength = 4;
+			tempLabel.textContent = Capitalize(e) +" Gatherer : ";
+			tempInput.style.width = "32px";
+	
+			tempInput.oninput = function() {checkRessource(e, this.value)};
+			tempInput.type = "number";
+			tempInput.value = 0;
+	
+			newDiv.appendChild(tempLabel);
+			newDiv.appendChild(tempInput);
+		})}
 	var resolveButton = document.createElement("button");
 	resolveButton.addEventListener("click", function () {changeMenu("gatherResolution");})
 	resolveButton.setAttribute("id", "resolveButton");
 	resolveButton.innerHTML = "Resolve";
-
-	ressources.forEach(e => {
-		var tempLabel = document.createElement("label");
-		tempIDs.push(e+"Label");
-		tempLabel.setAttribute("id", e+"Label");
-
-		var tempInput = document.createElement("input");
-		tempIDs.push(e+"Input");
-				tempInput.setAttribute("id", e+"Input");
-		
-		tempInput.setAttribute("id", e+"Input");
-		tempInput.maxLength = 4;
-		tempLabel.textContent = Capitalize(e) +" Gatherer : ";
-		tempInput.style.width = "32px";
-
-		tempInput.oninput = function() {checkRessource(e, this.value)};
-		tempInput.type = "number";
-		tempInput.value = 0;
-
-		newDiv.appendChild(tempLabel);
-		newDiv.appendChild(tempInput);
-	})
 	document.getElementById("actionMenu").appendChild(resolveButton);
 }
 
@@ -633,13 +675,14 @@ function Defeat (option) {
 	tempIDs.push("dyingText");
 	var dyingText = document.createElement("p");
 	dyingText.setAttribute("id", "dyingText");
-	dyingText.innerHTML = "You died.";
+	dyingText.innerHTML = `You died on turn ${String(numberOfTurns)}.`;
 	document.getElementById("actionMenu").appendChild(dyingText);
 }
 
 function changeMenu(newMenu="None", option=null) {
 	updateRessourcesDisplay();
 	removeTempIDs();
+	if (newMenu == "turnX") {return turnX();}
 	if (newMenu == "special") {
 		if (playerLocation["isTradable"]) {return yourTurn("special");} else {return changeMenu("crewAssignment");}
 	}

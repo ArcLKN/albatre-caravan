@@ -9,6 +9,7 @@ function save(varName, value) {
 
 // Used to get all the new values from the sessionStorage.
 function loadSessionStorage() {
+	crewMembers = JSON.parse(sessionStorage.getItem("crewMembers"));
 	crewTotal = parseInt(sessionStorage.getItem("crewTotal"));
 	crewTypes = JSON.parse(sessionStorage.getItem("crewTypes"));
 	idleCrew = sessionStorage.getItem("idleCrew");
@@ -25,6 +26,7 @@ function loadSessionStorage() {
 
 // All the variables we want to save and share through every JS files.
 function saveSessionStorage () {
+	save("crewMembers", crewMembers);
 	// Number of people player has, thus number of people he can use.
 	save("crewTotal", crewTotal);
 	// Distribution of the crew, the total can't be > crewTotal.
@@ -308,6 +310,7 @@ function onLoad() {
 	prepareNarration();
 	loadSessionStorage();
 	updateRessourcesDisplay();
+	console.log(crewMembers);
 }
 
 // Create item depending of itemName.
@@ -368,8 +371,18 @@ function yourTurn(phase) {
 		yourTurn("travel");
 	}
 	else if (phase == "travel") {
-		tempIDs.push("yourTurn_travel");
 		var node = document.getElementById("actionMenu");
+
+		tempIDs.push("travelQuestion");
+		var newText = document.createElement('p');
+		newText.setAttribute("id", "travelQuestion");
+		newText.textContent = "Would you like to move?";
+		node.appendChild(newText);
+		newText.addEventListener('click', function() {
+			changeMenu(this.id);
+		});
+
+		tempIDs.push("yourTurn_travel");
 		var newButton = document.createElement('button');
 		newButton.setAttribute("id", "yourTurn_travel");
 		newButton.textContent = "Travel";
@@ -415,6 +428,25 @@ function turnX () {
 
 	node.appendChild(newText);
 	node.appendChild(newButton);
+
+	["water", "money", "food"].forEach(e => {
+		let bonusNode = document.getElementById("bonus_"+e);
+		bonus = 0;
+		crewMembers.forEach(e2 => {
+			if (e in e2['needs']) {
+				bonus -= e2['needs'][e] - e2['passiveEarning'][e]
+			}
+			else {
+			crewMembers.forEach(e2 => bonus += e2['passiveEarning'][e])
+			}
+		}
+		)
+		if (bonus >= 0) {bonus = "+"+bonus;bonusNode.style.color = "green";}
+		else {bonusNode.style.color = "red";}
+		bonusNode.innerHTML = String(bonus);
+	})
+
+
 }
 
 function areUSure (directions) {
@@ -470,23 +502,28 @@ function defineNewDestinations(changeMenuCallback) {
 	possibleDestinations = [];
 	for (let i = 0; i < playerLocation["possibleDestinations"].length; i++) {
 		if (playerLocation["possibleDestinations"][i]["luck"] >= Math.random()) {
-			possibleDestinations.push(playerLocation["possibleDestinations"][i]["type"]);
+
+			possibleDestinations.push(returnLocationData(playerLocation["possibleDestinations"][i]["type"]));
 		}
 	}
-	console.log(possibleDestinations)
+
+	var horizonzalNode = document.createElement("div");
+	horizonzalNode.setAttribute("id", "horizonzalNode");
+	node.appendChild(horizonzalNode);
+	console.log(possibleDestinations);
 	for (var i = 0; i < possibleDestinations.length; i++) {
-		possibleDestinationText.innerHTML = possibleDestinationText.innerHTML + possibleDestinations[i];
+		possibleDestinationText.innerHTML = possibleDestinationText.innerHTML + possibleDestinations[i]["name"];
 		if (i < (possibleDestinations.length - 1)) {
 			possibleDestinationText.innerHTML = possibleDestinationText.innerHTML + ", "
 		}
 		var newDestination = document.createElement('img');
-		newDestination.src = "../Images/"+possibleDestinations[i]+".png";
+		newDestination.src = "../Images/"+possibleDestinations[i]["type"]+".png";
 		newDestination.style.height = "100px";
 		newDestination.style.width = "100px";
 		newDestination.style.margin = "10px";
-		node.appendChild(newDestination);
-		newDestination.setAttribute("id", "dest_"+possibleDestinations[i]);
-		buttonID = "dest_"+possibleDestinations[i]
+		horizonzalNode.appendChild(newDestination);
+		newDestination.setAttribute("id", "dest_"+possibleDestinations[i]["type"]);
+		buttonID = "dest_"+possibleDestinations[i]["type"]
 		tempIDs.push(buttonID);
 		newDestination.addEventListener('click', function() {
 			changeLocation(this.id);
@@ -513,18 +550,26 @@ function killPeople(numberOfDeath) {
 	console.log("Death", numberOfDeath);
 	crewTotal -= numberOfDeath;
 	idleCrew = crewTotal;
+	for (let i = 0; i < numberOfDeath; i++) {
+		crewMembers.shift();
+	}
 }
 
 function ressourcesConsumption (doTravel) {
 	console.log("Crew Total", crewTotal, famineTurns);
+	var waterConsumption = 0;
+	crewMembers.forEach(e => waterConsumption += e['needs']['water'])
+	var foodConsumption = 0;
+	crewMembers.forEach(e => foodConsumption += e['needs']['food'])
+	console.log("Consumptions: ", waterConsumption, foodConsumption);
 	if (doTravel) {
-		water -= crewTotal;
+		water -= waterConsumption;
 	}
 	else {
-		water -= Math.floor(crewTotal / 2);
+		water -= Math.floor(waterConsumption / 2);
 	}
-	if (findItemInv("food")['quantity'] >= crewTotal)
-		{findItemInv("food")['quantity'] -= crewTotal;}
+	if (findItemInv("food")['quantity'] >= foodConsumption)
+		{findItemInv("food")['quantity'] -= foodConsumption;}
 	else {famineTurns += 1;morale -= 10;killPeople(Math.pow(2, famineTurns)-2)}
 	morale /= 1.05;
 	if (water <= 0) {

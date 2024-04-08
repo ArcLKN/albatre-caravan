@@ -378,13 +378,12 @@ function yourTurn(phase) {
 			changeMenu(this.id);
 		});
 		tempIDs.push("yourTurn_Stay");
-		var node = document.getElementById("actionMenu");
 		var newButton = document.createElement('button');
 		newButton.setAttribute("id", "yourTurn_Stay");
 		newButton.textContent = "Stay";
 		node.appendChild(newButton);
 		newButton.addEventListener('click', function() {
-			changeMenu("ressourcesConsumption", false);
+			changeMenu("uSure", [["ressourcesConsumption", false], ["travel", "false"]]);
 		});
 	}
 }
@@ -418,6 +417,38 @@ function turnX () {
 	node.appendChild(newButton);
 }
 
+function areUSure (directions) {
+	var node = document.getElementById("actionMenu");
+
+	tempIDs.push("uSureText")
+	var newText = document.createElement('h2');
+	newText.textContent = "Are you sure?"
+	newText.setAttribute("id", "uSureText");
+	node.appendChild(newText);
+
+	var horizonzalNode = document.createElement("div");
+	horizonzalNode.setAttribute("id", "horizonzalNode");
+	node.appendChild(horizonzalNode);
+
+	tempIDs.push("yesButton");
+	var newButton = document.createElement('button');
+	newButton.setAttribute("id", "yesButton");
+	newButton.textContent = "Yes";
+	horizonzalNode.appendChild(newButton);
+	newButton.addEventListener('click', function() {
+		changeMenu(directions[0][0], directions[0][1]);
+	});
+	newButton.classList.add("smallerButton");
+	tempIDs.push("noButton");
+	var newButton = document.createElement('button');
+	newButton.setAttribute("id", "noButton");
+	newButton.textContent = "No";
+	newButton.classList.add("smallerButton");
+	horizonzalNode.appendChild(newButton);
+	newButton.addEventListener('click', function() {
+		changeMenu(directions[1][0], directions[1][1]);
+	});
+}
 // Function: Change player location and do what has to been done after the movement
 // TO BE MODIFIED -> maybe not the same inner HTML
 function changeLocation(button_id) {
@@ -607,12 +638,12 @@ function checkRessource(VID, VValue) {
 }
 
 function manageGatherDistribution() {
-	["idleCrewText","tempDiv", "resolveButton", "yieldNode"].forEach(e => tempIDs.push(e));
+	["idleCrewText","tempDiv", "resolveButton", "horizonzalNode"].forEach(e => tempIDs.push(e));
 
 	var bottomNode = document.getElementById("actionMenu");
-	var yieldNode = document.createElement("div");
-	yieldNode.setAttribute("id", "yieldNode");
-	bottomNode.appendChild(yieldNode);
+	var horizonzalNode = document.createElement("div");
+	horizonzalNode.setAttribute("id", "horizonzalNode");
+	bottomNode.appendChild(horizonzalNode);
 
 	ressources = [];
 	if ("waterYield" in playerLocation["gatheringValues"] && playerLocation["gatheringValues"]["waterYield"] > 0) {ressources.push("water");}
@@ -630,7 +661,7 @@ function manageGatherDistribution() {
 			var ressourceYield = document.createElement("p");
 			ressourceYield.innerHTML = Capitalize(e)+"yield: "+String(playerLocation["gatheringValues"][e+"Yield"]);
 			ressourceYield.setAttribute("id", e+"Yield");
-			yieldNode.appendChild(ressourceYield);
+			horizonzalNode.appendChild(ressourceYield);
 			tempIDs.push(e+"Yield");
 		})
 	
@@ -693,6 +724,7 @@ function changeMenu(newMenu="None", option=null) {
 	if (newMenu == "yourTurn_gather") {return manageGatherDistribution();}
 	if (newMenu == "gatherResolution") {return gatherResolution();}
 	if (newMenu == "travel") {return yourTurn(newMenu);}
+	if (newMenu == "uSure") {return areUSure(option)};
 	if (newMenu == "yourTurn_travel") {return defineNewDestinations(changeMenu);}
 	if (newMenu == "ressourcesConsumption") {return ressourcesConsumption(option);}
 	if (newMenu == "Defeat") {return Defeat(option);}

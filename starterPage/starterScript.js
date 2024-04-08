@@ -9,16 +9,18 @@ function save(varName, value) {
 
 var listOfNames = {
 	firstname: {
-		male: ["Arienkhut", "Atum", "Amon", "Amenhemti", "Asim", "Anubis", "Apries", "Apmatenu", "Amenemap",
-			"Babafemi",
+		male: ["Arienkhut", "Atum", "Amon", "Amenhemti", "Asim", "Anubis", "Apries", "Apmatenu", "Amenemap", "Amenhotep", "Ahmosis"
+			"Babafemi", "Boubou"
 			"Cheres", "Chaths",
-			"Ethan", "Eate", "Hagar", "Horus", "Geb", "Hebunurotant", "Jonathan",
-			"Kemet", "Khet-ef", "Khem", "Kher-ab", "Kauib", "Ludim",
+			"Ethan", "Eate", "Hagar", "Euphrate", "Horus", "Geb", "Hebunurotant", "Jonathan",
+			"Kemet", "Khet-ef", "Khem", "Karnak", "Kher-ab", "Kauib", "Koush", "Koushi", "Ludim",
 			"Madu", "Menthesuphis", "Moss", "Menkara", "Mbizi", "Mesochris",
 			"Naouscheri", "Nakht", "Nezemab", "Nahab",
 			"Pisem", "Philitis", "Petsibast","Raphael", "Rashaken", "Ubaid",
-			"Stephinates", "Sua", "Seth", "Senusnet", "Sobek"],
-		female: ["Bastet", "Joanne", "Neyla", "Nephthys", "Sua"]
+			"Stephinates", "Sua", "Seth", "Snerseth", "Sethi", "Senusnet", "Sobek", "Thoutmosis", "Vizir"],
+		female: ["Aziza", "Ahmsès", "Ahmès", "Bastet", "Chepsout", "Chione", "Esi", "Hatchepsout", "Hathor", "Hibis", "Imeret", "Joanne", "Jamila", "Moutnofret", "Meritamon", "Myrrhe"
+			"Nuru", "Nour", "Nanu", "Nefertari", "Neyla", "Nephthys", "Neferoubity", "Nubie",
+			"Safiya", "Satre", "Sit-aah", "Selk", "Salifa", "Sagira", "Sua", "Talibah", "Thebe", "Tabia"]
 	},
 	surname: ["Joestar", "Neith"]
 };

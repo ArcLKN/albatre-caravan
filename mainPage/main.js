@@ -684,6 +684,9 @@ function checkRessource(VID, VValue) {
 
 function manageGatherDistribution() {
 	["idleCrewText","tempDiv", "resolveButton", "horizonzalNode"].forEach(e => tempIDs.push(e));
+	var resolveButton = document.createElement("button");
+	resolveButton.setAttribute("id", "resolveButton");
+	resolveButton.innerHTML = "Resolve";
 
 	var bottomNode = document.getElementById("actionMenu");
 	var horizonzalNode = document.createElement("div");
@@ -700,8 +703,10 @@ function manageGatherDistribution() {
 		noRessourceText.innerHTML = "There is no ressources in this forgotten place.";
 		noRessourceText.setAttribute("id", "noRessourceText");
 		bottomNode.appendChild(noRessourceText);
+		resolveButton.addEventListener("click", function () {changeMenu("travel");})
 	}
 	else {
+		resolveButton.addEventListener("click", function () {changeMenu("gatherResolution");})
 		ressources.forEach(e => {
 			var ressourceYield = document.createElement("p");
 			ressourceYield.innerHTML = Capitalize(e)+"yield: "+String(playerLocation["gatheringValues"][e+"Yield"]);
@@ -740,10 +745,7 @@ function manageGatherDistribution() {
 			newDiv.appendChild(tempLabel);
 			newDiv.appendChild(tempInput);
 		})}
-	var resolveButton = document.createElement("button");
-	resolveButton.addEventListener("click", function () {changeMenu("gatherResolution");})
-	resolveButton.setAttribute("id", "resolveButton");
-	resolveButton.innerHTML = "Resolve";
+
 	document.getElementById("actionMenu").appendChild(resolveButton);
 }
 

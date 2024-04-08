@@ -86,6 +86,11 @@ align-items: center;
 justify-content: center;
 }
 
+div.strangeButton img {
+  width: 40px;
+  height: 40px;
+}
+
 #actionMenu {
   margin: 1px 1px 1px 0px;
   width: 97vw;

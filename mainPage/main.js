@@ -9,6 +9,7 @@ function save(varName, value) {
 
 // Used to get all the new values from the sessionStorage.
 function loadSessionStorage() {
+	crewMembers = JSON.parse(sessionStorage.getItem("crewMembers"));
 	crewTotal = parseInt(sessionStorage.getItem("crewTotal"));
 	crewTypes = JSON.parse(sessionStorage.getItem("crewTypes"));
 	idleCrew = sessionStorage.getItem("idleCrew");
@@ -25,6 +26,7 @@ function loadSessionStorage() {
 
 // All the variables we want to save and share through every JS files.
 function saveSessionStorage () {
+	save("crewMembers", crewMembers);
 	// Number of people player has, thus number of people he can use.
 	save("crewTotal", crewTotal);
 	// Distribution of the crew, the total can't be > crewTotal.
@@ -308,6 +310,7 @@ function onLoad() {
 	prepareNarration();
 	loadSessionStorage();
 	updateRessourcesDisplay();
+	console.log(crewMembers);
 }
 
 // Create item depending of itemName.
@@ -368,8 +371,18 @@ function yourTurn(phase) {
 		yourTurn("travel");
 	}
 	else if (phase == "travel") {
-		tempIDs.push("yourTurn_travel");
 		var node = document.getElementById("actionMenu");
+
+		tempIDs.push("travelQuestion");
+		var newText = document.createElement('p');
+		newText.setAttribute("id", "travelQuestion");
+		newText.textContent = "Would you like to move?";
+		node.appendChild(newText);
+		newText.addEventListener('click', function() {
+			changeMenu(this.id);
+		});
+
+		tempIDs.push("yourTurn_travel");
 		var newButton = document.createElement('button');
 		newButton.setAttribute("id", "yourTurn_travel");
 		newButton.textContent = "Travel";
@@ -378,13 +391,12 @@ function yourTurn(phase) {
 			changeMenu(this.id);
 		});
 		tempIDs.push("yourTurn_Stay");
-		var node = document.getElementById("actionMenu");
 		var newButton = document.createElement('button');
 		newButton.setAttribute("id", "yourTurn_Stay");
 		newButton.textContent = "Stay";
 		node.appendChild(newButton);
 		newButton.addEventListener('click', function() {
-			changeMenu("ressourcesConsumption", false);
+			changeMenu("uSure", [["ressourcesConsumption", false], ["travel", "false"]]);
 		});
 	}
 }
@@ -416,8 +428,59 @@ function turnX () {
 
 	node.appendChild(newText);
 	node.appendChild(newButton);
+
+	["water", "money", "food"].forEach(e => {
+		let bonusNode = document.getElementById("bonus_"+e);
+		bonus = 0;
+		crewMembers.forEach(e2 => {
+			if (e in e2['needs']) {
+				bonus -= e2['needs'][e] - e2['passiveEarning'][e]
+			}
+			else {
+			crewMembers.forEach(e2 => bonus += e2['passiveEarning'][e])
+			}
+		}
+		)
+		if (bonus >= 0) {bonus = "+"+bonus;bonusNode.style.color = "green";}
+		else {bonusNode.style.color = "red";}
+		bonusNode.innerHTML = String(bonus);
+	})
+
+
 }
 
+function areUSure (directions) {
+	var node = document.getElementById("actionMenu");
+
+	tempIDs.push("uSureText")
+	var newText = document.createElement('h2');
+	newText.textContent = "Are you sure?"
+	newText.setAttribute("id", "uSureText");
+	node.appendChild(newText);
+
+	var horizonzalNode = document.createElement("div");
+	horizonzalNode.setAttribute("id", "horizonzalNode");
+	node.appendChild(horizonzalNode);
+
+	tempIDs.push("yesButton");
+	var newButton = document.createElement('button');
+	newButton.setAttribute("id", "yesButton");
+	newButton.textContent = "Yes";
+	horizonzalNode.appendChild(newButton);
+	newButton.addEventListener('click', function() {
+		changeMenu(directions[0][0], directions[0][1]);
+	});
+	newButton.classList.add("smallerButton");
+	tempIDs.push("noButton");
+	var newButton = document.createElement('button');
+	newButton.setAttribute("id", "noButton");
+	newButton.textContent = "No";
+	newButton.classList.add("smallerButton");
+	horizonzalNode.appendChild(newButton);
+	newButton.addEventListener('click', function() {
+		changeMenu(directions[1][0], directions[1][1]);
+	});
+}
 // Function: Change player location and do what has to been done after the movement
 // TO BE MODIFIED -> maybe not the same inner HTML
 function changeLocation(button_id) {
@@ -439,23 +502,28 @@ function defineNewDestinations(changeMenuCallback) {
 	possibleDestinations = [];
 	for (let i = 0; i < playerLocation["possibleDestinations"].length; i++) {
 		if (playerLocation["possibleDestinations"][i]["luck"] >= Math.random()) {
-			possibleDestinations.push(playerLocation["possibleDestinations"][i]["type"]);
+
+			possibleDestinations.push(returnLocationData(playerLocation["possibleDestinations"][i]["type"]));
 		}
 	}
-	console.log(possibleDestinations)
+
+	var horizonzalNode = document.createElement("div");
+	horizonzalNode.setAttribute("id", "horizonzalNode");
+	node.appendChild(horizonzalNode);
+	console.log(possibleDestinations);
 	for (var i = 0; i < possibleDestinations.length; i++) {
-		possibleDestinationText.innerHTML = possibleDestinationText.innerHTML + possibleDestinations[i];
+		possibleDestinationText.innerHTML = possibleDestinationText.innerHTML + possibleDestinations[i]["name"];
 		if (i < (possibleDestinations.length - 1)) {
 			possibleDestinationText.innerHTML = possibleDestinationText.innerHTML + ", "
 		}
 		var newDestination = document.createElement('img');
-		newDestination.src = "../Images/"+possibleDestinations[i]+".png";
+		newDestination.src = "../Images/"+possibleDestinations[i]["type"]+".png";
 		newDestination.style.height = "100px";
 		newDestination.style.width = "100px";
 		newDestination.style.margin = "10px";
-		node.appendChild(newDestination);
-		newDestination.setAttribute("id", "dest_"+possibleDestinations[i]);
-		buttonID = "dest_"+possibleDestinations[i]
+		horizonzalNode.appendChild(newDestination);
+		newDestination.setAttribute("id", "dest_"+possibleDestinations[i]["type"]);
+		buttonID = "dest_"+possibleDestinations[i]["type"]
 		tempIDs.push(buttonID);
 		newDestination.addEventListener('click', function() {
 			changeLocation(this.id);
@@ -482,18 +550,26 @@ function killPeople(numberOfDeath) {
 	console.log("Death", numberOfDeath);
 	crewTotal -= numberOfDeath;
 	idleCrew = crewTotal;
+	for (let i = 0; i < numberOfDeath; i++) {
+		crewMembers.shift();
+	}
 }
 
 function ressourcesConsumption (doTravel) {
 	console.log("Crew Total", crewTotal, famineTurns);
+	var waterConsumption = 0;
+	crewMembers.forEach(e => waterConsumption += e['needs']['water'])
+	var foodConsumption = 0;
+	crewMembers.forEach(e => foodConsumption += e['needs']['food'])
+	console.log("Consumptions: ", waterConsumption, foodConsumption);
 	if (doTravel) {
-		water -= crewTotal;
+		water -= waterConsumption;
 	}
 	else {
-		water -= Math.floor(crewTotal / 2);
+		water -= Math.floor(waterConsumption / 2);
 	}
-	if (findItemInv("food")['quantity'] >= crewTotal)
-		{findItemInv("food")['quantity'] -= crewTotal;}
+	if (findItemInv("food")['quantity'] >= foodConsumption)
+		{findItemInv("food")['quantity'] -= foodConsumption;}
 	else {famineTurns += 1;morale -= 10;killPeople(Math.pow(2, famineTurns)-2)}
 	morale /= 1.05;
 	if (water <= 0) {
@@ -607,12 +683,15 @@ function checkRessource(VID, VValue) {
 }
 
 function manageGatherDistribution() {
-	["idleCrewText","tempDiv", "resolveButton", "yieldNode"].forEach(e => tempIDs.push(e));
+	["idleCrewText","tempDiv", "resolveButton", "horizonzalNode"].forEach(e => tempIDs.push(e));
+	var resolveButton = document.createElement("button");
+	resolveButton.setAttribute("id", "resolveButton");
+	resolveButton.innerHTML = "Resolve";
 
 	var bottomNode = document.getElementById("actionMenu");
-	var yieldNode = document.createElement("div");
-	yieldNode.setAttribute("id", "yieldNode");
-	bottomNode.appendChild(yieldNode);
+	var horizonzalNode = document.createElement("div");
+	horizonzalNode.setAttribute("id", "horizonzalNode");
+	bottomNode.appendChild(horizonzalNode);
 
 	ressources = [];
 	if ("waterYield" in playerLocation["gatheringValues"] && playerLocation["gatheringValues"]["waterYield"] > 0) {ressources.push("water");}
@@ -624,13 +703,15 @@ function manageGatherDistribution() {
 		noRessourceText.innerHTML = "There is no ressources in this forgotten place.";
 		noRessourceText.setAttribute("id", "noRessourceText");
 		bottomNode.appendChild(noRessourceText);
+		resolveButton.addEventListener("click", function () {changeMenu("travel");})
 	}
 	else {
+		resolveButton.addEventListener("click", function () {changeMenu("gatherResolution");})
 		ressources.forEach(e => {
 			var ressourceYield = document.createElement("p");
 			ressourceYield.innerHTML = Capitalize(e)+"yield: "+String(playerLocation["gatheringValues"][e+"Yield"]);
 			ressourceYield.setAttribute("id", e+"Yield");
-			yieldNode.appendChild(ressourceYield);
+			horizonzalNode.appendChild(ressourceYield);
 			tempIDs.push(e+"Yield");
 		})
 	
@@ -664,10 +745,7 @@ function manageGatherDistribution() {
 			newDiv.appendChild(tempLabel);
 			newDiv.appendChild(tempInput);
 		})}
-	var resolveButton = document.createElement("button");
-	resolveButton.addEventListener("click", function () {changeMenu("gatherResolution");})
-	resolveButton.setAttribute("id", "resolveButton");
-	resolveButton.innerHTML = "Resolve";
+
 	document.getElementById("actionMenu").appendChild(resolveButton);
 }
 
@@ -693,6 +771,7 @@ function changeMenu(newMenu="None", option=null) {
 	if (newMenu == "yourTurn_gather") {return manageGatherDistribution();}
 	if (newMenu == "gatherResolution") {return gatherResolution();}
 	if (newMenu == "travel") {return yourTurn(newMenu);}
+	if (newMenu == "uSure") {return areUSure(option)};
 	if (newMenu == "yourTurn_travel") {return defineNewDestinations(changeMenu);}
 	if (newMenu == "ressourcesConsumption") {return ressourcesConsumption(option);}
 	if (newMenu == "Defeat") {return Defeat(option);}

@@ -57,7 +57,7 @@ div[id='bottom menu'] {
   flex-direction: row;
   height: 30vh;
 }
-div[id='actionMenu'] button {
+button {
   background-color: cream;
   color: black;
   font-size: 16px;
@@ -77,11 +77,9 @@ div.buttons {
 
 div.strangeButton {
   height: 10vh;
-
   margin: 1px 1px 0px 1px;
  background-color: #ebdfd1;
 display: flex;
-
 align-items: center;
 justify-content: center;
 }
@@ -89,6 +87,17 @@ justify-content: center;
 div.strangeButton img {
   width: 40px;
   height: 40px;
+}
+
+.ressources {
+  width: 97vw;
+  padding: 0px;
+  margin: 0px 0px 0px 0px;
+}
+
+.smallerButton {
+  width: 100px;
+  border-radius: 5px;
 }
 
 #actionMenu {
@@ -105,13 +114,7 @@ align-items: center
 }
 
 #actionMenu button {
-  margin: 5px;
-}
-
-.ressources {
-  width: 97vw;
-  padding: 0px;
-  margin: 0px 0px 0px 0px;
+  margin: 5px 15px 5px 15px;
 }
 
 #escapeBox img{
@@ -148,7 +151,7 @@ justify-content: center;
   margin: 10px;
 }
 
-#yieldNode {
+#horizonzalNode {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -158,4 +161,3 @@ justify-content: center;
 #yieldNode p {
 	margin: 0px 10px 0px 10px;
 }
-

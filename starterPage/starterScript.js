@@ -9,8 +9,8 @@ function save(varName, value) {
 
 var listOfNames = {
 	firstname: {
-		male: ["Arienkhut", "Atum", "Amon", "Amenhemti", "Asim", "Anubis", "Apries", "Apmatenu", "Amenemap", "Amenhotep", "Ahmosis"
-			"Babafemi", "Boubou"
+		male: ["Arienkhut", "Atum", "Amon", "Amenhemti", "Asim", "Anubis", "Apries", "Apmatenu", "Amenemap", "Amenhotep", "Ahmosis",
+			"Babafemi", "Boubou",
 			"Cheres", "Chaths",
 			"Ethan", "Eate", "Hagar", "Euphrate", "Horus", "Geb", "Hebunurotant", "Jonathan",
 			"Kemet", "Khet-ef", "Khem", "Karnak", "Kher-ab", "Kauib", "Koush", "Koushi", "Ludim",
@@ -18,7 +18,7 @@ var listOfNames = {
 			"Naouscheri", "Nakht", "Nezemab", "Nahab",
 			"Pisem", "Philitis", "Petsibast","Raphael", "Rashaken", "Ubaid",
 			"Stephinates", "Sua", "Seth", "Snerseth", "Sethi", "Senusnet", "Sobek", "Thoutmosis", "Vizir"],
-		female: ["Aziza", "Ahmsès", "Ahmès", "Bastet", "Chepsout", "Chione", "Esi", "Hatchepsout", "Hathor", "Hibis", "Imeret", "Joanne", "Jamila", "Moutnofret", "Meritamon", "Myrrhe"
+		female: ["Aziza", "Ahmsès", "Ahmès", "Bastet", "Chepsout", "Chione", "Esi", "Hatchepsout", "Hathor", "Hibis", "Imeret", "Joanne", "Jamila", "Moutnofret", "Meritamon", "Myrrhe",
 			"Nuru", "Nour", "Nanu", "Nefertari", "Neyla", "Nephthys", "Neferoubity", "Nubie",
 			"Safiya", "Satre", "Sit-aah", "Selk", "Salifa", "Sagira", "Sua", "Talibah", "Thebe", "Tabia"]
 	},
@@ -28,10 +28,11 @@ var listOfNames = {
 specialNames = ["Amen", "Ammon", "Amon", "Amonet", "Amonet", "Amon-Ra", "Amun", "Amunet", "Anapa", "Anoubis", "Anubis", "Apis", "Asar", "Atem", "Aten"]
 
 baseUnit = {
+	id: 0,
 	name: "",
 	gender: null,
 	age: null,
-
+	max_health: 10,
 	health: 10,
 	attacks : {
 		damageAbs: 0,
@@ -104,7 +105,15 @@ baseUnit = {
 		lance: 0,
 		bow: 0,
 		mace: 0
-	}
+	},
+	weapon: {
+		name: "hand",
+		power: [1, 0, 0],
+		attackType: "blunt",
+		weaponType: "mace",
+		attackStyle: "melee"
+	},
+	injuries: 0
 }
 
 var luckTrait = [0.6, 0.7, 0.8, 0.9, 0.95];
@@ -112,9 +121,10 @@ var luckTrait = [0.6, 0.7, 0.8, 0.9, 0.95];
 var genderArr = ["male", "female"];
 
 function manageSpecials(unit) {
-	specials = Object.keys(unit['special']);
+	specials = unit['special'];
 	for (let special in specials) {
 		if (unit['special'][special] == false) {continue;}
+		// console.log(unit['special'][special]);
 		if (special == "hungry") {
 			unit['needs']['food'] += 1;
 		}
@@ -142,12 +152,12 @@ function manageSpecials(unit) {
 		}
 		else if (special == "warrior") {
 			unit['attacks']['damageAbs'] += 1;
-			unit['defense']['phyDefense'] += 1;
+			unit['resistance']['phyDefense'] += 1;
 			unit['weaponProficiency']['melee'] += 1;
 		}
 		else if (special == "protector") {
-			unit['defense']['defense'] += 1;
-			unit['defense']['phyDefense'] += 1;
+			unit['resistance']['defense'] += 1;
+			unit['resistance']['phyDefense'] += 1;
 			unit['health'] += 5;
 		}
 		else if (special == "healthy") {
@@ -158,9 +168,9 @@ function manageSpecials(unit) {
 			unit['needs']['morale'] = 0;
 			unit['needs']['food'] = 0;
 		}
-		else if (special == "lancer") {
+		else if (special == "spearman") {
 			unit['attacks']['piercing'] += 1;
-			unit['weaponProficiency']['lance'] += 1;
+			unit['weaponProficiency']['spear'] += 1;
 		}
 		else if (special == "swordsman") {
 			unit['attacks']['slashing'] += 1;
@@ -173,24 +183,28 @@ function manageSpecials(unit) {
 			unit['skills']['waterGatheringAbs'] += 1;
 			unit['health'] += 2;
 			unit['attacks']['damageAbs'] += 1;
-			unit['defense']['defense'] += 1;
+			unit['resistance']['defense'] += 1;
 		}
 	}
 	return unit;
 }
 
 function createCharacter () {
-	var newUnit = JSON.parse(JSON.stringify(baseUnit));;
+	var newUnit = JSON.parse(JSON.stringify(baseUnit));
+	newUnit['id'] = "id" + Math.random().toString(16).slice(2);
 	newUnit["gender"] = genderArr[Math.floor(genderArr.length * Math.random())];
 	newUnit["name"] = listOfNames["firstname"][newUnit["gender"]][Math.floor(listOfNames["firstname"][newUnit["gender"]].length * Math.random())];
 	newUnit["age"] = 18 + Math.floor(60 * Math.random());
+	if (newUnit['age'] > 65) {newUnit['health'] -= 1;}
 	for (let i=0; i < luckTrait.length; i++) {
 			if (Math.random() > luckTrait[i]) {
 				keys = Object.keys(baseUnit['special']);
 				newUnit['special'][keys[Math.floor(keys.length * Math.random())]] = true;
 			};
 	}
-	return manageSpecials(newUnit);
+	newUnit = manageSpecials(newUnit);
+	newUnit['max_health'] = health;
+	return newUnit;
 }
 
 var baseCrewNumber = 10;
@@ -235,7 +249,7 @@ function initSessionStorage () {
 }
 
 function goPlay() {
-	window.location.href = "../cinematicPage/cinematic.html";
+	window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
 }
 
 document.getElementById("play").onclick = goPlay;

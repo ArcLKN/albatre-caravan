@@ -43,6 +43,10 @@ function saveSessionStorage () {
 	save("gatherer", gatherer);
 }
 
+inventory.push(monNouvelObjet);
+
+
+
 // Simply used to capitalize a word. let capitalizedWord = Capitalize(the_word_you_want_to_capitalize);
 function Capitalize(e) {return e[0].toUpperCase() + e.slice(1);}
 
@@ -307,10 +311,15 @@ function prepareNarration() {
 // It manages what to do afterward.
 // Maybe it could be put at the root, but I just prefer to put things in function, if it isn't a variable.
 function onLoad() {
-	prepareNarration();
 	loadSessionStorage();
 	updateRessourcesDisplay();
-	console.log(crewMembers);
+	if (statusTurn == "trade") {
+		changeMenu("");
+	}
+	else if (statusTurn == "deployUnits") {
+		changeMenu("");
+	}
+	prepareNarration();
 }
 
 // Create item depending of itemName.
@@ -332,6 +341,77 @@ function defineUnit () {
 	newUnit["surname"] = listOfNames["surname"][Math.floor(listOfNames["surname"].length * Math.random())];
 	newUnit["age"] = 18 + Math.floor(60 * Math.random());
 	return newUnit;
+}
+
+function fight (team1, team2) {
+	console.log(team1, team2);
+	for (let i=0; i<team1.length; i++) {
+		for (let unit1 in team1[i]) {
+			thisUnit = team1[i][unit1];
+			trueAim = Math.min(team2.length-1, Math.max(0, team1Aim[i] - i));
+			maxIndex = team2[trueAim].length - 1;
+			if (maxIndex == 0) {
+				unitIndex = 0;
+			}
+			else if (unit1 > maxIndex) {
+				unitIndex = unit1%maxIndex;
+			}
+			else {unitIndex = unit1};
+			ennemyUnit = team2[trueAim][unitIndex];
+			atk = thisUnit['weapon']['power'][team1Aim[i]]
+				+ thisUnit['weaponProficiency'][thisUnit['weapon']["weaponType"]]
+				+ thisUnit['weaponProficiency'][thisUnit['weapon']["attackStyle"]]
+				+ thisUnit['weaponProficiency']["weapon"]
+				+ thisUnit["attacks"][thisUnit['weapon']["attackType"]];
+			res = ennemyUnit["resistance"][thisUnit['weapon']["attackType"]]
+				+ ennemyUnit["resistance"]["defense"]
+				+ ennemyUnit["resistance"]["phyDefense"];
+			damageCalc = Math.max(0, atk - res);
+			if (ennemyUnit['health'] > 0 && ennemyUnit['health'] - damageCalc <= 0) {
+				console.log(ennemyUnit['name'],"died from the next attack.");
+			}
+			ennemyUnit['health'] -= damageCalc;
+			console.log("T1:",thisUnit['name'],"has done", damageCalc,"damage to",ennemyUnit['name'],"with",thisUnit['weapon']['name']+"!");
+		}
+	}
+	for (let i=0; i<team2.length; i++) {
+		for (let unit2 in team2[i]) {
+			thisUnit = team2[i][unit2];
+			trueAim = Math.min(team1.length-1, Math.max(0, team2Aim[i] - i));
+			maxIndex = team1[trueAim].length - 1;
+			if (maxIndex == 0) {
+				unitIndex = 0;
+			}
+			else if (unit2 > maxIndex) {
+				unitIndex = unit2%maxIndex;
+			}
+			else {unitIndex = unit2};
+			ennemyUnit = team1[trueAim][unitIndex];
+			atk = thisUnit['weapon']['power'][team2Aim[i]]
+				+ thisUnit['weaponProficiency'][thisUnit['weapon']["weaponType"]]
+				+ thisUnit['weaponProficiency'][thisUnit['weapon']["attackStyle"]]
+				+ thisUnit['weaponProficiency']["weapon"]
+				+ thisUnit["attacks"][thisUnit['weapon']["attackType"]];
+			res = ennemyUnit["resistance"][thisUnit['weapon']["attackType"]]
+				+ ennemyUnit["resistance"]["defense"]
+				+ ennemyUnit["resistance"]["phyDefense"];
+			damageCalc = Math.max(0, atk - res);
+			if (ennemyUnit['health'] > 0 && ennemyUnit['health'] - damageCalc <= 0) {
+				console.log(ennemyUnit['name'],"died from the next attack.");
+			}
+			ennemyUnit['health'] -= damageCalc;
+			console.log("T2:",thisUnit['name'],"has done", damageCalc,"damage to",ennemyUnit['name'],"with",thisUnit['weapon']['name']+"!");
+			//console.log("Atk.:",atk,"=",thisUnit['weapon']['power'][team2Aim[i]],"(",team2Aim[i], i,") +", thisUnit['weaponProficiency'][thisUnit['weapon']["weaponType"]])
+			//console.log("Def.:",res,"=",ennemyUnit["resistance"][thisUnit['weapon']["attackType"]],"+",ennemyUnit["resistance"]["defense"],"+",ennemyUnit["resistance"]["phyDefense"]);
+		}
+	}
+	for (let team in [team1, team2]) {
+		for (let i = 0; i<[team1, team2][team].length; i++) {
+			[team1, team2][team][i] = [team1, team2][team][i].filter(unit => unit['health'] > 0);
+		}
+		chooseAim([team1, team2][team], 1);
+	}
+	return team1, team2;
 }
 
 function yourTurn(phase) {
@@ -755,6 +835,11 @@ function Defeat (option) {
 	dyingText.setAttribute("id", "dyingText");
 	dyingText.innerHTML = `You died on turn ${String(numberOfTurns)}.`;
 	document.getElementById("actionMenu").appendChild(dyingText);
+}
+
+function manageTrade() {
+	saveSessionStorage();
+	window.location.href = "../mainPage/tradePage/trade.html";
 }
 
 function changeMenu(newMenu="None", option=null) {

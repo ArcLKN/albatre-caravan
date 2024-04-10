@@ -43,10 +43,6 @@ function saveSessionStorage () {
 	save("gatherer", gatherer);
 }
 
-inventory.push(monNouvelObjet);
-
-
-
 // Simply used to capitalize a word. let capitalizedWord = Capitalize(the_word_you_want_to_capitalize);
 function Capitalize(e) {return e[0].toUpperCase() + e.slice(1);}
 
@@ -346,6 +342,7 @@ function prepareNarration() {
 function onLoad() {
 	loadSessionStorage();
 	updateRessourcesDisplay();
+	let statusTurn = "";
 	if (statusTurn == "trade") {
 		changeMenu("");
 	}
@@ -393,10 +390,11 @@ function fight (team1, team2) {
 			ennemyUnit = team2[trueAim][unitIndex];
 			atk = thisUnit['weapon']['power'][team1Aim[i]]
 				+ thisUnit['weaponProficiency'][thisUnit['weapon']["weaponType"]]
-				+ thisUnit['weaponProficiency'][thisUnit['weapon']["attackStyle"]]
+				+ thisUnit['weaponProficiency'][thisUnit['weapon']["attackStyle"][team1Aim[i]]]
 				+ thisUnit['weaponProficiency']["weapon"]
-				+ thisUnit["attacks"][thisUnit['weapon']["attackType"]];
-			res = ennemyUnit["resistance"][thisUnit['weapon']["attackType"]]
+				+ thisUnit["attacks"][thisUnit['weapon']["attackType"][team1Aim[i]]]
+				+ thisUnit["attacks"]["damageAbs"];
+			res = ennemyUnit["resistance"][thisUnit['weapon']["attackType"][team1Aim[i]]]
 				+ ennemyUnit["resistance"]["defense"]
 				+ ennemyUnit["resistance"]["phyDefense"];
 			damageCalc = Math.max(0, atk - res);
@@ -422,10 +420,10 @@ function fight (team1, team2) {
 			ennemyUnit = team1[trueAim][unitIndex];
 			atk = thisUnit['weapon']['power'][team2Aim[i]]
 				+ thisUnit['weaponProficiency'][thisUnit['weapon']["weaponType"]]
-				+ thisUnit['weaponProficiency'][thisUnit['weapon']["attackStyle"]]
+				+ thisUnit['weaponProficiency'][thisUnit['weapon']["attackStyle"][team2Aim[i]]]
 				+ thisUnit['weaponProficiency']["weapon"]
-				+ thisUnit["attacks"][thisUnit['weapon']["attackType"]];
-			res = ennemyUnit["resistance"][thisUnit['weapon']["attackType"]]
+				+ thisUnit["attacks"][thisUnit['weapon']["attackType"][team2Aim[i]]];
+			res = ennemyUnit["resistance"][thisUnit['weapon']["attackType"][team2Aim[i]]]
 				+ ennemyUnit["resistance"]["defense"]
 				+ ennemyUnit["resistance"]["phyDefense"];
 			damageCalc = Math.max(0, atk - res);

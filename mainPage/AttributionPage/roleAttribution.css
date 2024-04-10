@@ -38,6 +38,10 @@
 }
 
 #role button:hover {
+    background-color: darkgrey;
+}
+
+#role button:focus {
     background-color: grey;
 }
 

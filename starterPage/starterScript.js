@@ -297,6 +297,7 @@ for (i = 0; i < baseCrewNumber; i++) {
 
 // Define starting values.
 function initSessionStorage() {
+  save("statusTurn", "trade");
   save("crewMembers", crewMembers);
   // Number of people player has, thus number of people he can use.
   save("crewTotal", 10);
@@ -325,7 +326,14 @@ function initSessionStorage() {
       { type: "desert_city", luck: 0.1 },
     ],
   });
-  save("gatherer", { water: 0, food: 0, morale: 0 });
+  save("gatherer", {
+    water: 0,
+    food: 0,
+    morale: 0,
+    scout: [],
+    guard: [],
+    carrier: [],
+  });
 }
 
 function goPlay() {

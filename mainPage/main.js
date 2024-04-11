@@ -28,8 +28,7 @@ function loadSessionStorage() {
   playerLocation = JSON.parse(sessionStorage.getItem("playerLocation"));
   gatherer = JSON.parse(sessionStorage.getItem("gatherer"));
   statusTurn = sessionStorage.getItem("statusTurn");
-  //crew = sessionStorage.getItem("crew");
-  console.log(statusTurn);
+  crew = JSON.parse(sessionStorage.getItem("crew"));
 }
 
 // All the variables we want to save and share through every JS files.
@@ -374,22 +373,11 @@ function prepareNarration() {
 // Maybe it could be put at the root, but I just prefer to put things in function, if it isn't a variable.
 function onLoad() {
   loadSessionStorage();
-  console.log(statusTurn);
   updateRessourcesDisplay();
   if (statusTurn == "trade") {
-    changeMenu("crewAssignment");
+    return changeMenu("crewAssignment");
   } else if (statusTurn == "deployUnits") {
     return yourTurn("gathering");
-  }
-  prepareNarration();
-  console.log(crewMembers);
-  loadSessionStorage();
-  updateRessourcesDisplay();
-  let statusTurn = "";
-  if (statusTurn == "trade") {
-    changeMenu("");
-  } else if (statusTurn == "deployUnits") {
-    changeMenu("");
   }
   prepareNarration();
 }

@@ -31,6 +31,7 @@ function loadSessionStorage() {
   gatherer = JSON.parse(sessionStorage.getItem("gatherer"));
   statusTurn = sessionStorage.getItem("statusTurn");
   crew = JSON.parse(sessionStorage.getItem("crew"));
+  console.log(crew);
 }
 
 // All the variables we want to save and share through every JS files.
@@ -145,7 +146,7 @@ function createMemberAndAssign(menu = "") {
     attributionCheck.setAttribute("id", newId);
     personAbout.classList.add("member-about");
     attributionContainer.classList.add("checkbox");
-    personImage.src = "/Images/personImage-" + eachPerson + ".jpg";
+    personImage.src = "../../Images/personImage-" + eachPerson + ".jpg";
     personFullName.classList.add("description");
     personFullName.innerHTML =
       crew[eachPerson]["name"] + " " + crew[eachPerson]["lastName"];
@@ -197,7 +198,6 @@ confirmationBtn.addEventListener("click", () => {
 
 // ---------- START FUNCTIONS CALLING ----------
 
-loadSessionStorage();
 displayResources();
 createMemberAndAssign("scout");
 

@@ -598,7 +598,7 @@ function initSessionStorage() {
     id: "personne" + Math.floor(Math.random() * 100000),
   },
 ]);
-  save("statusTurn", "trade");
+  save("statusTurn", "");
   save("crewMembers", crewMembers);
   // Number of people player has, thus number of people he can use.
   save("crewTotal", 10);

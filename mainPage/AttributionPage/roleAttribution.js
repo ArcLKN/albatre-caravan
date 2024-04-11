@@ -30,6 +30,7 @@ function loadSessionStorage() {
   playerLocation = JSON.parse(sessionStorage.getItem("playerLocation"));
   gatherer = JSON.parse(sessionStorage.getItem("gatherer"));
   statusTurn = sessionStorage.getItem("statusTurn");
+  crew = JSON.parse(sessionStorage.getItem("crew"));
 }
 
 // All the variables we want to save and share through every JS files.
@@ -49,6 +50,7 @@ function saveSessionStorage() {
   save("playerLocation", playerLocation);
   save("gatherer", gatherer);
   save("statusTurn", statusTurn);
+  save("crew", crew);
 }
 
 // ---------- END MANDATORY VARIABLE FUNCTIONS ----------
@@ -56,48 +58,6 @@ function saveSessionStorage() {
 loadSessionStorage();
 
 // ---------- START CREW AND INVENTORY VARIABLES ----------
-
-var gatherer = {
-  scout: [],
-  guard: [],
-  carrier: [],
-};
-
-//Crew related variables
-let crew = [
-  {
-    name: "Joanne",
-    lastName: "Andriamahandry",
-    Age: 18,
-    Sex: "Female",
-    role: [false, false, false], //Scout, guard, carrier
-    id: "personne" + Math.floor(Math.random() * 100000),
-  },
-  {
-    name: "Neyla",
-    lastName: "Mazouz",
-    Age: 19,
-    Sex: "Female",
-    role: [false, false, false], //Scout, guard, carrier
-    id: "personne" + Math.floor(Math.random() * 100000),
-  },
-  {
-    name: "Ethan",
-    lastName: "Gandiboyina",
-    Age: 19,
-    Sex: "Male",
-    role: [false, false, false], //Scout, guard, carrier
-    id: "personne" + Math.floor(Math.random() * 100000),
-  },
-  {
-    name: "Raphael",
-    lastName: "Grosnoir",
-    Age: 19,
-    Sex: "Male",
-    role: [false, false, false], //Scout, guard, carrier,
-    id: "personne" + Math.floor(Math.random() * 100000),
-  },
-];
 
 let crewList = document.getElementById("crewMembers");
 let displayCrewTotal = document.getElementById("crew-total");

@@ -28,6 +28,8 @@ function loadSessionStorage() {
   playerLocation = JSON.parse(sessionStorage.getItem("playerLocation"));
   gatherer = JSON.parse(sessionStorage.getItem("gatherer"));
   statusTurn = sessionStorage.getItem("statusTurn");
+  //crew = sessionStorage.getItem("crew");
+  console.log(statusTurn);
 }
 
 // All the variables we want to save and share through every JS files.
@@ -48,6 +50,7 @@ function saveSessionStorage() {
   save("inventory", inventory);
   save("playerLocation", playerLocation);
   save("gatherer", gatherer);
+  save("crew", crew);
 }
 
 // Simply used to capitalize a word. let capitalizedWord = Capitalize(the_word_you_want_to_capitalize);
@@ -371,6 +374,7 @@ function prepareNarration() {
 // Maybe it could be put at the root, but I just prefer to put things in function, if it isn't a variable.
 function onLoad() {
   loadSessionStorage();
+  console.log(statusTurn);
   updateRessourcesDisplay();
   if (statusTurn == "trade") {
     changeMenu("crewAssignment");

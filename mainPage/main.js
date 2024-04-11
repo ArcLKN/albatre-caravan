@@ -239,6 +239,39 @@ var allItems = [
     value: 10,
     description: "Miam miam",
   },
+  {
+    type: "weapon",
+    name: "bow",
+    quantity: 0,
+    value: 10,
+    power: [1, 2, 3],
+    attackType: "piercing",
+    weaponType: "bow",
+    attackStyle: "distance",
+    description: "Classic wooden bow.",
+  },
+  {
+    type: "weapon",
+    quantity: 0,
+    value: 10,
+    name: "spear",
+    power: [2, 3, 0],
+    attackType: "piercing",
+    weaponType: "spear",
+    attackStyle: "melee",
+    description: "Classic wooden bow.",
+  },
+  {
+    type: "weapon",
+    quantity: 0,
+    value: 10,
+    name: "sword",
+    power: [3, 2, 0],
+    attackType: "slashing",
+    weaponType: "sword",
+    attackStyle: "melee",
+    description: "Classic wooden bow.",
+  },
 ];
 var moralDecrease = 0.05;
 var listOfNames = {
@@ -346,6 +379,15 @@ function onLoad() {
   }
   prepareNarration();
   console.log(crewMembers);
+  loadSessionStorage();
+  updateRessourcesDisplay();
+  let statusTurn = "";
+  if (statusTurn == "trade") {
+    changeMenu("");
+  } else if (statusTurn == "deployUnits") {
+    changeMenu("");
+  }
+  prepareNarration();
 }
 
 // Create item depending of itemName.
@@ -379,6 +421,210 @@ function defineUnit() {
     ];
   newUnit["age"] = 18 + Math.floor(60 * Math.random());
   return newUnit;
+}
+
+function fight(team1, team2) {
+  console.log(team1, team2);
+  for (let i = 0; i < team1.length; i++) {
+    for (let unit1 in team1[i]) {
+      thisUnit = team1[i][unit1];
+      trueAim = Math.min(team2.length - 1, Math.max(0, team1Aim[i] - i));
+      maxIndex = team2[trueAim].length - 1;
+      if (maxIndex == 0) {
+        unitIndex = 0;
+      } else if (unit1 > maxIndex) {
+        unitIndex = unit1 % maxIndex;
+      } else {
+        unitIndex = unit1;
+      }
+      ennemyUnit = team2[trueAim][unitIndex];
+      atk =
+        thisUnit["weapon"]["power"][team1Aim[i]] +
+        thisUnit["weaponProficiency"][thisUnit["weapon"]["weaponType"]] +
+        thisUnit["weaponProficiency"][
+          thisUnit["weapon"]["attackStyle"][team1Aim[i]]
+        ] +
+        thisUnit["weaponProficiency"]["weapon"] +
+        thisUnit["attacks"][thisUnit["weapon"]["attackType"][team1Aim[i]]] +
+        thisUnit["attacks"]["damageAbs"];
+      res =
+        ennemyUnit["resistance"][
+          thisUnit["weapon"]["attackType"][team1Aim[i]]
+        ] +
+        ennemyUnit["resistance"]["defense"] +
+        ennemyUnit["resistance"]["phyDefense"];
+      damageCalc = Math.max(0, atk - res);
+      if (ennemyUnit["health"] > 0 && ennemyUnit["health"] - damageCalc <= 0) {
+        console.log(ennemyUnit["name"], "died from the next attack.");
+      }
+      ennemyUnit["health"] -= damageCalc;
+      console.log(
+        "T1:",
+        thisUnit["name"],
+        "has done",
+        damageCalc,
+        "damage to",
+        ennemyUnit["name"],
+        "with",
+        thisUnit["weapon"]["name"] + "!"
+      );
+    }
+  }
+  for (let i = 0; i < team2.length; i++) {
+    for (let unit2 in team2[i]) {
+      thisUnit = team2[i][unit2];
+      trueAim = Math.min(team1.length - 1, Math.max(0, team2Aim[i] - i));
+      maxIndex = team1[trueAim].length - 1;
+      if (maxIndex == 0) {
+        unitIndex = 0;
+      } else if (unit2 > maxIndex) {
+        unitIndex = unit2 % maxIndex;
+      } else {
+        unitIndex = unit2;
+      }
+      ennemyUnit = team1[trueAim][unitIndex];
+      atk =
+        thisUnit["weapon"]["power"][team2Aim[i]] +
+        thisUnit["weaponProficiency"][thisUnit["weapon"]["weaponType"]] +
+        thisUnit["weaponProficiency"][
+          thisUnit["weapon"]["attackStyle"][team2Aim[i]]
+        ] +
+        thisUnit["weaponProficiency"]["weapon"] +
+        thisUnit["attacks"][thisUnit["weapon"]["attackType"][team2Aim[i]]];
+      res =
+        ennemyUnit["resistance"][
+          thisUnit["weapon"]["attackType"][team2Aim[i]]
+        ] +
+        ennemyUnit["resistance"]["defense"] +
+        ennemyUnit["resistance"]["phyDefense"];
+      damageCalc = Math.max(0, atk - res);
+      if (ennemyUnit["health"] > 0 && ennemyUnit["health"] - damageCalc <= 0) {
+        console.log(ennemyUnit["name"], "died from the next attack.");
+      }
+      ennemyUnit["health"] -= damageCalc;
+      console.log(
+        "T2:",
+        thisUnit["name"],
+        "has done",
+        damageCalc,
+        "damage to",
+        ennemyUnit["name"],
+        "with",
+        thisUnit["weapon"]["name"] + "!"
+      );
+      //console.log("Atk.:",atk,"=",thisUnit['weapon']['power'][team2Aim[i]],"(",team2Aim[i], i,") +", thisUnit['weaponProficiency'][thisUnit['weapon']["weaponType"]])
+      //console.log("Def.:",res,"=",ennemyUnit["resistance"][thisUnit['weapon']["attackType"]],"+",ennemyUnit["resistance"]["defense"],"+",ennemyUnit["resistance"]["phyDefense"]);
+    }
+  }
+  for (let team in [team1, team2]) {
+    for (let i = 0; i < [team1, team2][team].length; i++) {
+      [team1, team2][team][i] = [team1, team2][team][i].filter(
+        (unit) => unit["health"] > 0
+      );
+    }
+    chooseAim([team1, team2][team], 1);
+  }
+  return team1, team2;
+}
+
+function battle(team1, team2) {
+  let nbrT1 = 0;
+  let nbrT2 = 0;
+  team1.forEach((e1) => e1.forEach((e2) => (nbrT1 += 1)));
+  team2.forEach((e1) => e1.forEach((e2) => (nbrT2 += 1)));
+  var turn = 0;
+  while (nbrT1 > 0 && nbrT2 > 0 && turn < 50) {
+    team1, (team2 = fight(team1, team2));
+    team1 = team1.filter((row) => row.length > 0);
+    team2 = team2.filter((row) => row.length > 0);
+    console.log(team1, team2);
+    nbrT1 = 0;
+    nbrT2 = 0;
+    team1.forEach((e1) => e1.forEach((e2) => (nbrT1 += 1)));
+    team2.forEach((e1) => e1.forEach((e2) => (nbrT2 += 1)));
+    turn++;
+  }
+}
+
+// Different AI difficulties depending on what stats they take for account to aim. The more stats it takes into account, the more precise it is.
+// First level is just weapon.
+// Second level is weapon and proficiency.
+// Third levels is weapon, proficiency and attack type compared to ennemy defense type.
+function chooseAim(team, level) {
+  let aimList = [];
+  if (level == 1) {
+    for (let eachRow in team) {
+      let sumDamage = [0, 0, 0];
+      for (let eachUnit in team[eachRow]) {
+        let thisUnit = team[eachRow][eachUnit];
+        for (let eachRange in thisUnit["weapon"]["power"]) {
+          sumDamage[eachRange] += thisUnit["weapon"]["power"][eachRange];
+        }
+      }
+      let maxDmg = 0;
+      // console.log(sumDamage);
+      for (let eachRange in sumDamage) {
+        if (sumDamage[eachRange] > maxDmg) {
+          aimList[eachRow] = eachRange;
+          maxDmg = sumDamage[eachRange];
+        }
+      }
+    }
+  } else if (level == 2) {
+    for (let eachRow in team) {
+      let sumDamage = [0, 0, 0];
+      for (let eachUnit in team[eachRow]) {
+        let thisUnit = team[eachRow][eachUnit];
+        // console.log(thisUnit);
+        for (let eachRange in thisUnit["weapon"]["power"]) {
+          sumDamage[eachRange] +=
+            thisUnit["weapon"]["power"][eachRange] +
+            thisUnit["weaponProficiency"][thisUnit["weapon"]["weaponType"]] +
+            thisUnit["weaponProficiency"][thisUnit["weapon"]["attackStyle"]] +
+            thisUnit["weaponProficiency"]["weapon"];
+          // console.log(sumDamage[eachRange]);
+        }
+      }
+      let maxDmg = 0;
+      for (let eachRange in sumDamage) {
+        if (sumDamage[eachRange] > maxDmg) {
+          aimList[eachRow] = eachRange;
+          maxDmg = sumDamage[eachRange];
+        }
+      }
+    }
+  } else if (level == 3) {
+    for (let eachRow in team) {
+      let sumDamage = [0, 0, 0];
+      for (let eachUnit in team[eachRow]) {
+        let thisUnit = team[eachRow][eachUnit];
+        // console.log(thisUnit);
+        for (let eachRange in thisUnit["weapon"]["power"]) {
+          sumDamage[eachRange] +=
+            thisUnit["weapon"]["power"][eachRange] +
+            thisUnit["weaponProficiency"][thisUnit["weapon"]["weaponType"]] +
+            thisUnit["weaponProficiency"][thisUnit["weapon"]["attackStyle"]] +
+            thisUnit["weaponProficiency"]["weapon"];
+          let totalRes = 0;
+          team2[eachRange].forEach((e1) => {
+            totalRes += e1["resistance"][thisUnit["weapon"]["attackType"]];
+          });
+          totalRes /= team2[eachRange].length;
+          sumDamage[eachRange] +=
+            thisUnit["attacks"][thisUnit["weapon"]["attackType"]] - totalRes;
+          // console.log(sumDamage[eachRange]);
+        }
+      }
+      let maxDmg = 0;
+      for (let eachRange in sumDamage) {
+        if (sumDamage[eachRange] > maxDmg) {
+          aimList[eachRow] = eachRange;
+          maxDmg = sumDamage[eachRange];
+        }
+      }
+    }
+  }
+  return aimList;
 }
 
 function yourTurn(phase) {
@@ -862,6 +1108,11 @@ function Defeat(option) {
   dyingText.setAttribute("id", "dyingText");
   dyingText.innerHTML = `You died on turn ${String(numberOfTurns)}.`;
   document.getElementById("actionMenu").appendChild(dyingText);
+}
+
+function manageTrade() {
+  saveSessionStorage();
+  window.location.href = "../mainPage/tradePage/trade.html";
 }
 
 function changeMenu(newMenu = "None", option = null) {

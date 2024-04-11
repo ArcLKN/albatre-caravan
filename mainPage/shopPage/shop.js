@@ -2,7 +2,7 @@ var inventaire = [ // inventaire à adapter au jeu
     {name: "water", quantité: 15, prix: 5},
     {name: "grass", quantité: 25, prix: 2},
     {name: "air", quantité: 35, prix: 1},
-    
+    {name: "Neyla", quantité: 5, prix: 10},
     
 ];
 
@@ -18,58 +18,46 @@ var inventaireMagasin2 = [ //juste la pour être modifié les quantités à mett
     {name: "shield", quantité: 0, prix: 1}
 ]
 
-var images = [ //je sais que mes images sont horribles, la on peut placer les images correspondantes aux items de l'inventaire
+//je sais que mes images sont horribles, la on peut placer les images correspondantes aux items de l'inventaire
+var images = [
     "placeholder.jpeg", "placeholder.jpeg", "placeholder.jpeg"
 
 ]
 
-var imagesMagasin = [//images des items du magasin
+//images des items du magasin
+var imagesMagasin = [
     "placeholder.jpeg", "placeholder.jpeg", "placeholder.jpeg"
 
 ]
-
-
-
-
 
 let lengthInventaire = inventaire.length;
 
 let lengthInventaireMagasin = inventaireMagasin.length;
 
-function displayInventory() {//pas utilisé ici 
-    for(let item in inventaire){
-        var newItem = document.createElement("p");
-        newItem.textContent = inventaire[item]["name"] + inventaire[item]["quantité"] + inventaire[item]["prix"];
-        document.body.appendChild(newItem);
-
-    }
-}
-
-
-
-duplicatediv();
-
-function duplicatediv(){//afficher dans le shop
-    for (i=0; i<lengthInventaire; i++){
+// Affiche l'inventaire
+function displayInventory(){
+    for (let eachItem in inventaire) {
+        let thisItem = inventaire[eachItem];
         var nouvelleDiv = document.createElement("div");
         nouvelleDiv.classList.add("BigItem");
         //nouvelleDiv.innerText = "div numéro:"+i;
 
         var image = document.createElement("img");
-        image.src = images[i];
+        //image.src = thisItem['image']; // Quand les objets auront des images.
 
         var divname = document.createElement("div");
         divname.classList.add("name");
-        divname.innerText = inventaire[i]["name"];//elem numero i de la liste avec l'attribut "name"
+        divname.innerText = thisItem["name"];//elem numero i de la liste avec l'attribut "name"
         
 
-        var divquantité = document.createElement("div");       
-        divquantité.classList.add("quantité"+i);
-        divquantité.innerText = "Quantité dans l'inventaire: "+inventaire[i]["quantité"];
+        var divquantité = document.createElement("div");
+        divquantité.classList.add("quantity");
+        divquantité.setAttribute("id", "idQtt"+thisItem['name']);
+        divquantité.innerText = "Quantité dans l'inventaire : " + thisItem["quantité"];
     
         var divprix = document.createElement("div");
         divprix.classList.add("prix");
-        divprix.innerText = inventaire[i]["prix"]+"$";
+        divprix.innerText = thisItem["prix"]+"$";
 
         nouvelleDiv.appendChild(divprix);
         nouvelleDiv.appendChild(divname);
@@ -77,11 +65,15 @@ function duplicatediv(){//afficher dans le shop
         
 
         var inputquantité = document.createElement("input");
-        inputquantité.classList.add("input"+i);
+        inputquantité.classList.add("input");
+        inputquantité.setAttribute("id", thisItem['name']+"Input");
         inputquantité.type = "number";
-        inputquantité.max = inventaire[i]["quantité"];
+        inputquantité.max = thisItem["quantité"];
         inputquantité.value = 0;
         inputquantité.min = 0;
+        inputquantité.oninput = function () {
+        sellItem(thisItem, this.value);
+      };
 
         divquantité.appendChild(inputquantité);
         
@@ -91,7 +83,6 @@ function duplicatediv(){//afficher dans le shop
         
     }
 }
-
 function duplicatedivM(){
     for (i=0; i<lengthInventaireMagasin; i++){
         var nouvelleDivM = document.createElement("div");
@@ -132,134 +123,43 @@ function duplicatedivM(){
         parentM.appendChild(nouvelleDivM);//ajoute la div ds container
     }
 }
+displayInventory();
 duplicatedivM();
 
-let a = 0;
-let prix = 100;
+let a = 0; // ???
 let argent = 100; //valeur à accorder à l'argent qu'on possède dans le jeu
-const resultat = document.querySelector("#résultat");
+let resultat = 0;
 const finali = document.querySelector("#finali");
 
-function vendre() {//flèche du bas pour enlèever de notre inventaire l'objet et donc vendre
-    for (let i = 0; i < lengthInventaire; i++) {
-        let input = document.querySelector(".input" + i); // Sélectionner l'input correspondant
-        let valeurPrix = parseInt(input.value);; // Récupérer la valeur de l'input
-        let price = inventaire[i]["prix"]; //Récupérer le prix de l'inventaire
-        let divquantité = document.querySelector(".quantité" + i); 
-
-        let divQuantiteAffichee = document.createElement("div");
-        //divQuantiteAffichee.textContent = "Quantité: " + valeurPrix; // Initialiser avec la valeur actuelle de la quantité
-        divquantité.appendChild(divQuantiteAffichee);
-
-        input.addEventListener("change", function() {//quand on click la fonction se déclanche
-            let valeurPrixnv = parseInt(input.value); // Récupérer la nouvelle valeur de l'input
-
-            if (valeurPrixnv > valeurPrix) { //si on click sur la flèche du haut on remet l'item dans l'inventaire donc on gagne pas cet argent donc le prix du ticket augmente
-                argent = argent - price;
-                console.log("argent en poche:",argent);
-                prix = prix + price;
-                a = a + price;
-                changeColor();
-                finali.innerText = a;
-                resultat.innerText = prix;
-            } else if (valeurPrixnv < valeurPrix) { //si on click sur la flèche du bas on vend un item donc le prix u ticket baisee
-                argent = argent + price;
-                console.log("argent en poche:",argent);
-                prix = prix - price;
-                changeColor();
-                resultat.innerText = prix; //si le prix est négatif on gagne de l'argent 
-            }
-            // Mettre à jour la valeur précédente
-            valeurPrix = valeurPrixnv;
-            inventaire[i].quantité = valeurPrixnv;//mettre à jour la quantité dans l'inventaire
-            console.log("quantité dans l'inventaire", inventaire[i].quantité)
-            
-            divQuantiteAffichee.textContent = "You're selling  " + valeurPrixnv +" "+inventaire[i].name;            
-    
-        });
-
-    }
+let previousValues = {
 
 }
 
-vendre();//ça marche qu'avec les flèches
+let previousShopValues = {
 
-
-
-
-
-
-function acheter() {
-    for (let i = 0; i < lengthInventaireMagasin; i++) {
-        let inputM = document.querySelector(".inputM" + i); // Sélectionner l'input correspondant
-        let MdivquantitéM = document.querySelector(".Mquantité" + i); // pour pouvoir l'update après
-
-        let divQuantiteAfficheeM = document.createElement("div");
-        MdivquantitéM.appendChild(divQuantiteAfficheeM);
-
-        inputM.addEventListener("input", function() {
-            let ancienneValeurPrixM = parseInt(inputM.getAttribute('data-old-value')) || 0; // Récupérer l'ancienne valeur de l'input
-            let nouvelleValeurPrixM = parseInt(inputM.value) || 0; // Récupérer la nouvelle valeur de l'input
-            let priceM = inventaireMagasin[i]["prix"]; //Récupérer le prix de l'article
-
-            let difference = nouvelleValeurPrixM - ancienneValeurPrixM;
-
-            argent -= priceM * Math.abs(difference);
-
-            changeColor();
-            resultat.innerText = argent;
-
-            inventaireMagasin2[i].quantité = nouvelleValeurPrixM;
-            console.log("quantité achetée", inventaireMagasin2[i].quantité);
-
-            // Mettre à jour l'affichage de la quantité
-            divQuantiteAfficheeM.textContent = "You're buying " +  nouvelleValeurPrixM +" "+inventaireMagasin[i].name; 
-
-            newItems();
-
-            // Mettre à jour la valeur de l'attribut data-old-value
-            inputM.setAttribute('data-old-value', nouvelleValeurPrixM);
-        });
-    }
 }
 
+function defPreviousValues () {
+    inventaire.forEach(e => previousValues[e['name']] = 0);
+    inventaireMagasin.forEach(e => previousShopValues[e['name']] = 0);
+}
+defPreviousValues();
 
-
-
-
-
-
-acheter();//ça marche pas
-
-    
-
-
-
-
-function newItems() {//met les items achetés dans notre inventaire
-    for (let i = 0; i < lengthInventaireMagasin; i++) {
-        if (inventaireMagasin2[i].quantité > 0) {
-            let itemExists = false;
-            for (let j = 0; j < inventaire.length; j++) {
-                if (inventaire[j].name === inventaireMagasin[i].name) { //vérifie que l'item existe pas déjà
-                    itemExists = true;
-                    inventaire[j].quantité = inventaireMagasin2[i].quantité;//s'il existe déja on change juste la quantité de l'élément préexistant 
-                    break;
-                }
-            }
-            if (!itemExists) {
-                inventaire.push({
-                    name: inventaireMagasin[i].name,
-                    quantité: inventaireMagasin2[i].quantité,
-                    prix: inventaireMagasin[i].prix
-                });
-            }
-        }
-    }
-    console.log(inventaire);
+function sellItem (thisItem, newValue) {
+    let thisInput = document.getElementById(thisItem['name']+"Input");
+    let resultatNode = document.getElementById("finali");
+    resultatNode.textContent = parseInt(resultatNode.textContent) + (newValue - previousValues[thisItem['name']]) * thisItem['prix'];
+    previousValues[thisItem['name']] = newValue;
+    changeColor();
 }
 
-
+function buyItem (thisItem, newValue) {
+    let thisInput = document.getElementById(thisItem['name']+"ShopInput");
+    let resultatNode = document.getElementById("finali");
+    resultatNode.textContent = parseInt(resultatNode.textContent) - (newValue - previousValues[thisItem['name']]) * thisItem['prix'];
+    previousValues[thisItem['name']] = newValue;
+    changeColor();
+}
 
 
 function changeColor() {

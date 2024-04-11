@@ -1104,7 +1104,7 @@ function Defeat(option) {
 
 function manageTrade() {
   saveSessionStorage();
-  window.location.href = "../mainPage/tradePage/trade.html";
+  window.location.href = "../mainPage/shopPage/shop.html";
 }
 
 function changeMenu(newMenu = "None", option = null) {

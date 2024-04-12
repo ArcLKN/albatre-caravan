@@ -11,6 +11,11 @@ function save(varName, value) {
   sessionStorage.setItem(String(varName), value);
 }
 
+let listCrewImages = {
+	"male": 15,
+	"female": 51,
+}
+
 var listOfNames = {
   firstname: {
     male: [
@@ -281,6 +286,7 @@ specialNames = [
 
 baseUnit = {
 	id: 0,
+	image: null,
 	name: "",
 	gender: null,
 	age: null,
@@ -542,6 +548,8 @@ function createCharacter () {
 	newUnit["gender"] = genderArr[Math.floor(genderArr.length * Math.random())];
 	newUnit["name"] = listOfNames["firstname"][newUnit["gender"]][Math.floor(listOfNames["firstname"][newUnit["gender"]].length * Math.random())];
 	newUnit["age"] = 18 + Math.floor(60 * Math.random());
+	newUnit['image'] = "Images/crew/"+newUnit["gender"]+"/"+String(Math.floor(Math.random()*(listCrewImages[newUnit["gender"]]-1)))+".png";
+	console.log(newUnit['image']);
 	if (newUnit['age'] > 65) {newUnit['health'] -= 1;}
 	for (let i=0; i < luckTrait.length; i++) {
 			if (Math.random() > luckTrait[i]) {

@@ -167,7 +167,8 @@ function createMemberAndAssign(menu = "") {
     attributionCheck.setAttribute("id", newId);
     personAbout.classList.add("member-about");
     attributionContainer.classList.add("checkbox");
-    personImage.src = "../../Images/personImage-" + eachPerson%4 + ".jpg";
+    
+    personImage.src = "../../"+crew[eachPerson]['image'];
     personFullName.classList.add("description");
     personFullName.innerHTML = crew[eachPerson]["name"];
     attributionCheck.type = "checkbox";

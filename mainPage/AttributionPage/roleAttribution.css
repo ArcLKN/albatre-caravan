@@ -71,8 +71,6 @@
 }
 
 .trait {
-    border: solid black 1px;
-    border-radius: 5px;
     width: auto;
     height: 18px;
     background-color: white;

@@ -585,7 +585,8 @@ function initSessionStorage() {
   save("water", 10);
   save("numberOfTurns", 0);
   save("famineTurns", 0);
-  save("inventory", [{ name: "food", quantity: 0 }]);
+  save("inventory", [{type: "food", name: "Food", volume: 0}, {
+		type: "goods", name: "Papyrus", volume: 30,price: 40,}]);
   save("playerLocation", {
     type: "desert",
     name: "Desert",

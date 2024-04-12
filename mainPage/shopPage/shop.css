@@ -6,7 +6,7 @@
 
 
 .you{
-    background-color: whitesmoke;
+    background-color: white;
     height: 100%;
     width: 50%;
     border-right: 2px black solid;
@@ -14,7 +14,7 @@
 }
 
 .buyer{
-    background-color: whitesmoke;
+    background-color: white;
     height: 100%;
     width: 50%;
     
@@ -29,14 +29,14 @@
 .BigItem{
     display: flex;
     flex-direction: row;
-    height: 11vh;
+    height: 8vh;
     width: 100%;
-    background-color: white;
-    justify-content: center;
+    background-color: beige;
+    justify-content: space-around;
     align-items: center;
     text-align: center;
-    padding-left: 15%;
     border-bottom: 2px brown solid;
+    
     
 }
 
@@ -44,8 +44,7 @@
 img{
     height: 50px;
     width: 30px;
-    
-    margin: 5% 0 0 47%;
+    margin: 0 2% 0 2%;
    
 }
 
@@ -54,11 +53,13 @@ img{
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    
 }
 
 #generate{
+ 
     position: absolute;
-    top: 100%;
+    top: 60%;
     left: 45%;
     width: 10%;
     height: 10%;
@@ -73,15 +74,10 @@ img{
     left: 45%;
     width: 10%;
     height: 10%;
-    
+    color: white;
     text-align: center;
     
 }
-
-.BigItem div{
-    padding: 5% 8% 10% 0;
-}
-
 
 
 .quantité0, .quantité1, .quantité2, .Mquantité0, .Mquantité1, .Mquantité2{
@@ -89,11 +85,13 @@ img{
 }
 
 input{
-    margin: 0 0 0 5%;
+    min-height: 10px;
+    width: 50px;
+    height: 2vh;
+    font-size: 13px;
 }
 
 .name{
-    margin-left: 10%;
     font-size: 20px;
 }
 
@@ -102,7 +100,63 @@ h1{
 }
 
 #transa, #res{
-    background-color: white;
+    background-color: beige;
     font-size: 20px;
 
+}
+
+#triangle {
+    width: 0;
+    height: 0;
+    border: solid 15px;
+    border-color: transparent transparent transparent transparent;
+    position: absolute;
+    top: 110%;
+    left: 40%;
+
+}
+
+#res {
+    background-color: brown;
+    font-size: 25px;
+}
+
+#recap {
+    display: none;
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 10%;
+    left: 25%;
+    background-color: white;
+    text-align: center;
+    border: 2px brown solid;
+}
+
+#compute{
+    width: 10%;
+    height: 5%;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
+  
+}
+
+#compute:hover{
+    background-color: grey;
+}
+
+.bottom{
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 80%;
+    left: 25%;
+}
+
+#terminer, #continue {
+    width: 65%;
+    height: 15%;
+    font-size: 15px;
+    margin: 5% 55% 0 0;
 }

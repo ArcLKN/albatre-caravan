@@ -329,7 +329,7 @@ function returnLocationData(location) {
 function updateRessourcesDisplay() {
   document.getElementById("nb_water").textContent = String(water);
   document.getElementById("nb_food").textContent = String(
-	findItemInv("food")["quantity"]
+	findItemInv("Food")["quantity"]
   );
   document.getElementById("nb_money").textContent = String(money);
   document.getElementById("nb_morale").textContent = String(morale);
@@ -411,11 +411,12 @@ function createItem(nameItem) {
   }
 }
 function findItemInv(nameItem) {
-  for (var eachItem in allItems) {
-	if (inventory[eachItem]["name"] == nameItem) {
-	  return inventory[eachItem];
-	}
-  }
+  	for (var eachItem in allItems) {
+  		console.log(eachItem);
+		if (inventory[eachItem]["name"] == nameItem) {
+	  		return inventory[eachItem];
+		}
+  	}
 }
 // Create randomized person.
 function defineUnit() {
@@ -885,8 +886,8 @@ function ressourcesConsumption(doTravel) {
   } else {
 	water -= Math.floor(waterConsumption / 2);
   }
-  if (findItemInv("food")["quantity"] >= foodConsumption) {
-	findItemInv("food")["quantity"] -= foodConsumption;
+  if (findItemInv("Food")["quantity"] >= foodConsumption) {
+	findItemInv("Food")["quantity"] -= foodConsumption;
   } else {
 	famineTurns += 1;
 	morale -= 10;

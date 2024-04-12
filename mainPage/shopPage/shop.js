@@ -2,9 +2,11 @@ var inventaire = [ // inventaire à adapter au jeu
     {name: "water", quantité: 15, prix: 5},
     {name: "grass", quantité: 25, prix: 2},
     {name: "air", quantité: 35, prix: 1},
-    {name: "Neyla", quantité: 5, prix: 10},
+    {name: "neyla", quantité: 5, prix: 10},
     
 ];
+
+
 
 var inventaireMagasin = [ //same here 
     {name: "sword", quantité: 15, prix: 5},
@@ -83,26 +85,29 @@ function displayInventory(){
         
     }
 }
-function duplicatedivM(){
-    for (i=0; i<lengthInventaireMagasin; i++){
+//Affiche l'inventaire du magasin
+function displayInventoryShop(){
+    for (let eachItem in inventaireMagasin){
+        let thisItem = inventaireMagasin[eachItem];
         var nouvelleDivM = document.createElement("div");
         nouvelleDivM.classList.add("BigItem");
         //nouvelleDivM.innerText = "div numéro:"+i;
 
-        var image = document.createElement("img");
-        image.src = imagesMagasin[i];
+        var imageM = document.createElement("img");
+        //image.src = imagesMagasin[i];
 
         var divnameM = document.createElement("div");
         divnameM.classList.add("name");
-        divnameM.innerText = inventaireMagasin[i]["name"];//elem numero i de la liste avec l'attribut "name"
+        divnameM.innerText = thisItem["name"];//elem numero i de la liste avec l'attribut "name"
         
         var divquantitéM = document.createElement("div");       
-        divquantitéM.classList.add("Mquantité"+i);
-        divquantitéM.innerText = "Quantité dans le magasin: "+inventaireMagasin[i]["quantité"];
+        divquantitéM.classList.add("quantity");
+        divquantitéM.setAttribute("id", "idQtt"+thisItem['name']);
+        divquantitéM.innerText = "Quantité dans le magasin: "+thisItem["quantité"];
     
         var divprixM = document.createElement("div");
         divprixM.classList.add("prix");
-        divprixM.innerText = inventaireMagasin[i]["prix"]+"$";
+        divprixM.innerText = thisItem["prix"]+"$";
 
         nouvelleDivM.appendChild(divprixM);
         nouvelleDivM.appendChild(divnameM);
@@ -110,24 +115,27 @@ function duplicatedivM(){
         
 
         var inputquantitéM = document.createElement("input");
-        inputquantitéM.classList.add("inputM"+i);
+        inputquantitéM.classList.add("input");
+        inputquantitéM.setAttribute("id", thisItem['name']+"ShopInput");
         inputquantitéM.type = "number";
-        inputquantitéM.max = inventaireMagasin[i]["quantité"];
+        inputquantitéM.max = thisItem["quantité"];
         inputquantitéM.value = 0;
         inputquantitéM.min = 0;
+        inputquantitéM.oninput = function () {
+            buyItem(thisItem, this.value);
+          };
 
         divquantitéM.appendChild(inputquantitéM);
         
         var parentM = document.getElementById("containerMagasin");
-        parentM.appendChild(image);
+        parentM.appendChild(imageM);
         parentM.appendChild(nouvelleDivM);//ajoute la div ds container
     }
 }
 displayInventory();
-duplicatedivM();
+displayInventoryShop();
 
-let a = 0; // ???
-let argent = 100; //valeur à accorder à l'argent qu'on possède dans le jeu
+
 let resultat = 0;
 const finali = document.querySelector("#finali");
 
@@ -139,34 +147,158 @@ let previousShopValues = {
 
 }
 
+
 function defPreviousValues () {
     inventaire.forEach(e => previousValues[e['name']] = 0);
     inventaireMagasin.forEach(e => previousShopValues[e['name']] = 0);
 }
 defPreviousValues();
 
+
 function sellItem (thisItem, newValue) {
     let thisInput = document.getElementById(thisItem['name']+"Input");
     let resultatNode = document.getElementById("finali");
     resultatNode.textContent = parseInt(resultatNode.textContent) + (newValue - previousValues[thisItem['name']]) * thisItem['prix'];
+    changeTriangle();
     previousValues[thisItem['name']] = newValue;
-    changeColor();
+
+    var divquantité = document.getElementById("idQtt"+thisItem['name']);
+    var displayQ = divquantité.querySelector(".display-quantity");
+    if (!displayQ) {
+        displayQ = document.createElement("div");
+        displayQ.classList.add("display-quantity");
+        divquantité.appendChild(displayQ);
+    }
+    displayQ.innerText = "You're selling  "+ newValue +"  "+ thisItem['name'] ;
+    
+    
 }
 
 function buyItem (thisItem, newValue) {
+    
     let thisInput = document.getElementById(thisItem['name']+"ShopInput");
+    console.log(thisInput)
     let resultatNode = document.getElementById("finali");
-    resultatNode.textContent = parseInt(resultatNode.textContent) - (newValue - previousValues[thisItem['name']]) * thisItem['prix'];
-    previousValues[thisItem['name']] = newValue;
-    changeColor();
+    console.log(resultatNode);
+    resultatNode.textContent = parseInt(resultatNode.textContent) - (newValue - previousShopValues[thisItem['name']]) * thisItem['prix'];
+    console.log(resultatNode.textContent);
+    changeTriangle();
+    previousShopValues[thisItem['name']] = newValue;
+    console.log(newValue);
+
+    var divquantitéM = document.getElementById("idQtt"+thisItem['name']);
+    var displayQ = divquantitéM.querySelector(".display-quantity");
+    if (!displayQ) {
+        displayQ = document.createElement("div");
+        displayQ.classList.add("display-quantity");
+        divquantitéM.appendChild(displayQ);
+    }
+    displayQ.innerText = "You're buying  "+ newValue +"  "+ thisItem['name'] ;
+    
 }
 
 
-function changeColor() {
-    if (prix < 0){
-        transa.style.backgroundColor = "red" ;//on gagne de l'argent
-    }else{
-        transa.style.backgroundColor = "green" ;//on en perd
+function changeTriangle() {
+   let resultatNode = document.getElementById("finali");
+   let res = parseInt(resultatNode.textContent);
+   let triangle = document.getElementById("triangle");
+    if (res === 0){ 
+        triangle.style.borderColor = "transparent transparent transparent transparent"  
+    //on perd de l'argent          
+    }else if(res < 0){     
+        res = Math.abs(res);
+        //prob avec la valeure absolue
+        triangle.style.borderColor = "transparent transparent transparent brown" 
+        triangle.style.left = "55%";
+    //on gagne de l'argent
+    }else { 
+        triangle.style.borderColor = "transparent brown transparent transparent";
+        triangle.style.left = "41%";
     }
+    
+
+}
+
+const compute = document.querySelector('#compute');
+compute.onclick = function() {
+    update();
+    newItems();
+    displayNew();
+};
+
+const con = document.querySelector('#continue');
+con.onclick = keepTransa;
+
+
+
+function update() {
+    let resultatNode = document.getElementById("finali");
+    let money = document.getElementById("résultat");
+    let res = parseInt(resultatNode.textContent);
+    //update argent
+    let argent = 100;
+    argent= argent + res;
+    money.textContent = argent
+    //update inventaire
+    for(let eachItem in inventaire){
+        let thisItem = inventaire[eachItem];
+        let inputID = thisItem['name']+"Input";
+        let inputElement = document.getElementById(inputID);
+        //quantité vendu
+        let quantitySold = parseInt(inputElement.value);
+        //quantité de base dans l'inventaire
+        let firstQuantity = thisItem["quantité"];
+        console.log("quantitySold",quantitySold);
+        console.log("firstQuantity",firstQuantity);
+        let nvQuantity = firstQuantity - quantitySold;
+        //mettre à jour la quantité
+        thisItem["quantité"] = nvQuantity;
+        console.log(inventaire);
+
+    }
+}
+
+function newItems(){
+    for(let eachItem in inventaireMagasin){
+        let thisItem = inventaireMagasin[eachItem];
+        let inputID = thisItem['name']+"ShopInput";
+        let inputElement = document.getElementById(inputID);
+        //quantité achetée
+        let quantityBought = parseInt(inputElement.value);
+        if (quantityBought>0){
+            inventaire.push({
+                name: thisItem["name"],
+                quantité: quantityBought,
+                prix: thisItem["prix"]
+            });
+        }
+            
+    }console.log(inventaire);
+    
+}
+
+
+function displayNew () {
+    let recap = document.getElementById("recap");
+    recap.style.display = "inline-block";
+
+    let parent = document.getElementById("recap")
+    for(let eachItem in inventaire) {
+        let thisItem = inventaire[eachItem];
+        var newItem = document.createElement("p");
+        newItem.classList.add("text");
+        newItem.textContent = thisItem["name"] + "        :       quantity: " + thisItem["quantité"]+"        price:  " + thisItem["prix"];
+        parent.appendChild(newItem);
+
+    }
+}
+
+
+
+function keepTransa(){
+    let recap = document.getElementById("recap");
+    recap.style.display = "none";
+    let texts = document.querySelectorAll(".text");
+    texts.forEach(text => text.remove());
 
 }

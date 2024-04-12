@@ -154,7 +154,11 @@ function createMemberAndAssign(menu = "") {
 
     let person = document.createElement("div");
     let personAbout = document.createElement("div");
+    let endRowPerson = document.createElement("div");
+    endRowPerson.classList.add("endRowPerson");
     let attributionContainer = document.createElement("div");
+    let namePtrait = document.createElement("div");
+    let traitBox = document.createElement("div");
     let personImage = document.createElement("img");
     let personFullName = document.createElement("span");
     let attributionCheck = document.createElement("input");
@@ -170,11 +174,50 @@ function createMemberAndAssign(menu = "") {
     attributionCheck.name = "check";
     attributionCheck.classList.add("check");
     person.appendChild(personAbout);
-    person.appendChild(attributionContainer);
+    person.appendChild(endRowPerson);
+    
     personAbout.appendChild(personImage);
-    personAbout.appendChild(personFullName);
+    personAbout.appendChild(namePtrait);
+    namePtrait.appendChild(personFullName);
+    namePtrait.classList.add("namePtrait");
+    namePtrait.appendChild(traitBox);
+    traitBox.classList.add("traitBox");
     attributionContainer.appendChild(attributionCheck);
     crewList.appendChild(person);
+
+    for (let eachTrait in crew[eachPerson]["special"]) {
+        if (crew[eachPerson]["special"][eachTrait]) {
+            let nodeTrait = document.createElement("span");
+            nodeTrait.innerHTML = eachTrait;
+            nodeTrait.classList.add("trait");
+            traitBox.appendChild(nodeTrait);
+        }
+    }
+
+    if (["water", "food", "morale"].includes(menu)) {
+        let ressourcesObtained = playerLocation["gatheringValues"][menu + "Yield"] * (crew[eachPerson]['skills']['gatheringFactor'] + crew[eachPerson]['skills'][menu+'GatheringFactor'])
+        + crew[eachPerson]['skills']['gatheringAbs']
+        + crew[eachPerson]['skills'][menu+'GatheringAbs'];
+        let ressourceText = document.createElement("p");
+        if (ressourcesObtained > 0) {
+            ressourceText.innerHTML = "+";
+            ressourceText.style.color = "green";
+        }
+        else if (ressourcesObtained < 0) {
+            ressourceText.innerHTML = "-";
+            ressourceText.style.color = "red";
+        }
+        else {
+            ressourceText.innerHTML = "";
+            ressourceText.style.color = "grey";
+        }
+        ressourceText.innerHTML += String(ressourcesObtained);
+        endRowPerson.appendChild(ressourceText);
+    }
+
+    endRowPerson.appendChild(attributionContainer);
+
+
     for (let eachGatherer in gatherer[menu]) {
       if (gatherer[menu][eachGatherer]["id"] == crew[eachPerson]["id"]) {
         attributionCheck.checked = true;

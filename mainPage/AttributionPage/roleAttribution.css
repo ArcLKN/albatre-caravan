@@ -55,7 +55,7 @@
 .member {
     box-sizing: border-box;
     background-color: beige;
-    padding: 24px 32px;
+    padding: 20px 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -70,13 +70,37 @@
     display: flex;
 }
 
-.member .member-about .description {
+.trait {
+    border: solid black 1px;
+    border-radius: 5px;
+    width: auto;
+    height: 18px;
+    background-color: white;
+    margin: 0px 5px 0px 0px;
+    padding: 2px;
+}
+
+.namePtrait {
     padding-left: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.traitBox {
+    display: flex;
+    flex-direction: row;
 }
 
 .member input[type="checkbox"] {
     display: block;
     width: 32px;
     height: 32px;
+    align-items: center;
+    margin: 0px 0px 0px 10px;
+}
+
+.endRowPerson {
+    display: flex;
+    flex-direction: row;
     align-items: center;
 }

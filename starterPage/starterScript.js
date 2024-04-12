@@ -315,9 +315,9 @@ baseUnit = {
 		foodGatheringAbs: 0,
 		waterGatheringAbs: 0,
 		moraleGatheringAbs: 0,
-		foodGatheringFactor: 1,
-		waterGatheringFactor: 1,
-		moraleGatheringFactor: 1
+		foodGatheringFactor: 0,
+		waterGatheringFactor: 0,
+		moraleGatheringFactor: 0
 	},
 	special: {
 		hungry: false, // Needs two times more food.
@@ -564,40 +564,6 @@ for (i = 0; i < baseCrewNumber; i++) {
 
 // Define starting values.
 function initSessionStorage() {
-	save("crew", [
-  {
-    name: "Joanne",
-    lastName: "Andriamahandry",
-    Age: 18,
-    Sex: "Female",
-    role: [false, false, false], //Scout, guard, carrier
-    id: "personne" + Math.floor(Math.random() * 100000),
-  },
-  {
-    name: "Neyla",
-    lastName: "Mazouz",
-    Age: 19,
-    Sex: "Female",
-    role: [false, false, false], //Scout, guard, carrier
-    id: "personne" + Math.floor(Math.random() * 100000),
-  },
-  {
-    name: "Ethan",
-    lastName: "Gandiboyina",
-    Age: 19,
-    Sex: "Male",
-    role: [false, false, false], //Scout, guard, carrier
-    id: "personne" + Math.floor(Math.random() * 100000),
-  },
-  {
-    name: "Raphael",
-    lastName: "Grosnoir",
-    Age: 19,
-    Sex: "Male",
-    role: [false, false, false], //Scout, guard, carrier,
-    id: "personne" + Math.floor(Math.random() * 100000),
-  },
-]);
   save("statusTurn", "");
   save("crewMembers", crewMembers);
   // Number of people player has, thus number of people he can use.

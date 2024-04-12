@@ -30,7 +30,7 @@ function loadSessionStorage() {
   playerLocation = JSON.parse(sessionStorage.getItem("playerLocation"));
   gatherer = JSON.parse(sessionStorage.getItem("gatherer"));
   statusTurn = sessionStorage.getItem("statusTurn");
-  crew = JSON.parse(sessionStorage.getItem("crew"));
+  crew = JSON.parse(sessionStorage.getItem("crewMembers"));
   console.log(crew);
 }
 
@@ -51,7 +51,7 @@ function saveSessionStorage() {
   save("playerLocation", playerLocation);
   save("gatherer", gatherer);
   save("statusTurn", statusTurn);
-  save("crew", crew);
+  save("crewMembers", crew);
 }
 
 // ---------- END MANDATORY VARIABLE FUNCTIONS ----------
@@ -64,15 +64,14 @@ let crewList = document.getElementById("crewMembers");
 let displayCrewTotal = document.getElementById("crew-total");
 let displayHorseTotal = document.getElementById("horse-total");
 let displayWeaponTotal = document.getElementById("weapon-total");
-let scoutAttribution = document.getElementById("roleScout");
-let guardAttribution = document.getElementById("roleGuard");
-let carrierAttribution = document.getElementById("roleCarrier");
-
-let confirmationBtn = document.getElementById("confirm");
 
 // ---------- END CREW AND INVENTORY VARIABLES ----------
 
 // ---------- START FUNCTIONS INITIALIZATION ----------
+
+function Capitalize(e) {
+  return e[0].toUpperCase() + e.slice(1);
+}
 
 //Display the total of crew members (METTRE LES VALEURS !!)
 function displayResources() {
@@ -97,7 +96,6 @@ function manageDEr(menu, idInput) {
     }
     gatherer[menu] = tempCrew;
   }
-  console.log(gatherer);
 }
 
 //Checks if a member is assigned to the scout role
@@ -108,6 +106,26 @@ function scoutCheck(idInput) {
 //Checks if a member is assigned to the guard role
 function guardCheck(idInput) {
   manageDEr("guard", idInput);
+}
+
+//Checks if a member is assigned to the carrier role
+function carrierCheck(idInput) {
+  manageDEr("carrier", idInput);
+}
+
+//Checks if a member is assigned to the carrier role
+function waterCheck(idInput) {
+  manageDEr("water", idInput);
+}
+
+//Checks if a member is assigned to the carrier role
+function foodCheck(idInput) {
+  manageDEr("food", idInput);
+}
+
+//Checks if a member is assigned to the carrier role
+function moraleCheck(idInput) {
+  manageDEr("morale", idInput);
 }
 
 function removeCharacterBox() {
@@ -125,7 +143,6 @@ function createMemberAndAssign(menu = "") {
         continue;
       }
       for (let eachConnard in gatherer[eachMenu]) {
-        console.log(gatherer[eachMenu]);
         if (crew[eachPerson]["id"] == gatherer[eachMenu][eachConnard]["id"]) {
           isNotIdle = true;
         }
@@ -146,10 +163,9 @@ function createMemberAndAssign(menu = "") {
     attributionCheck.setAttribute("id", newId);
     personAbout.classList.add("member-about");
     attributionContainer.classList.add("checkbox");
-    personImage.src = "../../Images/personImage-" + eachPerson + ".jpg";
+    personImage.src = "../../Images/personImage-" + eachPerson%4 + ".jpg";
     personFullName.classList.add("description");
-    personFullName.innerHTML =
-      crew[eachPerson]["name"] + " " + crew[eachPerson]["lastName"];
+    personFullName.innerHTML = crew[eachPerson]["name"];
     attributionCheck.type = "checkbox";
     attributionCheck.name = "check";
     attributionCheck.classList.add("check");
@@ -173,32 +189,100 @@ function createMemberAndAssign(menu = "") {
       attributionCheck.addEventListener("click", function () {
         guardCheck(this.id);
       });
+    } else if (menu == "carrier") {
+      attributionCheck.addEventListener("click", function () {
+        carrierCheck(this.id);
+      });
+    } else if (menu == "water") {
+      attributionCheck.addEventListener("click", function () {
+        waterCheck(this.id);
+      });
+    } else if (menu == "food") {
+      attributionCheck.addEventListener("click", function () {
+        foodCheck(this.id);
+      });
+    } else if (menu == "morale") {
+      attributionCheck.addEventListener("click", function () {
+        moraleCheck(this.id);
+      });
     }
+
   }
 }
-
-//Scout category click event
-scoutAttribution.addEventListener("click", function () {
-  createMemberAndAssign("scout");
-});
-
-//Guard category event
-guardAttribution.addEventListener("click", function () {
-  createMemberAndAssign("guard");
-});
-
-confirmationBtn.addEventListener("click", () => {
-  statusTurn = "deployUnits";
-  saveSessionStorage();
-
-  window.location.href = "../gamePage.html";
-});
 
 // ---------- END FUNCTIONS INITIALIZATION ----------
 
 // ---------- START FUNCTIONS CALLING ----------
 
+function onLoad () {
+    console.log("Status",statusTurn);
+    let roleDiv = document.getElementById("role");
+    let confirmationBtn = document.getElementById("confirm");
+
+    if (statusTurn == "deployUnits") {
+        confirmationBtn.addEventListener("click", () => {
+            statusTurn = "gatherResolution";
+            saveSessionStorage();
+            window.location.href = "../gamePage.html";
+        });
+        if (
+            "waterYield" in playerLocation["gatheringValues"] &&
+            playerLocation["gatheringValues"]["waterYield"] > 0
+        ) {
+            let newButton = document.createElement("button");
+            newButton.setAttribute("id", "roleWater");
+            newButton.textContent = "Water Gatherer";
+            newButton.addEventListener("click", function () {
+                createMemberAndAssign("water");
+            });
+            roleDiv.appendChild(newButton);
+        }
+        if (
+            "foodYield" in playerLocation["gatheringValues"] &&
+            playerLocation["gatheringValues"]["foodYield"] > 0
+        ) {
+        let newButton = document.createElement("button");
+        newButton.setAttribute("id", "roleFood");
+        newButton.textContent = "Food Gatherer";
+        newButton.addEventListener("click", function () {
+                createMemberAndAssign("food");
+            });
+        roleDiv.appendChild(newButton);
+        }
+        if (
+        "moraleYield" in playerLocation["gatheringValues"] &&
+        playerLocation["gatheringValues"]["moraleYield"] > 0
+        ) {
+        let newButton = document.createElement("button");
+        newButton.setAttribute("id", "roleMorale");
+        newButton.textContent = "Morale Gatherer";
+        newButton.addEventListener("click", function () {
+                createMemberAndAssign("morale");
+            });
+        roleDiv.appendChild(newButton);
+        }
+    }
+    else {
+        confirmationBtn.addEventListener("click", () => {
+            statusTurn = "deployUnits";
+            saveSessionStorage();
+            window.location.href = "../gamePage.html";
+        });
+        let roleList = ["scout", "guard", "carrier"];
+        roleList.forEach(e => {
+            let newButton = document.createElement("button");
+            newButton.setAttribute("id", "role"+Capitalize(e));
+            newButton.textContent = Capitalize(e);
+            newButton.addEventListener("click", function () {
+                createMemberAndAssign(e);
+            });
+            roleDiv.appendChild(newButton);
+        })
+        createMemberAndAssign("scout");
+    }
+}
+
+onLoad();
 displayResources();
-createMemberAndAssign("scout");
 
 // ---------- END FUNCTIONS CALLING ----------

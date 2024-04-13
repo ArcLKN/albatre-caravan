@@ -15,7 +15,7 @@ function save(varName, value) {
 // Used to get all the new values from the sessionStorage.
 function loadSessionStorage() {
   crewMembers = JSON.parse(sessionStorage.getItem("crewMembers"));
-  crewTotal = parseInt(sessionStorage.getItem("crewTotal"));
+  crewTotal = JSON.parse(sessionStorage.getItem("crewTotal"));
   crewTypes = JSON.parse(sessionStorage.getItem("crewTypes"));
   idleCrew = parseInt(sessionStorage.getItem("idleCrew"));
   morale = parseInt(sessionStorage.getItem("morale"));
@@ -28,6 +28,7 @@ function loadSessionStorage() {
   playerLocation = JSON.parse(sessionStorage.getItem("playerLocation"));
   gatherer = JSON.parse(sessionStorage.getItem("gatherer"));
   statusTurn = sessionStorage.getItem("statusTurn");
+  allItems = JSON.parse(sessionStorage.getItem("allItems"));
 }
 
 // All the variables we want to save and share through every JS files.
@@ -63,7 +64,7 @@ function moraleYieldDef() {}
 // The severals yields decrease by one if harvested each turn.
 var possibleDestinations;
 var locations = [
-  {
+  {	
 	type: "nil_shore",
 	name: "Nil shore",
 	isTradable: false,
@@ -71,7 +72,7 @@ var locations = [
 	  "A fertile place escaping the harsh life of the desert. In this place you can freely gather high quantity of water and decent quantity of food.",
 	gatheringValues: {
 	  waterYield: 3,
-	  foodYield: 1,
+	  foodYield: 2,
 	},
 	possibleEvents: [],
 	possibleDestinations: [
@@ -97,20 +98,16 @@ var locations = [
 	  { type: "nil_shore", luck: 0.8 },
 	  { type: "desert", luck: 1 },
 	],
-	buyableGoods: [
-	  {
-		type: "food",
-		name: "Rations",
+	buyableGoods: {
+	5: {
 		volume: 100,
 		price: 4,
 	  },
-	  {
-		type: "mount",
-		name: "Horse",
+	7:{
 		volume: 3,
 		price: 500,
 	  },
-	],
+	},
   },
   {
 	type: "desert",
@@ -143,28 +140,22 @@ var locations = [
 	  { type: "oasis", luck: 0.1 },
 	  { type: "desert_city", luck: 0.1 },
 	],
-	buyableGoods: [
-	  {
-		type: "food",
-		name: "Rations",
+	buyableGoods: {
+	  5: {
 		volume: 100,
 		price: 8,
 	  },
-	  {
-		type: "mount",
-		name: "Camel",
+	  0: {
 		volume: 2,
 		price: 1000,
 	  },
-	],
-	sellableGoods: [
-	  {
-		type: "goods",
-		name: "Papyrus",
-		volume: 50,
-		price: 40,
-	  },
-	],
+	},
+	sellableGoods:{ 
+		  6: {
+			volume: 50,
+			price: 40,
+		  },
+		},
   },
   {
 	type: "fluvial_city",
@@ -182,34 +173,42 @@ var locations = [
 	  { type: "nil_shore", luck: 1 },
 	  { type: "desert", luck: 1 },
 	],
-	buyableGoods: [
-	  {
-		type: "food",
-		name: "Rations",
+	buyableGoods: {
+	6: {
 		volume: 100,
 		price: 6,
-	  },
-	  {
-		type: "goods",
-		name: "Papyrus",
+	},
+	5: {
 		volume: 50,
 		price: 20,
-	  },
-	  {
-		type: "weapon",
-		name: "Sword",
-		volume: 20,
-		price: 200,
-	  },
-	],
-	sellableGoods: [
-	  {
-		type: "weapon",
-		name: "Sword",
+	},
+	2: {
 		volume: 20,
 		price: 100,
-	  },
-	],
+	},
+	3: {
+			volume: 20,
+			price: 100,
+		},
+	4: {
+			volume: 20,
+			price: 100,
+		},
+	},
+	sellableGoods: {
+		2: {
+			volume: 20,
+			price: 100,
+		},
+		3: {
+			volume: 20,
+			price: 100,
+		},
+		4: {
+			volume: 20,
+			price: 100,
+		},
+	},
   },
   {
 	type: "oasis",
@@ -231,48 +230,7 @@ var locations = [
   },
 ];
 var probabilityRandomOasis = 0.1;
-var allItems = [
-  {
-	type: "food",
-	name: "Food",
-	quantity: 0,
-	value: 10,
-	description: "Miam miam",
-  },
-  {
-	type: "weapon",
-	name: "bow",
-	quantity: 0,
-	value: 10,
-	power: [1, 2, 3],
-	attackType: "piercing",
-	weaponType: "bow",
-	attackStyle: "distance",
-	description: "Classic wooden bow.",
-  },
-  {
-	type: "weapon",
-	quantity: 0,
-	value: 10,
-	name: "spear",
-	power: [2, 3, 0],
-	attackType: "piercing",
-	weaponType: "spear",
-	attackStyle: "melee",
-	description: "Classic wooden bow.",
-  },
-  {
-	type: "weapon",
-	quantity: 0,
-	value: 10,
-	name: "sword",
-	power: [3, 2, 0],
-	attackType: "slashing",
-	weaponType: "sword",
-	attackStyle: "melee",
-	description: "Classic wooden bow.",
-  },
-];
+
 var moralDecrease = 0.05;
 var listOfNames = {
   firstname: {
@@ -326,14 +284,23 @@ function returnLocationData(location) {
   }
 }
 
+
+function computeFood () {
+	let foodNbr = 0;
+	for (let i in inventory) {
+		if (allItems[i]['type'] == "food") {
+			foodNbr += allItems[i]['foodValue'] * inventory[i]['volume'];
+		}
+	}
+	return foodNbr;
+}
+
 function updateRessourcesDisplay() {
   document.getElementById("nb_water").textContent = String(water);
-  document.getElementById("nb_food").textContent = String(
-	findItemInv("Food")["volume"]
-  );
+  document.getElementById("nb_food").textContent = String(computeFood());
   document.getElementById("nb_money").textContent = String(money);
-  document.getElementById("nb_morale").textContent = String(morale);
-  document.getElementById("nb_crew").textContent = String(crewTotal);
+  document.getElementById("nb_morale").textContent = String(Math.round(morale));
+  document.getElementById("nb_crew").textContent = String(crewTotal.length);
 }
 
 function prepareNarration() {
@@ -376,11 +343,11 @@ function onLoad() {
   ["water", "money", "food"].forEach((e) => {
 	let bonusNode = document.getElementById("bonus_" + e);
 	bonus = 0;
-	crewMembers.forEach((e2) => {
+	crewTotal.forEach((e2) => {
 	  if (e in e2["needs"]) {
 		bonus -= e2["needs"][e] - e2["passiveEarning"][e];
 	  } else {
-		crewMembers.forEach((e2) => (bonus += e2["passiveEarning"][e]));
+		crewTotal.forEach((e2) => (bonus += e2["passiveEarning"][e]));
 	  }
 	});
 	if (bonus >= 0) {
@@ -397,7 +364,7 @@ function onLoad() {
 	return yourTurn("gathering");
   }
   else if (statusTurn == "gatherResolution") {
-  	return changeMenu("gatherResolution");
+	return changeMenu("gatherResolution");
   }
   prepareNarration();
 }
@@ -409,13 +376,6 @@ function createItem(nameItem) {
 	  return allItems[eachItem];
 	}
   }
-}
-function findItemInv(nameItem) {
-  	for (var eachItem in allItems) {
-		if (inventory[eachItem]["name"] == nameItem) {
-	  		return inventory[eachItem];
-		}
-  	}
 }
 // Create randomized person.
 function defineUnit() {
@@ -436,7 +396,6 @@ function defineUnit() {
 }
 
 function fight(team1, team2) {
-  console.log(team1, team2);
   for (let i = 0; i < team1.length; i++) {
 	for (let unit1 in team1[i]) {
 	  thisUnit = team1[i][unit1];
@@ -866,38 +825,67 @@ function changeTextNarration() {
 
 function killPeople(numberOfDeath) {
   console.log("Death", numberOfDeath);
-  crewTotal -= numberOfDeath;
-  idleCrew = crewTotal;
-  for (let i = 0; i < numberOfDeath; i++) {
-	crewMembers.shift();
-  }
+  for (let i = 0; i<numberOfDeath; i++) {
+  	randIndex = Math.floor(Math.random() * crewTotal.length);
+  	let unit = crewTotal[randIndex];
+  	crewTotal = crewTotal.filter(item => item !== unit);
+  	crewMembers = crewMembers.filter(item => item !== unit);
+  	for (let job in gatherer) {
+  	    gatherer[job] = gatherer[job].filter(item => item !== unit);}
+  	}
+}
+
+function foodConsumption () {
+	let foodConsumption;
+	
+	return foodNbr;
 }
 
 function ressourcesConsumption(doTravel) {
-  console.log("Crew Total", crewTotal, famineTurns);
-  var waterConsumption = 0;
-  crewMembers.forEach((e) => (waterConsumption += e["needs"]["water"]));
-  var foodConsumption = 0;
-  crewMembers.forEach((e) => (foodConsumption += e["needs"]["food"]));
-  console.log("Consumptions: ", waterConsumption, foodConsumption);
-  if (doTravel) {
-	water -= waterConsumption;
-  } else {
-	water -= Math.floor(waterConsumption / 2);
-  }
-  if (findItemInv("Food")["quantity"] >= foodConsumption) {
-	findItemInv("Food")["quantity"] -= foodConsumption;
-  } else {
-	famineTurns += 1;
-	morale -= 10;
-	killPeople(Math.pow(2, famineTurns) - 2);
-  }
+  	console.log("Crew Total", crewTotal, famineTurns);
+  	var waterConsumption = 0;
+  	crewTotal.forEach((e) => (waterConsumption += e["needs"]["water"]));
+  	var foodConsumption = 0;
+  	crewTotal.forEach((e) => (foodConsumption += e["needs"]["food"]));
+  	console.log("Consumptions: water", waterConsumption, "food", foodConsumption);
+  	if (doTravel) {
+		water -= waterConsumption;
+  	} else {
+		water -= Math.floor(waterConsumption / 2);
+  	}
+  	// Check if player has enough food to feed all of the crew.
+	let tempsFC = foodConsumption;
+	for (let i in inventory) {
+		if (allItems[i]['type'] == "food") {
+			let neededVolume = Math.ceil(tempsFC / allItems[i]['foodValue']);
+			tempsFC -=  allItems[i]['foodValue'] * Math.min(neededVolume, inventory[i]['volume']);
+			if (tempsFC == 0) {break;}
+		}
+	}
+	// If yes it feeds all of the crew, that's why there is two times the same 'function'
+  	if (tempsFC == 0) {
+		for (let i in inventory) {
+			if (allItems[i]['type'] == "food") {
+				let neededVolume = Math.ceil(foodConsumption / allItems[i]['foodValue']);
+				foodConsumption -=  allItems[i]['foodValue'] * Math.min(neededVolume, inventory[i]['volume']);
+				inventory[i]['volume'] -= Math.min(neededVolume, inventory[i]['volume']);
+				if (foodConsumption == 0) {break;}
+			}
+		}
+	// Bc otherwise it doesn't feed them at all and you get to keep the food for the next turn.
+  	} else {
+  		console.log("Famine", foodConsumption);
+		famineTurns += 1;
+		morale -= 10; // 10 ?? get someone to check that
+		killPeople(Math.pow(2, famineTurns) - 2);
+  	}
   morale /= 1.05;
   if (water <= 0) {
+  	console.log("Water", waterConsumption);
 	killPeople(water * -1);
 	water = 0;
   }
-  if (crewTotal <= 0) {
+  if (crewTotal.length <= 0) {
 	return changeMenu("Defeat", "Death");
   }
   if (morale < 0) {
@@ -909,6 +897,8 @@ function ressourcesConsumption(doTravel) {
 	}
   }
   numberOfTurns++;
+  updateRessourcesDisplay
+  console.log(inventory);
   return changeMenu("turnX");
 }
 
@@ -917,9 +907,7 @@ function gatherResolution() {
   ["continueButton"].forEach((e) => tempIDs.push(e));
   let i = 0;
   for (let ressources in playerLocation['gatheringValues']) {
-  	ressources = ressources.substring(0, ressources.length - 5);
-  	console.log(ressources);
-  	console.log(gatherer)
+	ressources = ressources.substring(0, ressources.length - 5);
 	if (gatherer[ressources].length != 0) {
 	  break;
 	} else {
@@ -936,7 +924,7 @@ function gatherResolution() {
   }
 
   for (let ressources in playerLocation['gatheringValues']) {
-  	ressources = ressources.substring(0, ressources.length - 5);
+	ressources = ressources.substring(0, ressources.length - 5);
 	if (gatherer[ressources].length == 0) {
 	  continue;
 	}
@@ -944,10 +932,10 @@ function gatherResolution() {
 	var newRessources = 0;
 	for (let eachGatherer in gatherer[ressources]) {
 		eachGatherer = gatherer[ressources][eachGatherer];
-		console.log(eachGatherer);
-	  	newRessources += playerLocation["gatheringValues"][ressources + "Yield"] * (eachGatherer['skills']['gatheringFactor'] + eachGatherer['skills'][ressources+'GatheringFactor'])
-	  	+ eachGatherer['skills']['gatheringAbs']
-	  	+ eachGatherer['skills'][ressources+'GatheringAbs'];
+		console.log("Gatherer", eachGatherer);
+		newRessources += playerLocation["gatheringValues"][ressources + "Yield"] * (eachGatherer['skills']['gatheringFactor'] + eachGatherer['skills'][ressources+'GatheringFactor'])
+		+ eachGatherer['skills']['gatheringAbs']
+		+ eachGatherer['skills'][ressources+'GatheringAbs'];
 	}
 	
 	ressourceObtained.innerHTML =
@@ -968,19 +956,8 @@ function gatherResolution() {
 	  morale += parseInt(newRessources);
 	} else if (ressources == "water") {
 	  water += parseInt(newRessources);
-	} else {
-	  let isItem = false;
-	  for (let item in inventory) {
-		if (inventory[item]["name"] == "Food") {
-		  inventory[item]["quantity"] += parseInt(newRessources);
-		  isItem = true;
-		}
-	  }
-	  if (!isItem) {
-		let newItem = createItem("Food");
-		newItem["quantity"] = newRessources;
-		inventory.push(newItem);
-	  }
+	} else if (ressources == "food") {
+	  inventory[1]['volume'] += parseInt(newRessources);
 	}
   }
 

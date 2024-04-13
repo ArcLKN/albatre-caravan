@@ -1,5 +1,4 @@
 function save(varName, value) {
-  console.log(typeof value);
   if (typeof value == "number") {
     value = String(value);
   } else if (typeof value == "object") {
@@ -379,6 +378,121 @@ var luckTrait = [0.6, 0.7, 0.8, 0.9, 0.95];
 
 var genderArr = ["male", "female"];
 
+var specialsTraits = [
+	"hungry", // Needs two times more food.
+	"drought", // Needs two times more water.
+	"ascetic", // Doesn't gain pleasure from going outside, but will not die from famine < 3.
+	"faithful", // Will not be part of the revolt if there is one.  // TBA
+	"lucky", // Will always find one more ressource.
+	"entertainer", // Will give one free moral each turn.
+	"dowser", // Give one water each turn.
+	"sick", // Less max health or more easily sick. Sickness event.  // TBA
+	"archer",
+	"warrior",
+	"protector",
+	"healthy",
+	"mummy", // Doesn't need anything.
+	"spearman",
+	"swordsman",
+	"farmer",
+	"strong",
+	"normie",
+	"fragile",
+	"weak",
+	"brave", // Doesn't lose morale after fight maybe.  // TBA
+	"aggressive",
+	"coward",
+	"depressed",
+	"unlucky",
+	"clumsy",
+	"cheerful",
+	"optimistic",
+	"pesimistic",
+	"charming",
+	"exhausted",
+	"chivalrous",
+	"weapon master",
+	"hard-working", // TBA
+	"heartless"
+]
+
+var baseCrewNumber = 10;
+var crewMembers = [];
+for (i = 0; i < baseCrewNumber; i++) {
+  crewMembers.push(createCharacter());
+}
+
+var allItems = {
+	0: {
+		type: "mount",
+		name: "Camel",
+		volume: 2,
+		price: 1000,
+	 },
+  	1: {
+		type: "food",
+		name: "Food",
+		foodValue: 1,
+		quantity: 0,
+		value: 10,
+		description: "Miam miam",
+  	},
+  	2: {
+		type: "weapon",
+		name: "bow",
+		quantity: 0,
+		value: 10,
+		power: [1, 2, 3],
+		attackType: "piercing",
+		weaponType: "bow",
+		attackStyle: "distance",
+		description: "Classic wooden bow.",
+  	},
+  	3: {
+		type: "weapon",
+		quantity: 0,
+		value: 10,
+		name: "spear",
+		power: [2, 3, 0],
+		attackType: "piercing",
+		weaponType: "spear",
+		attackStyle: "melee",
+		description: "Classic wooden bow.",
+  	},
+		4: {
+		type: "weapon",
+		quantity: 0,
+		value: 10,
+		name: "sword",
+		power: [3, 2, 0],
+		attackType: "slashing",
+		weaponType: "sword",
+		attackStyle: "melee",
+		description: "Classic wooden bow.",
+  	},
+  	5: {
+		type: "food",
+		name: "Rations",
+		foodValue: 1,
+		volume: 100,
+		price: 6,
+	},
+	6: {
+		type: "goods",
+		name: "Papyrus",
+		volume: 50,
+		price: 20,
+	},
+	7: {
+		type: "mount",
+		name: "Horse",
+		volume: 3,
+		price: 500,
+	},
+};
+
+baseInventory = {1: {volume: 50}, 2: {volume: 2}, 3: {volume: 2}, 4: {volume: 2},}
+
 function manageSpecials(unit, trait) {
 	// console.log(unit['special'][special]);
 	if (trait == "hungry") {
@@ -504,44 +618,6 @@ function manageSpecials(unit, trait) {
 	return unit;
 }
 
-var specialsTraits = [
-	"hungry", // Needs two times more food.
-	"drought", // Needs two times more water.
-	"ascetic", // Doesn't gain pleasure from going outside, but will not die from famine < 3.
-	"faithful", // Will not be part of the revolt if there is one.  // TBA
-	"lucky", // Will always find one more ressource.
-	"entertainer", // Will give one free moral each turn.
-	"dowser", // Give one water each turn.
-	"sick", // Less max health or more easily sick. Sickness event.  // TBA
-	"archer",
-	"warrior",
-	"protector",
-	"healthy",
-	"mummy", // Doesn't need anything.
-	"spearman",
-	"swordsman",
-	"farmer",
-	"strong",
-	"normie",
-	"fragile",
-	"weak",
-	"brave", // Doesn't lose morale after fight maybe.  // TBA
-	"aggressive",
-	"coward",
-	"depressed",
-	"unlucky",
-	"clumsy",
-	"cheerful",
-	"optimistic",
-	"pesimistic",
-	"charming",
-	"exhausted",
-	"chivalrous",
-	"weapon master",
-	"hard-working", // TBA
-	"heartless"
-]
-
 function createCharacter () {
 	var newUnit = JSON.parse(JSON.stringify(baseUnit));
 	newUnit['id'] = "id" + Math.random().toString(16).slice(2);
@@ -549,7 +625,6 @@ function createCharacter () {
 	newUnit["name"] = listOfNames["firstname"][newUnit["gender"]][Math.floor(listOfNames["firstname"][newUnit["gender"]].length * Math.random())];
 	newUnit["age"] = 18 + Math.floor(60 * Math.random());
 	newUnit['image'] = "Images/crew/"+newUnit["gender"]+"/"+String(Math.floor(Math.random()*(listCrewImages[newUnit["gender"]]-1)))+".png";
-	console.log(newUnit['image']);
 	if (newUnit['age'] > 65) {newUnit['health'] -= 1;}
 	for (let i=0; i < luckTrait.length; i++) {
 			if (Math.random() > luckTrait[i]) {
@@ -563,30 +638,23 @@ function createCharacter () {
 	return newUnit;
 }
 
-var baseCrewNumber = 10;
-var crewMembers = [];
-
-for (i = 0; i < baseCrewNumber; i++) {
-  crewMembers.push(createCharacter());
-}
-
 // Define starting values.
 function initSessionStorage() {
   save("statusTurn", "");
+  save("allItems", allItems);
   save("crewMembers", crewMembers);
   // Number of people player has, thus number of people he can use.
-  save("crewTotal", 10);
+  save("crewTotal", crewMembers);
   // Distribution of the crew, the total can't be > crewTotal.
   save("crewTypes", { scouts: 0, guards: 0, carriers: 0 }); // Free crew can become carriers to carry more goods.
-  save("idleCrew", 10); // Number of remaining people to distribute.
-  save("morale", 10);
-  save("money", 10);
+  save("idleCrew", crewMembers.lenght); // Number of remaining people to distribute.
+  save("morale", 100);
+  save("money", 200);
   save("authority", 10);
-  save("water", 10);
+  save("water", 20);
   save("numberOfTurns", 0);
   save("famineTurns", 0);
-  save("inventory", [{type: "food", name: "Food", volume: 0}, {
-		type: "goods", name: "Papyrus", volume: 30,price: 40,}]);
+  save("inventory", baseInventory);
   save("playerLocation", {
     type: "desert",
     name: "Desert",

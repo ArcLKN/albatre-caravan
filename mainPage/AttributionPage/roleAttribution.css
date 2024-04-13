@@ -102,3 +102,12 @@
     flex-direction: row;
     align-items: center;
 }
+
+#confirm {
+  background-color: palevioletred;
+}
+
+
+.active {
+    background-color: grey;
+}

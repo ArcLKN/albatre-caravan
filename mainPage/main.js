@@ -358,15 +358,18 @@ function onLoad() {
 	}
 	bonusNode.innerHTML = String(bonus);
   });
-  if (statusTurn == "trade") {
+  if (statusTurn == "deployUnits") {
 	return changeMenu("crewAssignment");
-  } else if (statusTurn == "deployUnits") {
-	return yourTurn("gathering");
   }
   else if (statusTurn == "gatherResolution") {
 	return changeMenu("gatherResolution");
   }
-  prepareNarration();
+  else if (statusTurn == "gatherResolution") {
+	return changeMenu("gatherResolution");
+  }
+  else if (statusTurn == "narration") {
+    	prepareNarration();
+  	}
 }
 
 // Create item depending of itemName.
@@ -971,58 +974,11 @@ function gatherResolution() {
 }
 
 function manageDeployDistribution() {
+	statusTurn = "deployUnits";
   saveSessionStorage();
   window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
 }
 
-function manageGatherDistribution() {
-  ["idleCrewText", "tempDiv", "resolveButton", "horizonzalNode"].forEach((e) =>
-	tempIDs.push(e)
-  );
-  var resolveButton = document.createElement("button");
-  resolveButton.setAttribute("id", "resolveButton");
-  resolveButton.innerHTML = "Resolve";
-
-  var bottomNode = document.getElementById("actionMenu");
-  var horizonzalNode = document.createElement("div");
-  horizonzalNode.setAttribute("id", "horizonzalNode");
-  bottomNode.appendChild(horizonzalNode);
-
-  ressources = [];
-  if (
-	"waterYield" in playerLocation["gatheringValues"] &&
-	playerLocation["gatheringValues"]["waterYield"] > 0
-  ) {
-	ressources.push("water");
-  }
-  if (
-	"foodYield" in playerLocation["gatheringValues"] &&
-	playerLocation["gatheringValues"]["foodYield"] > 0
-  ) {
-	ressources.push("food");
-  }
-  if (
-	"moraleYield" in playerLocation["gatheringValues"] &&
-	playerLocation["gatheringValues"]["moraleYield"] > 0
-  ) {
-	ressources.push("morale");
-  }
-  if (ressources == 0) {
-	tempIDs.push("noRessourceText");
-	var noRessourceText = document.createElement("p");
-	noRessourceText.innerHTML =
-	  "There is no ressources in this forgotten place.";
-	noRessourceText.setAttribute("id", "noRessourceText");
-	bottomNode.appendChild(noRessourceText);
-	resolveButton.addEventListener("click", function () {
-	  changeMenu("travel");
-	});
-  } else {
-	return manageDeployDistribution();
-  }
-
-  document.getElementById("actionMenu").appendChild(resolveButton);
-}
 
 function Defeat(option) {
   tempIDs.push("dyingText");
@@ -1063,7 +1019,7 @@ function changeMenu(newMenu = "None", option = null) {
 	return yourTurn(newMenu);
   }
   if (newMenu == "yourTurn_gather") {
-	return manageGatherDistribution();
+	return changeMenu("gatherResolution");
   }
   if (newMenu == "gatherResolution") {
 	return gatherResolution();

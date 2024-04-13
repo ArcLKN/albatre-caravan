@@ -31,6 +31,7 @@ function loadSessionStorage() {
 	gatherer = JSON.parse(sessionStorage.getItem("gatherer"));
 	statusTurn = sessionStorage.getItem("statusTurn");
 	crew = JSON.parse(sessionStorage.getItem("crewMembers"));
+	allItems = JSON.parse(sessionStorage.getItem("allItems"));
 	console.log(crew);
 }
 
@@ -64,6 +65,7 @@ let crewList = document.getElementById("crewMembers");
 let displayCrewTotal = document.getElementById("crew-total");
 let displayHorseTotal = document.getElementById("horse-total");
 let displayWeaponTotal = document.getElementById("weapon-total");
+let displayPortageTotal = document.getElementById("portage-total");
 
 // ---------- END CREW AND INVENTORY VARIABLES ----------
 
@@ -76,8 +78,25 @@ function Capitalize(e) {
 //Display the total of crew members (METTRE LES VALEURS !!)
 function displayResources() {
 	displayCrewTotal.innerHTML = `Crew: ${crewTotal.length}` + " | ";
-	displayHorseTotal.innerHTML = " " + `Horses: ` + " | ";
-	displayWeaponTotal.innerHTML = " " + `Weapons: `;
+	let nbrWeapons = 0;
+	let nbrMounts = 0;
+	let portageNeeded = 0;
+	let portage = 0;
+	for (let index in inventory) {
+		if (allItems[index]['type'] == "weapon") {
+			nbrWeapons += inventory[index]['volume'];
+		}
+		else if (allItems[index]['type'] == "mount") {
+			nbrMounts += inventory[index]['volume'];
+		}
+		else if (allItems[index]['type'] == "carrier") {
+			portage += inventory[index]['volume'] * allItems[index]['carryValue'];
+		}
+		portageNeeded += inventory[index]['volume'] * allItems[index]['weight'];
+	}
+	displayHorseTotal.innerHTML = " " + `Mounts: ${nbrMounts}` + " | ";
+	displayWeaponTotal.innerHTML = " " + `Weapons: ${nbrWeapons}` + " | ";
+	displayPortageTotal.innerHTML = " " + `Portage: ${portageNeeded} / ${portage}`;
 }
 
 function manageDEr(menu, idInput) {
@@ -310,6 +329,8 @@ function onLoad () {
 						newButton.setAttribute("id", "roleWater");
 						newButton.textContent = "Water Gatherer";
 						newButton.addEventListener("click", function () {
+							document.querySelectorAll('.active').forEach(e => e.classList.remove('active'));
+							this.classList.add('active');
 								createMemberAndAssign("water");
 						});
 						roleDiv.appendChild(newButton);
@@ -322,6 +343,8 @@ function onLoad () {
 				newButton.setAttribute("id", "roleFood");
 				newButton.textContent = "Food Gatherer";
 				newButton.addEventListener("click", function () {
+					document.querySelectorAll('.active').forEach(e => e.classList.remove('active'));
+					this.classList.add('active');
 								createMemberAndAssign("food");
 						});
 				roleDiv.appendChild(newButton);
@@ -334,18 +357,34 @@ function onLoad () {
 				newButton.setAttribute("id", "roleMorale");
 				newButton.textContent = "Morale Gatherer";
 				newButton.addEventListener("click", function () {
-								createMemberAndAssign("morale");
-						});
+					document.querySelectorAll('.active').forEach(e => e.classList.remove('active'));
+					this.classList.add('active');
+					createMemberAndAssign("morale");
+				});
 				roleDiv.appendChild(newButton);
 				}
+
+				let roleList = ["scout", "guard"];
+				roleList.forEach(e => {
+						let newButton = document.createElement("button");
+						newButton.setAttribute("id", "role"+Capitalize(e));
+						newButton.textContent = Capitalize(e);
+						newButton.addEventListener("click", function () {
+							document.querySelectorAll('.active').forEach(e => e.classList.remove('active'));
+							this.classList.add('active');
+							createMemberAndAssign(e);
+						});
+						roleDiv.appendChild(newButton);
+				})
+				createMemberAndAssign("scout");
 		}
 		else {
-				confirmationBtn.addEventListener("click", () => {
-						statusTurn = "deployUnits";
+			confirmationBtn.addEventListener("click", () => {
+						statusTurn = "gatherResolution";
 						saveSessionStorage();
 						window.location.href = "../gamePage.html";
 				});
-				let roleList = ["scout", "guard", "carrier"];
+			let roleList = ["carrier"];
 				roleList.forEach(e => {
 						let newButton = document.createElement("button");
 						newButton.setAttribute("id", "role"+Capitalize(e));
@@ -355,7 +394,7 @@ function onLoad () {
 						});
 						roleDiv.appendChild(newButton);
 				})
-				createMemberAndAssign("scout");
+			createMemberAndAssign("carrier");
 		}
 }
 

@@ -137,12 +137,11 @@ const finali = document.querySelector("#finali");
 
 const computeButton = document.querySelector('#compute');
 computeButton.onclick = function() {
-	update();
-	displayNew();
+	checkTransaction();
 };
 const terminateButton = document.querySelector('#terminer');
 terminateButton.onclick = function() {
-	statusTurn = "trade";
+	statusTurn = "deployUnits";
 	saveSessionStorage();
 	window.location.href = "../gamePage.html";
 };
@@ -225,7 +224,7 @@ function update() {
 	let res = parseInt(resultatNode.textContent);
 	//update argent
 	
-	argent= argent + res;
+	argent = argent + res;
 	money.textContent = argent;
 	//update inventaire
 
@@ -311,6 +310,16 @@ function keepTransa(){
 	let texts = document.querySelectorAll(".text");
 	texts.forEach(text => text.remove());
 
+}
+
+// Check if player has enough money.
+function checkTransaction () {
+	let resultatNode = document.getElementById("finali");
+	let res = parseInt(resultatNode.textContent);
+	if (argent >= res * -1) {
+		update();
+		displayNew();
+	}
 }
 
 loadSessionStorage()

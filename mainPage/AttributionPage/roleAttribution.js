@@ -32,6 +32,7 @@ function loadSessionStorage() {
 	statusTurn = sessionStorage.getItem("statusTurn");
 	crew = JSON.parse(sessionStorage.getItem("crewMembers"));
 	allItems = JSON.parse(sessionStorage.getItem("allItems"));
+	allTraits = JSON.parse(sessionStorage.getItem("allTraits"));
 	console.log(crew);
 }
 
@@ -75,13 +76,14 @@ function Capitalize(e) {
 	return e[0].toUpperCase() + e.slice(1);
 }
 
+let  portage = 0;
+let portageNeeded = 0;
+
 //Display the total of crew members (METTRE LES VALEURS !!)
 function displayResources() {
 	displayCrewTotal.innerHTML = `Crew: ${crewTotal.length}` + " | ";
 	let nbrWeapons = 0;
 	let nbrMounts = 0;
-	let portageNeeded = 0;
-	let portage = 0;
 	for (let index in inventory) {
 		if (allItems[index]['type'] == "weapon") {
 			nbrWeapons += inventory[index]['volume'];
@@ -94,6 +96,9 @@ function displayResources() {
 		}
 		portageNeeded += inventory[index]['volume'] * allItems[index]['weight'];
 	}
+	for (let carry in gatherer['carrier']) {
+		portage += gatherer['carrier'][carry]['carryValue'];
+	}
 	displayHorseTotal.innerHTML = " " + `Mounts: ${nbrMounts}` + " | ";
 	displayWeaponTotal.innerHTML = " " + `Weapons: ${nbrWeapons}` + " | ";
 	displayPortageTotal.innerHTML = " " + `Portage: ${portageNeeded} / ${portage}`;
@@ -105,6 +110,10 @@ function manageDEr(menu, idInput) {
 		for (let eachMember in crew) {
 			if (crew[eachMember]["id"] == idInput) {
 				gatherer[menu].push(crew[eachMember]);
+				if (menu == "carrier") {
+					portage += crew[eachMember]['carryValue'];
+					displayPortageTotal.innerHTML = " " + `Portage: ${portageNeeded} / ${portage}`;
+				}
 			}
 			else {
 				tempCrew.push(crew[eachMember]);
@@ -120,12 +129,14 @@ function manageDEr(menu, idInput) {
 			}
 			else {
 				crew.push(gatherer[menu][eachMember]);
+				if (menu == "carrier") {
+					portage -= gatherer[menu][eachMember]['carryValue'];
+					displayPortageTotal.innerHTML = " " + `Portage: ${portageNeeded} / ${portage}`;
+				}
 			}
 		}
 		gatherer[menu] = tempCrew;
 	}
-	console.log(crew);
-	console.log(gatherer[menu]);
 }
 
 //Checks if a member is assigned to the scout role
@@ -217,12 +228,28 @@ function createMemberAndAssign(menu = "") {
 		crewList.appendChild(person);
 
 		for (let eachTrait in crewTotal[eachPerson]["special"]) {
-				if (crewTotal[eachPerson]["special"][eachTrait]) {
-						let nodeTrait = document.createElement("span");
-						nodeTrait.innerHTML = eachTrait;
-						nodeTrait.classList.add("trait");
-						traitBox.appendChild(nodeTrait);
+			if (crewTotal[eachPerson]["special"][eachTrait]) {
+				let nodeTrait = document.createElement("span");
+					nodeTrait.innerHTML = eachTrait;
+					nodeTrait.classList.add("trait");
+					traitBox.appendChild(nodeTrait);
+				
+				if (["water", "food", "morale"].includes(menu)) {
+					let bonus = 0;
+					if ("skills" in allTraits[eachTrait]) {
+						if ("gatheringAbs" in allTraits[eachTrait]['skills'])
+						{bonus += allTraits[eachTrait]['skills']['gatheringAbs'];}
+						if (menu+'GatheringAbs' in allTraits[eachTrait]['skills'])
+						{bonus += allTraits[eachTrait]['skills'][menu+'GatheringAbs'];}
+					}
+					if (bonus > 0) {
+						nodeTrait.style.backgroundColor = "LightGreen";
+					}
+					else if (bonus < 0) {
+						nodeTrait.style.backgroundColor = "LightPink";
+					}
 				}
+			}
 		}
 
 		if (["water", "food", "morale"].includes(menu)) {
@@ -244,6 +271,11 @@ function createMemberAndAssign(menu = "") {
 				}
 				ressourceText.innerHTML += String(ressourcesObtained);
 				endRowPerson.appendChild(ressourceText);
+		}
+		else if (menu == "carrier") {
+			let carryText = document.createElement("p");
+			carryText.innerHTML = String(crewTotal[eachPerson]["carryValue"]);
+			endRowPerson.appendChild(carryText);
 		}
 
 		endRowPerson.appendChild(attributionContainer);
@@ -378,9 +410,9 @@ function onLoad () {
 				})
 				createMemberAndAssign("scout");
 		}
-		else {
+		else if (statusTurn == "deployCarrier") {
 			confirmationBtn.addEventListener("click", () => {
-						statusTurn = "gatherResolution";
+						statusTurn = "deployCarrier";
 						saveSessionStorage();
 						window.location.href = "../gamePage.html";
 				});

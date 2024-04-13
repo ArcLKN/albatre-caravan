@@ -367,6 +367,9 @@ function onLoad() {
   else if (statusTurn == "gatherResolution") {
 	return changeMenu("gatherResolution");
   }
+  else if (statusTurn == "deployCarrier") {
+		return changeMenu("travel");
+	}
   else if (statusTurn == "narration") {
     	prepareNarration();
   	}
@@ -601,6 +604,24 @@ function chooseAim(team, level) {
   return aimList;
 }
 
+function computePortage() {
+	let portage = 0;
+	let portageNeeded = 0;
+	for (const index in inventory) {
+		if (allItems[index]['type'] === "mount") {
+			portage += inventory[index]['volume'] * allItems[index]['carryValue'];
+		}
+		else if (allItems[index]['type'] === "carrier") {
+			portage += inventory[index]['volume'] * allItems[index]['carryValue'];
+		}
+		portageNeeded += inventory[index]['volume'] * allItems[index]['weight'];
+	}
+	for (const carry of gatherer['carrier']) {
+		portage += carry['carryValue'];
+	}
+	return [portage, portageNeeded];
+}
+
 function yourTurn(phase) {
   console.log("YOUR TURN");
   var node = document.getElementById("actionMenu");
@@ -644,15 +665,17 @@ function yourTurn(phase) {
 	newText.addEventListener("click", function () {
 	  changeMenu(this.id);
 	});
-
-	tempIDs.push("yourTurn_travel");
-	var newButton = document.createElement("button");
-	newButton.setAttribute("id", "yourTurn_travel");
-	newButton.textContent = "Travel";
-	node.appendChild(newButton);
-	newButton.addEventListener("click", function () {
-	  changeMenu(this.id);
-	});
+	const computation = computePortage();
+	console.log(computation);
+	if (computation[0] >= computation[1]) {
+		tempIDs.push("yourTurn_travel");
+		var newButton = document.createElement("button");
+		newButton.setAttribute("id", "yourTurn_travel");
+		newButton.textContent = "Travel";
+		node.appendChild(newButton);
+		newButton.addEventListener("click", function () {
+		  changeMenu(this.id);
+		});}
 	tempIDs.push("yourTurn_Stay");
 	var newButton = document.createElement("button");
 	newButton.setAttribute("id", "yourTurn_Stay");
@@ -713,7 +736,7 @@ function turnX() {
 	}
 	bonusNode.innerHTML = String(bonus);
   });
-  statusTurn = "";
+  statusTurn = "deployUnits";
 }
 
 function areUSure(directions) {
@@ -966,15 +989,15 @@ function gatherResolution() {
 
   var continueButton = document.createElement("button");
   continueButton.addEventListener("click", function () {
-	changeMenu("travel");
+	manageCarrier();
   });
   continueButton.setAttribute("id", "continueButton");
   continueButton.innerHTML = "Continue";
   document.getElementById("actionMenu").appendChild(continueButton);
+	statusTurn = "deployUnits";
 }
 
 function manageDeployDistribution() {
-	statusTurn = "deployUnits";
   saveSessionStorage();
   window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
 }
@@ -991,6 +1014,12 @@ function Defeat(option) {
 function manageTrade() {
   saveSessionStorage();
   window.location.href = "../mainPage/shopPage/shop.html";
+}
+
+function manageCarrier() {
+	statusTurn = "deployCarrier";
+	saveSessionStorage();
+	window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
 }
 
 function changeMenu(newMenu = "None", option = null) {

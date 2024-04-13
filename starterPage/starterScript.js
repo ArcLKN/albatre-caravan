@@ -820,6 +820,7 @@ function createCharacter () {
 
 // Define starting values.
 function initSessionStorage() {
+	save("allTraits", specialsTraitsManager);
   save("statusTurn", "narration");
   save("allItems", allItems);
   save("crewMembers", crewMembers);

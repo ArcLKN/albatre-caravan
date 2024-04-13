@@ -787,7 +787,19 @@ var allItems = {
 
 baseInventory = {0: {volume: 1},1: {volume: 80}, 2: {volume: 2}, 3: {volume: 2}, 4: {volume: 2}, 7: {volume: 2}, 6: {volume: 10},}
 
-
+function inputTrait(newTrait, newUnit) {
+	for (let property in newTrait) {
+		if (typeof newTrait[property] == "object") {
+			for (let subProperty in newTrait[property]) {
+				newUnit[property][subProperty] += newTrait[property][subProperty];
+			}
+		}
+		else {
+			newUnit[property] += newTrait[property];
+		}
+	}
+	return newUnit;
+}
 
 function createCharacter () {
 	var newUnit = JSON.parse(JSON.stringify(baseUnit));
@@ -796,11 +808,19 @@ function createCharacter () {
 	newUnit["name"] = listOfNames["firstname"][newUnit["gender"]][Math.floor(listOfNames["firstname"][newUnit["gender"]].length * Math.random())];
 	newUnit["age"] = 18 + Math.floor(60 * Math.random());
 	newUnit['image'] = "Images/crew/"+newUnit["gender"]+"/"+String(Math.floor(Math.random()*(listCrewImages[newUnit["gender"]]-1)))+".png";
+	if (newUnit["name"] == "Jonathan") {
+		console.log("Easter Egg");
+		newUnit['image'] = "Images/crew/jonathan.png";
+		inputTrait("strong", newUnit)
+	}
 	if (newUnit['age'] > 65) {newUnit['health'] -= 1;}
 	for (let i=0; i < luckTrait.length; i++) {
 			if (Math.random() > luckTrait[i]) {
 				let newTraitName = Object.keys(specialsTraitsManager)[Math.floor(Object.keys(specialsTraitsManager).length * Math.random())];
 				let newTrait = specialsTraitsManager[newTraitName];
+				if (newTraitName in newUnit['special']) {
+					continue;
+				}
 				newUnit['special'][newTraitName] = true;
 				for (let property in newTrait) {
 					if (typeof newTrait[property] == "object") {

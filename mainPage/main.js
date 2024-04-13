@@ -234,7 +234,7 @@ var probabilityRandomOasis = 0.1;
 var allItems = [
   {
 	type: "food",
-	name: "food",
+	name: "Food",
 	quantity: 0,
 	value: 10,
 	description: "Miam miam",
@@ -329,7 +329,7 @@ function returnLocationData(location) {
 function updateRessourcesDisplay() {
   document.getElementById("nb_water").textContent = String(water);
   document.getElementById("nb_food").textContent = String(
-	findItemInv("Food")["quantity"]
+	findItemInv("Food")["volume"]
   );
   document.getElementById("nb_money").textContent = String(money);
   document.getElementById("nb_morale").textContent = String(morale);
@@ -412,7 +412,6 @@ function createItem(nameItem) {
 }
 function findItemInv(nameItem) {
   	for (var eachItem in allItems) {
-  		console.log(eachItem);
 		if (inventory[eachItem]["name"] == nameItem) {
 	  		return inventory[eachItem];
 		}
@@ -961,8 +960,6 @@ function gatherResolution() {
 	ressourceObtained.setAttribute("id", ressources + "Obtained");
 	document.getElementById("actionMenu").appendChild(ressourceObtained);
 	tempIDs.push(ressources + "Obtained");
-	idleCrew += gatherer[ressources];
-	gatherer[ressources] = 0;
 
 	// Depletion
 	playerLocation["gatheringValues"][ressources + "Yield"] -= 1;
@@ -974,13 +971,13 @@ function gatherResolution() {
 	} else {
 	  let isItem = false;
 	  for (let item in inventory) {
-		if (inventory[item]["name"] == "food") {
+		if (inventory[item]["name"] == "Food") {
 		  inventory[item]["quantity"] += parseInt(newRessources);
 		  isItem = true;
 		}
 	  }
 	  if (!isItem) {
-		let newItem = createItem("food");
+		let newItem = createItem("Food");
 		newItem["quantity"] = newRessources;
 		inventory.push(newItem);
 	  }
@@ -999,39 +996,6 @@ function gatherResolution() {
 function manageDeployDistribution() {
   saveSessionStorage();
   window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
-}
-
-// Function to check if player can assign more or less units to each yield.
-// VID is the ressource yield the player want to assign units to, so it can be food, water or morale.
-// VValue is the new value given by the player to this yield.
-// I don't remember what V stands for.
-function checkRessource(VID, VValue) {
-  // First thing is to round the value in case player put a float, and user isn't supposed to assign a limb to such a task.
-  VValue = Math.round(VValue);
-  // From the VID we can search the corresponding node, bc the id of those input elements have the same format name_of_ressource + "Input".
-  var inputNode = document.getElementById(VID + "Input");
-  // Then I'm making sure the VID is in those values. It's pretty useless but it is in can case we need specific actions for specific values. Might delete.
-  if (["water", "food", "morale"].includes(VID)) {
-	// If it isn't, then I'm first checking bro isn't trying to put negative values, if he is then I'm putting the value back to what it was before.
-	// I can do this because I save the value each time in a dict.
-	if (VValue < 0) {
-	  inputNode.value = gatherer[VID];
-	  return;
-	}
-	// Otherwise I'm checking if the amount of new crew he wants to assign is < to the number of idle crew member.
-	else if (VValue - gatherer[VID] > idleCrew) {
-	  // If it is then I'm checking the max number he can put.
-	  // parseInt is used to convert String into Integer, I do this bc it often is a String for some reason...
-	  inputNode.value = idleCrew + parseInt(gatherer[VID]);
-	  VValue = parseInt(gatherer[VID]) + parseInt(idleCrew);
-	}
-	// Finally I'm updating the idle crew avaible.
-	idleCrew -= VValue - gatherer[VID];
-	// And I'm updating the dict of values to keep track of assignement and to use them as backup as seen before.
-	gatherer[VID] = VValue;
-  }
-  document.getElementById("idleCrewText").innerHTML =
-	"Idle crew: " + String(idleCrew);
 }
 
 function manageGatherDistribution() {

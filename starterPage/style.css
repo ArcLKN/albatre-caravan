@@ -44,8 +44,8 @@ body {
   display: flex;
   flex-direction: column; /* Set flex direction to column */
   align-items: flex-start; /* Align to the left */
-  margin-left: 20px; /* Add some margin for spacing */
-  margin-top: 75px; /* Increase the distance from the top */
+  margin-left: 5vw; /* Add some margin for spacing */
+  margin-top: 10vh; /* Increase the distance from the top */
 }
 .box-title {
   font-size: 48px;

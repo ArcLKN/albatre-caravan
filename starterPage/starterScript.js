@@ -42,13 +42,16 @@ var listOfNames = {
 		"Anubis",
 		"Anoubis",
 		"Apis",
+		"Apophis",
 		"Anapa",
 		"Apries",
 		"Apmatenu",
 		"Babafemi",
 		"Boubou",
+		"Chepseskaf",
 		"Cheres",
 		"Chaths",
+		"Dedoun",
 		"Djehuti",
 		"Ethan",
 		"Eate",
@@ -57,9 +60,13 @@ var listOfNames = {
 		"Hagar",
 		"Horus",
 		"Geb",
+		"Gizeh",
 		"Hapi",
+		"Hemen",
+		"Houroun",
 		"Horos",
 		"Horus",
+		"Hor-Merty",
 		"Hebunurotant",
 		"Heru",
 		"Iah",
@@ -73,6 +80,7 @@ var listOfNames = {
 		"Kauib",
 		"Koush",
 		"Koushi",
+		"Khephren",
 		"Khnum",
 		"Khonsu",
 		"Ludim",
@@ -114,6 +122,8 @@ var listOfNames = {
 		"Sethi",
 		"Senusnet",
 		"Sobek",
+		"Sokar",
+		"Sopdou",
 		"Thoutmosis",
 		"Thoth",
 		"Toutankharton",
@@ -384,7 +394,7 @@ var specialsTraits = [
 	"normie",
 	"fragile",
 	"weak",
-	"brave", // Doesn't lose morale after fight maybe.  // TBA
+	//"brave", // Doesn't lose morale after fight maybe.  // TBA
 	"aggressive",
 	"coward",
 	"depressed",
@@ -399,7 +409,7 @@ var specialsTraits = [
 	"weapon master",
 	"hard-working",
 	"heartless",
-	"obese",
+	"overweight",
 	"anorexic",
 	"child of the Nil", // Will always find more ressources.
 	"noble", // Requires way more ressources but enlighten others bc it's a privilege to be with a noble, and is very competent in term of warfare.
@@ -701,6 +711,24 @@ specialsTraitsManager = {
 			moraleGatheringAbs: -1,
 		}
 	},
+	Horus: {
+		vision: 10,
+		attacks: {
+			damageAbs: 1,
+		},
+		resistance: {
+			defense: 1,
+		}
+	},
+	Osiris: {
+		skills: {
+			foodGatheringAbs: 2,
+			waterGatheringAbs: 1,
+			moraleGatheringAbs: 2,
+		},
+		health: 10,
+	},
+	normie: {},
 }
 
 var baseCrewNumber = 20;
@@ -790,7 +818,9 @@ var allItems = {
 
 baseInventory = {0: {volume: 1},1: {volume: 80}, 2: {volume: 2}, 3: {volume: 2}, 4: {volume: 2}, 7: {volume: 2}, 6: {volume: 10},}
 
-function inputTrait(newTrait, newUnit) {
+function inputTrait(newTraitName, newUnit) {
+	let newTrait = specialsTraitsManager[newTraitName];
+	newUnit['special'][newTraitName] = true;
 	for (let property in newTrait) {
 		if (typeof newTrait[property] == "object") {
 			for (let subProperty in newTrait[property]) {
@@ -814,12 +844,22 @@ function createCharacter () {
 	if (newUnit["name"] == "Jonathan") {
 		console.log("Easter Egg");
 		newUnit['image'] = "Images/crew/jonathan.png";
-		inputTrait("strong", newUnit)
+		newUnit = inputTrait("strong", newUnit)
+	}
+	else if (newUnit["name"] == "Horus" && Math.floor(Math.random() * 5) == 0) {
+		console.log("Easter Egg");
+		newUnit = inputTrait("Horus", newUnit)
+		newUnit['image'] = "Images/crew/horus.png";
+	}
+	else if (newUnit["name"] == "Osiris" && Math.floor(Math.random() * 5) == 0) {
+		console.log("Easter Egg Osiris");
+		newUnit = inputTrait("Osiris", newUnit)
+		newUnit['image'] = "Images/crew/osiris.png";
 	}
 	if (newUnit['age'] > 65) {newUnit['health'] -= 1;}
 	for (let i=0; i < luckTrait.length; i++) {
 			if (Math.random() > luckTrait[i]) {
-				let newTraitName = Object.keys(specialsTraitsManager)[Math.floor(Object.keys(specialsTraitsManager).length * Math.random())];
+				let newTraitName = specialsTraits[Math.floor(specialsTraits.length * Math.random())];
 				let newTrait = specialsTraitsManager[newTraitName];
 				if (newTraitName in newUnit['special']) {
 					continue;

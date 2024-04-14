@@ -250,6 +250,7 @@ function createMemberAndAssign(menu = "") {
 					}
 				}
 				else if (menu == "scout") {
+					console.log (eachTrait);
 					if ("vision" in allTraits[eachTrait]) {
 						if (allTraits[eachTrait]['vision'] > 0)
 							{nodeTrait.style.backgroundColor = "LightGreen";}

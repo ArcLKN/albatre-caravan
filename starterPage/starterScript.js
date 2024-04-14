@@ -292,6 +292,7 @@ baseUnit = {
 	max_health: 10,
 	health: 10,
 	carryValue: 10,
+	vision: 5,
 	attacks : {
 		damageAbs: 0,
 		piercing: 0,
@@ -448,7 +449,8 @@ specialsTraitsManager = {
 	archer: {
 		weaponProficiency: {
 			bow: 1,
-		}
+		},
+		vision: 5,
 	},
 	warrior: {
 		weaponProficiency: {
@@ -664,6 +666,7 @@ specialsTraitsManager = {
 			foodGatheringAbs: 1,
 		},
 		health: 5,
+		vision: 5,
 	},
 	noble: {
 		needs: {

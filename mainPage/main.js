@@ -127,7 +127,7 @@ var locations = [
   {
 	type: "desert_city",
 	name: "Desert city",
-	isTradable: false,
+	isTradable: true,
 	description:
 	  "In the middle of the desert, majestic buildings made of polished sandstones rise from the sand welcoming your caravan.",
 	gatheringValues: {
@@ -371,8 +371,8 @@ function onLoad() {
 		return changeMenu("travel");
 	}
   else if (statusTurn == "narration") {
-    	prepareNarration();
-  	}
+		prepareNarration();
+	}
 }
 
 // Create item depending of itemName.
@@ -786,20 +786,21 @@ function changeLocation(button_id) {
 
 // Function: define which destinations will be avaible to the player and creates the buttons associated with those destinations.
 function defineNewDestinations(changeMenuCallback) {
-  tempIDs.push("possibleDestinations");
-  var node = document.getElementById("actionMenu");
-  var possibleDestinationText = document.createElement("h1");
-  possibleDestinationText.innerHTML = "Possible destinations: ";
-  possibleDestinationText.setAttribute("id", "possibleDestinations");
-  node.appendChild(possibleDestinationText);
-  possibleDestinations = [];
-  for (let i = 0; i < playerLocation["possibleDestinations"].length; i++) {
-	if (playerLocation["possibleDestinations"][i]["luck"] >= Math.random()) {
-	  possibleDestinations.push(
-		returnLocationData(playerLocation["possibleDestinations"][i]["type"])
-	  );
+  	tempIDs.push("possibleDestinations");
+  	var node = document.getElementById("actionMenu");
+  	var possibleDestinationText = document.createElement("h1");
+  	possibleDestinationText.innerHTML = "Possible destinations: ";
+  	possibleDestinationText.setAttribute("id", "possibleDestinations");
+  	node.appendChild(possibleDestinationText);
+  	possibleDestinations = [];
+  	for (let i = 0; i < playerLocation["possibleDestinations"].length; i++) {
+  		let luck = playerLocation["possibleDestinations"][i]["luck"];
+  		gatherer['scout'].forEach(e => luck += e['vision'] / 10);
+		if (luck >= Math.random()) {
+				possibleDestinations.push(returnLocationData(playerLocation["possibleDestinations"][i]["type"])
+	  		);
+		}
 	}
-  }
 
   var horizonzalNode = document.createElement("div");
   horizonzalNode.setAttribute("id", "horizonzalNode");
@@ -852,13 +853,13 @@ function changeTextNarration() {
 function killPeople(numberOfDeath) {
   console.log("Death", numberOfDeath);
   for (let i = 0; i<numberOfDeath; i++) {
-  	randIndex = Math.floor(Math.random() * crewTotal.length);
-  	let unit = crewTotal[randIndex];
-  	crewTotal = crewTotal.filter(item => item !== unit);
-  	crewMembers = crewMembers.filter(item => item !== unit);
-  	for (let job in gatherer) {
-  	    gatherer[job] = gatherer[job].filter(item => item !== unit);}
-  	}
+	randIndex = Math.floor(Math.random() * crewTotal.length);
+	let unit = crewTotal[randIndex];
+	crewTotal = crewTotal.filter(item => item !== unit);
+	crewMembers = crewMembers.filter(item => item !== unit);
+	for (let job in gatherer) {
+		gatherer[job] = gatherer[job].filter(item => item !== unit);}
+	}
 }
 
 function foodConsumption () {
@@ -868,18 +869,18 @@ function foodConsumption () {
 }
 
 function ressourcesConsumption(doTravel) {
-  	console.log("Crew Total", crewTotal, famineTurns);
-  	var waterConsumption = 0;
-  	crewTotal.forEach((e) => (waterConsumption += e["needs"]["water"]));
-  	var foodConsumption = 0;
-  	crewTotal.forEach((e) => (foodConsumption += e["needs"]["food"]));
-  	console.log("Consumptions: water", waterConsumption, "food", foodConsumption);
-  	if (doTravel) {
+	console.log("Crew Total", crewTotal, famineTurns);
+	var waterConsumption = 0;
+	crewTotal.forEach((e) => (waterConsumption += e["needs"]["water"]));
+	var foodConsumption = 0;
+	crewTotal.forEach((e) => (foodConsumption += e["needs"]["food"]));
+	console.log("Consumptions: water", waterConsumption, "food", foodConsumption);
+	if (doTravel) {
 		water -= waterConsumption;
-  	} else {
+	} else {
 		water -= Math.floor(waterConsumption / 2);
-  	}
-  	// Check if player has enough food to feed all of the crew.
+	}
+	// Check if player has enough food to feed all of the crew.
 	let tempsFC = foodConsumption;
 	for (let i in inventory) {
 		if (allItems[i]['type'] == "food") {
@@ -889,7 +890,7 @@ function ressourcesConsumption(doTravel) {
 		}
 	}
 	// If yes it feeds all of the crew, that's why there is two times the same 'function'
-  	if (tempsFC == 0) {
+	if (tempsFC == 0) {
 		for (let i in inventory) {
 			if (allItems[i]['type'] == "food") {
 				let neededVolume = Math.ceil(foodConsumption / allItems[i]['foodValue']);
@@ -899,15 +900,15 @@ function ressourcesConsumption(doTravel) {
 			}
 		}
 	// Bc otherwise it doesn't feed them at all and you get to keep the food for the next turn.
-  	} else {
-  		console.log("Famine", foodConsumption);
+	} else {
+		console.log("Famine", foodConsumption);
 		famineTurns += 1;
 		morale -= 10; // 10 ?? get someone to check that
 		killPeople(Math.pow(2, famineTurns) - 2);
-  	}
+	}
   morale /= 1.05;
   if (water <= 0) {
-  	console.log("Water", waterConsumption);
+	console.log("Water", waterConsumption);
 	killPeople(water * -1);
 	water = 0;
   }

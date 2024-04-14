@@ -249,6 +249,22 @@ function createMemberAndAssign(menu = "") {
 						nodeTrait.style.backgroundColor = "LightPink";
 					}
 				}
+				else if (menu == "scout") {
+					if ("vision" in allTraits[eachTrait]) {
+						if (allTraits[eachTrait]['vision'] > 0)
+							{nodeTrait.style.backgroundColor = "LightGreen";}
+						else if (allTraits[eachTrait]['vision'] < 0)
+							{nodeTrait.style.backgroundColor = "LightPink";}
+					}
+				}
+				else if (menu == "carrier") {
+					if ("vision" in allTraits[eachTrait]) {
+						if (allTraits[eachTrait]['carryValue'] > 0)
+							{nodeTrait.style.backgroundColor = "LightGreen";}
+						else if (allTraits[eachTrait]['carryValue'] < 0)
+							{nodeTrait.style.backgroundColor = "LightPink";}
+					}
+				}
 			}
 		}
 
@@ -275,6 +291,11 @@ function createMemberAndAssign(menu = "") {
 		else if (menu == "carrier") {
 			let carryText = document.createElement("p");
 			carryText.innerHTML = String(crewTotal[eachPerson]["carryValue"]);
+			endRowPerson.appendChild(carryText);
+		}
+		else if (menu == "scout") {
+			let carryText = document.createElement("p");
+			carryText.innerHTML = String(crewTotal[eachPerson]["vision"]);
 			endRowPerson.appendChild(carryText);
 		}
 

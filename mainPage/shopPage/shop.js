@@ -220,12 +220,8 @@ function changeTriangle() {
 // Update values and inventories after comnputation.
 function update() {
 	let resultatNode = document.getElementById("finali");
-	let money = document.getElementById("résultat");
 	let res = parseInt(resultatNode.textContent);
-	//update argent
-	
-	argent = argent + res;
-	money.textContent = argent;
+
 	//update inventaire
 
 	["player", "shop"].forEach(e => {
@@ -288,20 +284,7 @@ function update() {
 
 // Fonction qui demande à l'utilisateur s'il veut continuer ses achats après avoir appuyé sur compute.
 // Function that ask the user if he wants to continue shopping.
-function displayNew () {
-	let recap = document.getElementById("recap");
-	recap.style.display = "inline-block";
-	let parent = document.getElementById("recap")
-	for(let eachItem in inventaire) {
-		var newItem = document.createElement("p");
-		newItem.classList.add("text");
-		let priceItem = 0;
-		if (playerLocation['sellableGoods'] && playerLocation['sellableGoods'][eachItem]) {priceItem = playerLocation["sellableGoods"][eachItem]["price"];}
 
-		newItem.textContent = allItems[eachItem]["name"] + "        :       quantity: " + inventaire[eachItem]["volume"]+"        price:  " + priceItem;
-		parent.appendChild(newItem);
-	}
-}
 
 // Remove transaction recap
 function keepTransa(){
@@ -317,8 +300,8 @@ function checkTransaction () {
 	let resultatNode = document.getElementById("finali");
 	let res = parseInt(resultatNode.textContent);
 	if (argent >= res * -1) {
-		update();
 		displayNew();
+		update();
 	}
 }
 
@@ -328,3 +311,58 @@ console.log(inventaire);
 console.log(inventaireMagasin);
 displayInventory();
 defPreviousValues();
+
+function displayNew () {
+	let recap = document.getElementById("recap");
+	recap.style.display = "inline-block";
+	let parent = document.getElementById("recap");
+	for(let eachItem in inventaire) {
+		var newItem = document.createElement("p");
+		newItem.classList.add("text");
+		let priceItem = 0;
+		if (playerLocation['sellableGoods'] && playerLocation['sellableGoods'][eachItem]) {priceItem = playerLocation["sellableGoods"][eachItem]["price"];}
+
+		newItem.textContent = allItems[eachItem]["name"] + "        :       quantity: " + inventaire[eachItem]["volume"];
+		parent.appendChild(newItem);
+	}
+}
+
+/*function displayNew () { //y a update argent dedans aussi
+	let recap = document.getElementById("recap");
+	recap.style.display = "inline-block";
+	let parent = document.getElementById("recap");
+	var newItem = document.createElement("p");
+
+	newItem.classList.add("text");
+	let money = document.getElementById("résultat");
+	//update argent
+	
+	argent = argent + res;
+	money.textContent = argent;
+
+	["player", "shop"].forEach(e => {
+		let eInventaire;
+		if (e == "player") {
+			if (!playerLocation['sellableGoods']) {return;}
+			eInventaire = inventaire;
+		}
+		else {
+			eInventaire = inventaireMagasin;
+		}
+		for(let eachItem in eInventaire) {
+			let itemVolume;
+			let itemPrice;
+			if (e=="player"){
+				inputID = eachItem+"Input";
+				let quantitySold = parseInt(document.getElementById(inputID).value);
+				newItem.textContent = allItems[eachItem]["name"] + ":quantity: " + inventaire[eachItem]["volume"] + "-" + quantity;
+			}
+			else{
+				inputID = eachItem+"ShopInput";
+				let quantityBought = parseInt(document.getElementById(inputID).value);
+				newItem.textContent = allItems[eachItem]["name"] + ":quantity: " + inventaireMagasin[eachItem]["volume"] + "+" + quantity;
+				parent.appendChild(newItem);
+			}
+		}
+	}	
+}*/

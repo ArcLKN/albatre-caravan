@@ -62,6 +62,9 @@ var neededPorterage; // Weight of all the items transported by the caravan.
 // Each unit of food and water is equal to one weight unit.
 function moraleYieldDef() {}
 // The severals yields decrease by one if harvested each turn.
+var groupOfEnemies = [[],[],[]];
+var enemyType;
+var enemyNumber;
 var possibleDestinations;
 var locations = [
   {	
@@ -227,7 +230,12 @@ var locations = [
 	  { type: "desert", luck: 1 },
 	  { type: "fluvial_city", luck: 0.2 },
 	],
-  },
+  },];
+var enemyList = [
+{
+	name: "bandit",
+	health: 0,
+}
 ];
 var probabilityRandomOasis = 0.1;
 
@@ -300,6 +308,7 @@ function updateRessourcesDisplay() {
   document.getElementById("nb_food").textContent = String(computeFood());
   document.getElementById("nb_money").textContent = String(money);
   document.getElementById("nb_morale").textContent = String(Math.round(morale));
+  console.log(crewTotal);
   document.getElementById("nb_crew").textContent = String(crewTotal.length);
 }
 
@@ -369,6 +378,9 @@ function onLoad() {
   }
   else if (statusTurn == "deployCarrier") {
 		return changeMenu("travel");
+	}
+	else if (statusTurn == "beginFight") {
+		return manageBattle();
 	}
   else if (statusTurn == "narration") {
 		prepareNarration();
@@ -622,6 +634,10 @@ function computePortage() {
 	return [portage, portageNeeded];
 }
 
+function manageBattle() {
+
+}
+
 function yourTurn(phase) {
   console.log("YOUR TURN");
   var node = document.getElementById("actionMenu");
@@ -786,19 +802,19 @@ function changeLocation(button_id) {
 
 // Function: define which destinations will be avaible to the player and creates the buttons associated with those destinations.
 function defineNewDestinations(changeMenuCallback) {
-  	tempIDs.push("possibleDestinations");
-  	var node = document.getElementById("actionMenu");
-  	var possibleDestinationText = document.createElement("h1");
-  	possibleDestinationText.innerHTML = "Possible destinations: ";
-  	possibleDestinationText.setAttribute("id", "possibleDestinations");
-  	node.appendChild(possibleDestinationText);
-  	possibleDestinations = [];
-  	for (let i = 0; i < playerLocation["possibleDestinations"].length; i++) {
-  		let luck = playerLocation["possibleDestinations"][i]["luck"];
-  		gatherer['scout'].forEach(e => luck += e['vision'] / 10);
+	tempIDs.push("possibleDestinations");
+	var node = document.getElementById("actionMenu");
+	var possibleDestinationText = document.createElement("h1");
+	possibleDestinationText.innerHTML = "Possible destinations: ";
+	possibleDestinationText.setAttribute("id", "possibleDestinations");
+	node.appendChild(possibleDestinationText);
+	possibleDestinations = [];
+	for (let i = 0; i < playerLocation["possibleDestinations"].length; i++) {
+		let luck = playerLocation["possibleDestinations"][i]["luck"];
+		gatherer['scout'].forEach(e => luck += e['vision'] / 10);
 		if (luck >= Math.random()) {
 				possibleDestinations.push(returnLocationData(playerLocation["possibleDestinations"][i]["type"])
-	  		);
+			);
 		}
 	}
 
@@ -864,8 +880,19 @@ function killPeople(numberOfDeath) {
 
 function foodConsumption () {
 	let foodConsumption;
-	
 	return foodNbr;
+}
+
+function manageEndTurnEvent () {
+	if (numberOfTurns > -1) {
+		let pBattle = 0;
+		pBattle += (crewTotal.length) / 100;
+		let pRandom = Math.random();
+		if (pRandom < pBattle) {
+			manageArmy();
+		}
+	}
+	return changeMenu("turnX");
 }
 
 function ressourcesConsumption(doTravel) {
@@ -924,9 +951,9 @@ function ressourcesConsumption(doTravel) {
 	}
   }
   numberOfTurns++;
-  updateRessourcesDisplay
+  updateRessourcesDisplay();
   console.log(inventory);
-  return changeMenu("turnX");
+  return manageEndTurnEvent();
 }
 
 function gatherResolution() {
@@ -1019,6 +1046,44 @@ function manageTrade() {
 
 function manageCarrier() {
 	statusTurn = "deployCarrier";
+	saveSessionStorage();
+	window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
+}
+
+function manageArmy() {
+
+	statusTurn = "fight";
+	saveSessionStorage();
+	window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
+
+	enemyType = "bandit";
+	let numberOfEnnemy = 0
+	if (enemyType == "bandit") {
+		//numberOfEnnemy = Math.getRandomIntInclusive(5, Math.max(7, Math.round(crewTotal.length/4)))
+	}
+	
+
+	for (let i = 0; i < numberOfEnnemy; i++) {
+		groupOfEnemies[Math.floor(Math.random() * 3)].push()
+	}
+
+
+	tempIDs.push("ennemyApprochingText");
+	var ennemyApprochingText = document.createElement("p");
+	ennemyApprochingText.setAttribute("id", "ennemyApprochingText");
+	ennemyApprochingText.textContent = "Ennemy in sight: a group of bandits is approaching you.";
+	node.appendChild(ennemyApprochingText);
+
+	tempIDs.push("ennemyText");
+	var ennemyApprochingText = document.createElement("p");
+	ennemyApprochingText.setAttribute("id", "ennemyApprochingText");
+	ennemyApprochingText.textContent = "Ennemy in sight: a group of bandits is approaching you.";
+	node.appendChild(ennemyApprochingText);
+
+	newText.addEventListener("click", function () {
+	  changeMenu(this.id);
+	});
+	statusTurn = "fight";
 	saveSessionStorage();
 	window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
 }

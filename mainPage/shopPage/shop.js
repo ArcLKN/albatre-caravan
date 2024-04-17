@@ -328,6 +328,7 @@ function displayNew () {
 }
 
 /*function displayNew () { //y a update argent dedans aussi
+
 	let recap = document.getElementById("recap");
 	recap.style.display = "inline-block";
 	let parent = document.getElementById("recap");

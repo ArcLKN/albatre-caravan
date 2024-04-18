@@ -118,6 +118,31 @@ function displayResources() {
     " " + `Portage: ${portageNeeded} / ${portage}` + " | ";
 }
 
+function updateTotal(menu) {
+	let totalNode = document.getElementById("total-skills");
+	let totalScore = 0;
+
+	if (["water", "food", "morale"].includes(menu)) {
+		for (let eachUnit in gatherer[menu]) {
+      		totalScore +=
+        	playerLocation["gatheringValues"][menu + "Yield"] *
+          	(gatherer[menu][eachUnit]["skills"]["gatheringFactor"] +
+            gatherer[menu][eachUnit]["skills"][menu + "GatheringFactor"]) +
+        	gatherer[menu][eachUnit]["skills"]["gatheringAbs"] +
+        	gatherer[menu][eachUnit]["skills"][menu + "GatheringAbs"];
+        }
+    } else if (menu == "carrier") {
+    	for (let eachUnit in gatherer[menu]) {
+      	totalScore += gatherer[menu][eachUnit]["carryValue"]
+      }
+    } else if (menu == "scout") {
+      for (let eachUnit in gatherer[menu]) {
+      	totalScore += gatherer[menu][eachUnit]["vision"]
+      }
+    }
+	totalNode.textContent = String(totalScore);
+}
+
 function manageDEr(menu, idInput) {
   if (document.getElementById(idInput).checked == true) {
     let tempCrew = [];
@@ -150,6 +175,7 @@ function manageDEr(menu, idInput) {
     }
     gatherer[menu] = tempCrew;
   }
+  updateTotal(menu);
 }
 
 //Checks if a member is assigned to the scout role
@@ -190,12 +216,28 @@ function removeCharacterBox() {
 function createMemberAndAssign(menu = "") {
   removeCharacterBox();
 
+ 	updateTotal(menu);
+
+  	// Clone the button
+	const clonedSelectButton = selectAllChar.cloneNode(true);
+	const clonedDeselectButton = deselectAllChar.cloneNode(true);
+
+	// Replace the original button with the cloned one
+	selectAllChar.parentNode.replaceChild(clonedSelectButton, selectAllChar);
+	deselectAllChar.parentNode.replaceChild(clonedDeselectButton, deselectAllChar);
+
+	selectAllChar = clonedSelectButton;
+	deselectAllChar = clonedDeselectButton;
+
+	// Now, the clonedButton has no event listeners attached to it
+
   selectAllChar.addEventListener("click", function () {
     for (let eachMember in crew) {
       gatherer[menu].push(crew[eachMember]);
       document.querySelectorAll("input").forEach((e) => (e.checked = true));
     }
     crew = [];
+    updateTotal(menu);
   });
 
   deselectAllChar.addEventListener("click", function () {
@@ -204,6 +246,7 @@ function createMemberAndAssign(menu = "") {
       document.querySelectorAll("input").forEach((e) => (e.checked = false));
     }
     gatherer[menu] = [];
+    updateTotal(menu);
   });
 
   for (let eachPerson in crewTotal) {
@@ -281,7 +324,6 @@ function createMemberAndAssign(menu = "") {
             nodeTrait.style.backgroundColor = "LightPink";
           }
         } else if (menu == "scout") {
-          console.log(eachTrait);
           if ("vision" in allTraits[eachTrait]) {
             if (allTraits[eachTrait]["vision"] > 0) {
               nodeTrait.style.backgroundColor = "LightGreen";

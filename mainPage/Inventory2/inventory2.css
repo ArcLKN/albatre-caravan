@@ -1,0 +1,98 @@
+/* Container for the entire inventory */
+.inventory-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(192px, 1fr)); /* Responsive grid columns */
+    gap: 10px; /* Gap between grid items */
+    align-items: center;
+    border-radius: 10px; /* Rounded border for the container */
+    padding: 20px; /* Padding inside the container */
+    background-color: #ffdd00; /* Light yellow background color */
+}
+
+/* Individual item container */
+.inventory-item {
+    position: relative; /* allows for the positioning of info image */
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    width: 192px; /* Set width to 192 pixels */
+    height: 192px; /* Set height to 240 pixels */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px; /* Rounded border for each item */
+    overflow: hidden; /* Hide overflow content */
+    transition: transform 0.3s ease; /* Transition for hover effect */
+}
+/* Item title styling */
+.item-title {
+    text-align: center;
+    font-size: 24px; /* Adjust the font size as needed */
+    font-weight: bold; /* Optionally make the font bold */
+    margin-bottom: 25px; /* Space below the title */
+}
+
+
+/* General image styling within inventory-item */
+.inventory-item img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    margin-bottom: 5px;
+}
+
+/* Info image icon */
+.info-img {
+    position: absolute;
+    bottom: 0%;
+    right: 5%;
+    /*The dimensions for the item img override the dims i set for the 
+    info img. So I set a max size to get the desired dimensions this hurts me*/
+    max-width: 25px;
+    max-height: 25px;
+    cursor: pointer;
+}
+
+
+
+/* Extra information box */
+/* Extra information box */
+.extra-info {
+    display: none;
+    position: absolute;
+    top: 40%; /* Position at vertical center of parent */
+    left: 50%; /* Position at horizontal center of parent */
+    transform: translate(-50%, -50%); /* Center the element precisely */
+    width: 80%; /* Adjust width as needed */
+    max-width: 180px; /* Maximum width for the description */
+    padding: 10px;
+    color: #0c0808; /* Dark text color */
+    text-align: left;
+    font-style: italic;
+    font-size: 16px;
+    border-radius: 8px; /* Rounded border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
+}
+
+
+
+/* Background color based on item rarity */
+.inventory-item.rarity-common {
+    background-color: #867e7e; /* Light gray for common items */
+}
+
+.inventory-item.rarity-rare {
+    background-color: #0e1df3; /* Light blue for rare items */
+}
+
+.inventory-item.rarity-legendary {
+    background-color: #ffb300; /* Gold for legendary items */
+}
+
+.inventory-item.rarity-epic {
+    background-color: #5300a1; /* Tomato red for epic items */
+}
+
+/*expands item box during hover*/
+.inventory-item:hover {
+    transform: scale(1.1); /* Scale up by 10% on hover */
+}

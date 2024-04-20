@@ -1,12 +1,17 @@
 /* Container for the entire inventory */
 .inventory-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(192px, 1fr)); /* Responsive grid columns */
-    gap: 10px; /* Gap between grid items */
+    display: flex;
+    gap: 5px; /* Gap between grid items */
     align-items: center;
     border-radius: 10px; /* Rounded border for the container */
     padding: 20px; /* Padding inside the container */
     background-color: #ffdd00; /* Light yellow background color */
+    justify-items: center;
+    flex-wrap:wrap ;
+    left: 28px;
+    bottom:
+    /*trying to make the inventory fit within the text area below the game*/
+    
 }
 
 /* Individual item container */
@@ -15,8 +20,8 @@
     display: flex;
     flex-direction: column;
     align-items: center; 
-    width: 192px; /* Set width to 192 pixels */
-    height: 192px; /* Set height to 240 pixels */
+    width: 60px; /* Set width to 192 pixels */
+    height: 80px; /* Set height to 240 pixels */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px; /* Rounded border for each item */
@@ -26,7 +31,7 @@
 /* Item title styling */
 .item-title {
     text-align: center;
-    font-size: 24px; /* Adjust the font size as needed */
+    font-size: 16px; /* Adjust the font size as needed */
     font-weight: bold; /* Optionally make the font bold */
     margin-bottom: 25px; /* Space below the title */
 }
@@ -34,8 +39,8 @@
 
 /* General image styling within inventory-item */
 .inventory-item img {
-    width: 150px;
-    height: 150px;
+    width: 40px;
+    height: 40px;
     object-fit: contain;
     margin-bottom: 5px;
 }
@@ -47,30 +52,27 @@
     right: 5%;
     /*The dimensions for the item img override the dims i set for the 
     info img. So I set a max size to get the desired dimensions this hurts me*/
-    max-width: 25px;
-    max-height: 25px;
+    max-width: 15px;
+    max-height: 15px;
     cursor: pointer;
 }
-
-
-
-/* Extra information box */
 /* Extra information box */
 .extra-info {
     display: none;
     position: absolute;
-    top: 40%; /* Position at vertical center of parent */
-    left: 50%; /* Position at horizontal center of parent */
-    transform: translate(-50%, -50%); /* Center the element precisely */
-    width: 80%; /* Adjust width as needed */
-    max-width: 180px; /* Maximum width for the description */
+    top: 0;
+    left: 0;
+    width: 100%; /* Cover entire width of parent */
+    height: 100%; /* Cover entire height of parent */
     padding: 10px;
-    color: #0c0808; /* Dark text color */
+    color: #0c0808;
     text-align: left;
     font-style: italic;
-    font-size: 16px;
-    border-radius: 8px; /* Rounded border */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
+    font-size: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    
+    
 }
 
 

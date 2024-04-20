@@ -15,7 +15,7 @@ function save(varName, value) {
 // Used to get all the new values from the sessionStorage.
 function loadSessionStorage() {
   crewMembers = JSON.parse(sessionStorage.getItem("crewMembers"));
-  crewTotal = parseInt(sessionStorage.getItem("crewTotal"));
+  crewTotal = JSON.parse(sessionStorage.getItem("crewTotal"));
   crewTypes = JSON.parse(sessionStorage.getItem("crewTypes"));
   idleCrew = parseInt(sessionStorage.getItem("idleCrew"));
   morale = parseInt(sessionStorage.getItem("morale"));
@@ -28,6 +28,7 @@ function loadSessionStorage() {
   playerLocation = JSON.parse(sessionStorage.getItem("playerLocation"));
   gatherer = JSON.parse(sessionStorage.getItem("gatherer"));
   statusTurn = sessionStorage.getItem("statusTurn");
+  allItems = JSON.parse(sessionStorage.getItem("allItems"));
 }
 
 // All the variables we want to save and share through every JS files.
@@ -61,9 +62,12 @@ var neededPorterage; // Weight of all the items transported by the caravan.
 // Each unit of food and water is equal to one weight unit.
 function moraleYieldDef() {}
 // The severals yields decrease by one if harvested each turn.
+var groupOfEnemies = [[],[],[]];
+var enemyType;
+var enemyNumber;
 var possibleDestinations;
 var locations = [
-  {
+  {	
 	type: "nil_shore",
 	name: "Nil shore",
 	isTradable: false,
@@ -71,7 +75,7 @@ var locations = [
 	  "A fertile place escaping the harsh life of the desert. In this place you can freely gather high quantity of water and decent quantity of food.",
 	gatheringValues: {
 	  waterYield: 3,
-	  foodYield: 1,
+	  foodYield: 2,
 	},
 	possibleEvents: [],
 	possibleDestinations: [
@@ -97,20 +101,16 @@ var locations = [
 	  { type: "nil_shore", luck: 0.8 },
 	  { type: "desert", luck: 1 },
 	],
-	buyableGoods: [
-	  {
-		type: "food",
-		name: "Rations",
+	buyableGoods: {
+	5: {
 		volume: 100,
 		price: 4,
 	  },
-	  {
-		type: "mount",
-		name: "Horse",
+	7:{
 		volume: 3,
 		price: 500,
 	  },
-	],
+	},
   },
   {
 	type: "desert",
@@ -130,7 +130,7 @@ var locations = [
   {
 	type: "desert_city",
 	name: "Desert city",
-	isTradable: false,
+	isTradable: true,
 	description:
 	  "In the middle of the desert, majestic buildings made of polished sandstones rise from the sand welcoming your caravan.",
 	gatheringValues: {
@@ -143,28 +143,22 @@ var locations = [
 	  { type: "oasis", luck: 0.1 },
 	  { type: "desert_city", luck: 0.1 },
 	],
-	buyableGoods: [
-	  {
-		type: "food",
-		name: "Rations",
+	buyableGoods: {
+	  5: {
 		volume: 100,
 		price: 8,
 	  },
-	  {
-		type: "mount",
-		name: "Camel",
+	  0: {
 		volume: 2,
 		price: 1000,
 	  },
-	],
-	sellableGoods: [
-	  {
-		type: "goods",
-		name: "Papyrus",
-		volume: 50,
-		price: 40,
-	  },
-	],
+	},
+	sellableGoods:{ 
+		  6: {
+			volume: 50,
+			price: 40,
+		  },
+		},
   },
   {
 	type: "fluvial_city",
@@ -182,34 +176,42 @@ var locations = [
 	  { type: "nil_shore", luck: 1 },
 	  { type: "desert", luck: 1 },
 	],
-	buyableGoods: [
-	  {
-		type: "food",
-		name: "Rations",
+	buyableGoods: {
+	6: {
 		volume: 100,
 		price: 6,
-	  },
-	  {
-		type: "goods",
-		name: "Papyrus",
+	},
+	5: {
 		volume: 50,
 		price: 20,
-	  },
-	  {
-		type: "weapon",
-		name: "Sword",
-		volume: 20,
-		price: 200,
-	  },
-	],
-	sellableGoods: [
-	  {
-		type: "weapon",
-		name: "Sword",
+	},
+	2: {
 		volume: 20,
 		price: 100,
-	  },
-	],
+	},
+	3: {
+			volume: 20,
+			price: 100,
+		},
+	4: {
+			volume: 20,
+			price: 100,
+		},
+	},
+	sellableGoods: {
+		2: {
+			volume: 20,
+			price: 100,
+		},
+		3: {
+			volume: 20,
+			price: 100,
+		},
+		4: {
+			volume: 20,
+			price: 100,
+		},
+	},
   },
   {
 	type: "oasis",
@@ -228,51 +230,15 @@ var locations = [
 	  { type: "desert", luck: 1 },
 	  { type: "fluvial_city", luck: 0.2 },
 	],
-  },
+  },];
+var enemyList = [
+{
+	name: "bandit",
+	health: 0,
+}
 ];
 var probabilityRandomOasis = 0.1;
-var allItems = [
-  {
-	type: "food",
-	name: "Food",
-	quantity: 0,
-	value: 10,
-	description: "Miam miam",
-  },
-  {
-	type: "weapon",
-	name: "bow",
-	quantity: 0,
-	value: 10,
-	power: [1, 2, 3],
-	attackType: "piercing",
-	weaponType: "bow",
-	attackStyle: "distance",
-	description: "Classic wooden bow.",
-  },
-  {
-	type: "weapon",
-	quantity: 0,
-	value: 10,
-	name: "spear",
-	power: [2, 3, 0],
-	attackType: "piercing",
-	weaponType: "spear",
-	attackStyle: "melee",
-	description: "Classic wooden bow.",
-  },
-  {
-	type: "weapon",
-	quantity: 0,
-	value: 10,
-	name: "sword",
-	power: [3, 2, 0],
-	attackType: "slashing",
-	weaponType: "sword",
-	attackStyle: "melee",
-	description: "Classic wooden bow.",
-  },
-];
+
 var moralDecrease = 0.05;
 var listOfNames = {
   firstname: {
@@ -326,14 +292,24 @@ function returnLocationData(location) {
   }
 }
 
+
+function computeFood () {
+	let foodNbr = 0;
+	for (let i in inventory) {
+		if (allItems[i]['type'] == "food") {
+			foodNbr += allItems[i]['foodValue'] * inventory[i]['volume'];
+		}
+	}
+	return foodNbr;
+}
+
 function updateRessourcesDisplay() {
   document.getElementById("nb_water").textContent = String(water);
-  document.getElementById("nb_food").textContent = String(
-	findItemInv("Food")["volume"]
-  );
+  document.getElementById("nb_food").textContent = String(computeFood());
   document.getElementById("nb_money").textContent = String(money);
-  document.getElementById("nb_morale").textContent = String(morale);
-  document.getElementById("nb_crew").textContent = String(crewTotal);
+  document.getElementById("nb_morale").textContent = String(Math.round(morale));
+  console.log(crewTotal);
+  document.getElementById("nb_crew").textContent = String(crewTotal.length);
 }
 
 function prepareNarration() {
@@ -376,11 +352,11 @@ function onLoad() {
   ["water", "money", "food"].forEach((e) => {
 	let bonusNode = document.getElementById("bonus_" + e);
 	bonus = 0;
-	crewMembers.forEach((e2) => {
+	crewTotal.forEach((e2) => {
 	  if (e in e2["needs"]) {
 		bonus -= e2["needs"][e] - e2["passiveEarning"][e];
 	  } else {
-		crewMembers.forEach((e2) => (bonus += e2["passiveEarning"][e]));
+		crewTotal.forEach((e2) => (bonus += e2["passiveEarning"][e]));
 	  }
 	});
 	if (bonus >= 0) {
@@ -391,15 +367,24 @@ function onLoad() {
 	}
 	bonusNode.innerHTML = String(bonus);
   });
-  if (statusTurn == "trade") {
+  if (statusTurn == "deployUnits") {
 	return changeMenu("crewAssignment");
-  } else if (statusTurn == "deployUnits") {
-	return yourTurn("gathering");
   }
   else if (statusTurn == "gatherResolution") {
-  	return changeMenu("gatherResolution");
+	return changeMenu("gatherResolution");
   }
-  prepareNarration();
+  else if (statusTurn == "gatherResolution") {
+	return changeMenu("gatherResolution");
+  }
+  else if (statusTurn == "deployCarrier") {
+		return changeMenu("travel");
+	}
+	else if (statusTurn == "beginFight") {
+		return manageBattle();
+	}
+  else if (statusTurn == "narration") {
+		prepareNarration();
+	}
 }
 
 // Create item depending of itemName.
@@ -409,13 +394,6 @@ function createItem(nameItem) {
 	  return allItems[eachItem];
 	}
   }
-}
-function findItemInv(nameItem) {
-  	for (var eachItem in allItems) {
-		if (inventory[eachItem]["name"] == nameItem) {
-	  		return inventory[eachItem];
-		}
-  	}
 }
 // Create randomized person.
 function defineUnit() {
@@ -436,7 +414,6 @@ function defineUnit() {
 }
 
 function fight(team1, team2) {
-  console.log(team1, team2);
   for (let i = 0; i < team1.length; i++) {
 	for (let unit1 in team1[i]) {
 	  thisUnit = team1[i][unit1];
@@ -639,6 +616,28 @@ function chooseAim(team, level) {
   return aimList;
 }
 
+function computePortage() {
+	let portage = 0;
+	let portageNeeded = 0;
+	for (const index in inventory) {
+		if (allItems[index]['type'] === "mount") {
+			portage += inventory[index]['volume'] * allItems[index]['carryValue'];
+		}
+		else if (allItems[index]['type'] === "carrier") {
+			portage += inventory[index]['volume'] * allItems[index]['carryValue'];
+		}
+		portageNeeded += inventory[index]['volume'] * allItems[index]['weight'];
+	}
+	for (const carry of gatherer['carrier']) {
+		portage += carry['carryValue'];
+	}
+	return [portage, portageNeeded];
+}
+
+function manageBattle() {
+
+}
+
 function yourTurn(phase) {
   console.log("YOUR TURN");
   var node = document.getElementById("actionMenu");
@@ -682,15 +681,17 @@ function yourTurn(phase) {
 	newText.addEventListener("click", function () {
 	  changeMenu(this.id);
 	});
-
-	tempIDs.push("yourTurn_travel");
-	var newButton = document.createElement("button");
-	newButton.setAttribute("id", "yourTurn_travel");
-	newButton.textContent = "Travel";
-	node.appendChild(newButton);
-	newButton.addEventListener("click", function () {
-	  changeMenu(this.id);
-	});
+	const computation = computePortage();
+	console.log(computation);
+	if (computation[0] >= computation[1]) {
+		tempIDs.push("yourTurn_travel");
+		var newButton = document.createElement("button");
+		newButton.setAttribute("id", "yourTurn_travel");
+		newButton.textContent = "Travel";
+		node.appendChild(newButton);
+		newButton.addEventListener("click", function () {
+		  changeMenu(this.id);
+		});}
 	tempIDs.push("yourTurn_Stay");
 	var newButton = document.createElement("button");
 	newButton.setAttribute("id", "yourTurn_Stay");
@@ -751,7 +752,7 @@ function turnX() {
 	}
 	bonusNode.innerHTML = String(bonus);
   });
-  statusTurn = "";
+  statusTurn = "deployUnits";
 }
 
 function areUSure(directions) {
@@ -801,20 +802,21 @@ function changeLocation(button_id) {
 
 // Function: define which destinations will be avaible to the player and creates the buttons associated with those destinations.
 function defineNewDestinations(changeMenuCallback) {
-  tempIDs.push("possibleDestinations");
-  var node = document.getElementById("actionMenu");
-  var possibleDestinationText = document.createElement("h1");
-  possibleDestinationText.innerHTML = "Possible destinations: ";
-  possibleDestinationText.setAttribute("id", "possibleDestinations");
-  node.appendChild(possibleDestinationText);
-  possibleDestinations = [];
-  for (let i = 0; i < playerLocation["possibleDestinations"].length; i++) {
-	if (playerLocation["possibleDestinations"][i]["luck"] >= Math.random()) {
-	  possibleDestinations.push(
-		returnLocationData(playerLocation["possibleDestinations"][i]["type"])
-	  );
+	tempIDs.push("possibleDestinations");
+	var node = document.getElementById("actionMenu");
+	var possibleDestinationText = document.createElement("h1");
+	possibleDestinationText.innerHTML = "Possible destinations: ";
+	possibleDestinationText.setAttribute("id", "possibleDestinations");
+	node.appendChild(possibleDestinationText);
+	possibleDestinations = [];
+	for (let i = 0; i < playerLocation["possibleDestinations"].length; i++) {
+		let luck = playerLocation["possibleDestinations"][i]["luck"];
+		gatherer['scout'].forEach(e => luck += e['vision'] / 10);
+		if (luck >= Math.random()) {
+				possibleDestinations.push(returnLocationData(playerLocation["possibleDestinations"][i]["type"])
+			);
+		}
 	}
-  }
 
   var horizonzalNode = document.createElement("div");
   horizonzalNode.setAttribute("id", "horizonzalNode");
@@ -866,38 +868,78 @@ function changeTextNarration() {
 
 function killPeople(numberOfDeath) {
   console.log("Death", numberOfDeath);
-  crewTotal -= numberOfDeath;
-  idleCrew = crewTotal;
-  for (let i = 0; i < numberOfDeath; i++) {
-	crewMembers.shift();
-  }
+  for (let i = 0; i<numberOfDeath; i++) {
+	randIndex = Math.floor(Math.random() * crewTotal.length);
+	let unit = crewTotal[randIndex];
+	crewTotal = crewTotal.filter(item => item !== unit);
+	crewMembers = crewMembers.filter(item => item !== unit);
+	for (let job in gatherer) {
+		gatherer[job] = gatherer[job].filter(item => item !== unit);}
+	}
+}
+
+function foodConsumption () {
+	let foodConsumption;
+	return foodNbr;
+}
+
+function manageEndTurnEvent () {
+	if (numberOfTurns > -1) {
+		let pBattle = 0;
+		pBattle += (crewTotal.length) / 100;
+		let pRandom = Math.random();
+		if (pRandom < pBattle) {
+			manageArmy();
+		}
+	}
+	return changeMenu("turnX");
 }
 
 function ressourcesConsumption(doTravel) {
-  console.log("Crew Total", crewTotal, famineTurns);
-  var waterConsumption = 0;
-  crewMembers.forEach((e) => (waterConsumption += e["needs"]["water"]));
-  var foodConsumption = 0;
-  crewMembers.forEach((e) => (foodConsumption += e["needs"]["food"]));
-  console.log("Consumptions: ", waterConsumption, foodConsumption);
-  if (doTravel) {
-	water -= waterConsumption;
-  } else {
-	water -= Math.floor(waterConsumption / 2);
-  }
-  if (findItemInv("Food")["quantity"] >= foodConsumption) {
-	findItemInv("Food")["quantity"] -= foodConsumption;
-  } else {
-	famineTurns += 1;
-	morale -= 10;
-	killPeople(Math.pow(2, famineTurns) - 2);
-  }
+	console.log("Crew Total", crewTotal, famineTurns);
+	var waterConsumption = 0;
+	crewTotal.forEach((e) => (waterConsumption += e["needs"]["water"]));
+	var foodConsumption = 0;
+	crewTotal.forEach((e) => (foodConsumption += e["needs"]["food"]));
+	console.log("Consumptions: water", waterConsumption, "food", foodConsumption);
+	if (doTravel) {
+		water -= waterConsumption;
+	} else {
+		water -= Math.floor(waterConsumption / 2);
+	}
+	// Check if player has enough food to feed all of the crew.
+	let tempsFC = foodConsumption;
+	for (let i in inventory) {
+		if (allItems[i]['type'] == "food") {
+			let neededVolume = Math.ceil(tempsFC / allItems[i]['foodValue']);
+			tempsFC -=  allItems[i]['foodValue'] * Math.min(neededVolume, inventory[i]['volume']);
+			if (tempsFC == 0) {break;}
+		}
+	}
+	// If yes it feeds all of the crew, that's why there is two times the same 'function'
+	if (tempsFC == 0) {
+		for (let i in inventory) {
+			if (allItems[i]['type'] == "food") {
+				let neededVolume = Math.ceil(foodConsumption / allItems[i]['foodValue']);
+				foodConsumption -=  allItems[i]['foodValue'] * Math.min(neededVolume, inventory[i]['volume']);
+				inventory[i]['volume'] -= Math.min(neededVolume, inventory[i]['volume']);
+				if (foodConsumption == 0) {break;}
+			}
+		}
+	// Bc otherwise it doesn't feed them at all and you get to keep the food for the next turn.
+	} else {
+		console.log("Famine", foodConsumption);
+		famineTurns += 1;
+		morale -= 10; // 10 ?? get someone to check that
+		killPeople(Math.pow(2, famineTurns) - 2);
+	}
   morale /= 1.05;
   if (water <= 0) {
+	console.log("Water", waterConsumption);
 	killPeople(water * -1);
 	water = 0;
   }
-  if (crewTotal <= 0) {
+  if (crewTotal.length <= 0) {
 	return changeMenu("Defeat", "Death");
   }
   if (morale < 0) {
@@ -909,7 +951,9 @@ function ressourcesConsumption(doTravel) {
 	}
   }
   numberOfTurns++;
-  return changeMenu("turnX");
+  updateRessourcesDisplay();
+  console.log(inventory);
+  return manageEndTurnEvent();
 }
 
 function gatherResolution() {
@@ -917,9 +961,7 @@ function gatherResolution() {
   ["continueButton"].forEach((e) => tempIDs.push(e));
   let i = 0;
   for (let ressources in playerLocation['gatheringValues']) {
-  	ressources = ressources.substring(0, ressources.length - 5);
-  	console.log(ressources);
-  	console.log(gatherer)
+	ressources = ressources.substring(0, ressources.length - 5);
 	if (gatherer[ressources].length != 0) {
 	  break;
 	} else {
@@ -936,7 +978,7 @@ function gatherResolution() {
   }
 
   for (let ressources in playerLocation['gatheringValues']) {
-  	ressources = ressources.substring(0, ressources.length - 5);
+	ressources = ressources.substring(0, ressources.length - 5);
 	if (gatherer[ressources].length == 0) {
 	  continue;
 	}
@@ -944,10 +986,10 @@ function gatherResolution() {
 	var newRessources = 0;
 	for (let eachGatherer in gatherer[ressources]) {
 		eachGatherer = gatherer[ressources][eachGatherer];
-		console.log(eachGatherer);
-	  	newRessources += playerLocation["gatheringValues"][ressources + "Yield"] * (eachGatherer['skills']['gatheringFactor'] + eachGatherer['skills'][ressources+'GatheringFactor'])
-	  	+ eachGatherer['skills']['gatheringAbs']
-	  	+ eachGatherer['skills'][ressources+'GatheringAbs'];
+		console.log("Gatherer", eachGatherer);
+		newRessources += playerLocation["gatheringValues"][ressources + "Yield"] * (eachGatherer['skills']['gatheringFactor'] + eachGatherer['skills'][ressources+'GatheringFactor'])
+		+ eachGatherer['skills']['gatheringAbs']
+		+ eachGatherer['skills'][ressources+'GatheringAbs'];
 	}
 	
 	ressourceObtained.innerHTML =
@@ -968,29 +1010,19 @@ function gatherResolution() {
 	  morale += parseInt(newRessources);
 	} else if (ressources == "water") {
 	  water += parseInt(newRessources);
-	} else {
-	  let isItem = false;
-	  for (let item in inventory) {
-		if (inventory[item]["name"] == "Food") {
-		  inventory[item]["quantity"] += parseInt(newRessources);
-		  isItem = true;
-		}
-	  }
-	  if (!isItem) {
-		let newItem = createItem("Food");
-		newItem["quantity"] = newRessources;
-		inventory.push(newItem);
-	  }
+	} else if (ressources == "food") {
+	  inventory[1]['volume'] += parseInt(newRessources);
 	}
   }
 
   var continueButton = document.createElement("button");
   continueButton.addEventListener("click", function () {
-	changeMenu("travel");
+	manageCarrier();
   });
   continueButton.setAttribute("id", "continueButton");
   continueButton.innerHTML = "Continue";
   document.getElementById("actionMenu").appendChild(continueButton);
+	statusTurn = "deployUnits";
 }
 
 function manageDeployDistribution() {
@@ -998,54 +1030,6 @@ function manageDeployDistribution() {
   window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
 }
 
-function manageGatherDistribution() {
-  ["idleCrewText", "tempDiv", "resolveButton", "horizonzalNode"].forEach((e) =>
-	tempIDs.push(e)
-  );
-  var resolveButton = document.createElement("button");
-  resolveButton.setAttribute("id", "resolveButton");
-  resolveButton.innerHTML = "Resolve";
-
-  var bottomNode = document.getElementById("actionMenu");
-  var horizonzalNode = document.createElement("div");
-  horizonzalNode.setAttribute("id", "horizonzalNode");
-  bottomNode.appendChild(horizonzalNode);
-
-  ressources = [];
-  if (
-	"waterYield" in playerLocation["gatheringValues"] &&
-	playerLocation["gatheringValues"]["waterYield"] > 0
-  ) {
-	ressources.push("water");
-  }
-  if (
-	"foodYield" in playerLocation["gatheringValues"] &&
-	playerLocation["gatheringValues"]["foodYield"] > 0
-  ) {
-	ressources.push("food");
-  }
-  if (
-	"moraleYield" in playerLocation["gatheringValues"] &&
-	playerLocation["gatheringValues"]["moraleYield"] > 0
-  ) {
-	ressources.push("morale");
-  }
-  if (ressources == 0) {
-	tempIDs.push("noRessourceText");
-	var noRessourceText = document.createElement("p");
-	noRessourceText.innerHTML =
-	  "There is no ressources in this forgotten place.";
-	noRessourceText.setAttribute("id", "noRessourceText");
-	bottomNode.appendChild(noRessourceText);
-	resolveButton.addEventListener("click", function () {
-	  changeMenu("travel");
-	});
-  } else {
-	return manageDeployDistribution();
-  }
-
-  document.getElementById("actionMenu").appendChild(resolveButton);
-}
 
 function Defeat(option) {
   tempIDs.push("dyingText");
@@ -1058,6 +1042,50 @@ function Defeat(option) {
 function manageTrade() {
   saveSessionStorage();
   window.location.href = "../mainPage/shopPage/shop.html";
+}
+
+function manageCarrier() {
+	statusTurn = "deployCarrier";
+	saveSessionStorage();
+	window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
+}
+
+function manageArmy() {
+
+	statusTurn = "fight";
+	saveSessionStorage();
+	window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
+
+	enemyType = "bandit";
+	let numberOfEnnemy = 0
+	if (enemyType == "bandit") {
+		//numberOfEnnemy = Math.getRandomIntInclusive(5, Math.max(7, Math.round(crewTotal.length/4)))
+	}
+	
+
+	for (let i = 0; i < numberOfEnnemy; i++) {
+		groupOfEnemies[Math.floor(Math.random() * 3)].push()
+	}
+
+
+	tempIDs.push("ennemyApprochingText");
+	var ennemyApprochingText = document.createElement("p");
+	ennemyApprochingText.setAttribute("id", "ennemyApprochingText");
+	ennemyApprochingText.textContent = "Ennemy in sight: a group of bandits is approaching you.";
+	node.appendChild(ennemyApprochingText);
+
+	tempIDs.push("ennemyText");
+	var ennemyApprochingText = document.createElement("p");
+	ennemyApprochingText.setAttribute("id", "ennemyApprochingText");
+	ennemyApprochingText.textContent = "Ennemy in sight: a group of bandits is approaching you.";
+	node.appendChild(ennemyApprochingText);
+
+	newText.addEventListener("click", function () {
+	  changeMenu(this.id);
+	});
+	statusTurn = "fight";
+	saveSessionStorage();
+	window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
 }
 
 function changeMenu(newMenu = "None", option = null) {
@@ -1086,7 +1114,7 @@ function changeMenu(newMenu = "None", option = null) {
 	return yourTurn(newMenu);
   }
   if (newMenu == "yourTurn_gather") {
-	return manageGatherDistribution();
+	return changeMenu("gatherResolution");
   }
   if (newMenu == "gatherResolution") {
 	return gatherResolution();

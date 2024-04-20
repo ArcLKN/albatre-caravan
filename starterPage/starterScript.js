@@ -1,5 +1,4 @@
 function save(varName, value) {
-  console.log(typeof value);
   if (typeof value == "number") {
     value = String(value);
   } else if (typeof value == "object") {
@@ -43,13 +42,16 @@ var listOfNames = {
 		"Anubis",
 		"Anoubis",
 		"Apis",
+		"Apophis",
 		"Anapa",
 		"Apries",
 		"Apmatenu",
 		"Babafemi",
 		"Boubou",
+		"Chepseskaf",
 		"Cheres",
 		"Chaths",
+		"Dedoun",
 		"Djehuti",
 		"Ethan",
 		"Eate",
@@ -58,9 +60,13 @@ var listOfNames = {
 		"Hagar",
 		"Horus",
 		"Geb",
+		"Gizeh",
 		"Hapi",
+		"Hemen",
+		"Houroun",
 		"Horos",
 		"Horus",
+		"Hor-Merty",
 		"Hebunurotant",
 		"Heru",
 		"Iah",
@@ -74,6 +80,7 @@ var listOfNames = {
 		"Kauib",
 		"Koush",
 		"Koushi",
+		"Khephren",
 		"Khnum",
 		"Khonsu",
 		"Ludim",
@@ -115,6 +122,8 @@ var listOfNames = {
 		"Sethi",
 		"Senusnet",
 		"Sobek",
+		"Sokar",
+		"Sopdou",
 		"Thoutmosis",
 		"Thoth",
 		"Toutankharton",
@@ -292,6 +301,8 @@ baseUnit = {
 	age: null,
 	max_health: 10,
 	health: 10,
+	carryValue: 10,
+	vision: 5,
 	attacks : {
 		damageAbs: 0,
 		piercing: 0,
@@ -325,26 +336,7 @@ baseUnit = {
 		waterGatheringFactor: 0,
 		moraleGatheringFactor: 0
 	},
-	special: {
-		hungry: false, // Needs two times more food.
-		drought: false, // Needs two times more water.
-		ascetic: false, // Doesn't gain pleasure from going outside, but will not die from famine < 3.
-		faithful: false, // Will not be part of the revolt if there is one.
-		lucky: false, // Will always find one more ressource.
-		entertainer: false, // Will give one free moral each turn.
-		dowser: false, // Give one water each turn.
-		sick: false, // Less max health or more easily sick. Sickness event.
-		archer: false,
-		warrior: false,
-		protector: false,
-		healthy: false,
-		mummy: false, // Doesn't need anything.
-		lancer: false,
-		swordsman: false,
-		farmer: false,
-		strong: false,
-		normie: false,
-	},
+	special: {},
 	needs: {
 		water: 1,
 		food: 1,
@@ -372,137 +364,14 @@ baseUnit = {
 		weaponType: "mace",
 		attackStyle: "melee"
 	},
-	injuries: 0
+	mount: {},
+	armor: {},
+	injuries: 0,
 }
 
 var luckTrait = [0.6, 0.7, 0.8, 0.9, 0.95];
 
 var genderArr = ["male", "female"];
-
-function manageSpecials(unit, trait) {
-	// console.log(unit['special'][special]);
-	if (trait == "hungry") {
-		unit['needs']['food'] += 1;
-	}
-	else if (trait == "drought") {
-		unit['needs']['water'] += 1;
-	}
-	else if (trait == "ascetic") {
-		unit['skills']['moraleGatheringFactor'] = 0;
-	}
-	else if (trait == "faithful") {}
-	else if (trait == "lucky") {
-		unit['skills']['gatheringAbs'] += 1;
-	}
-	else if (trait == "entertainer") {
-		unit['passiveEarning']['morale'] += 1;
-	}
-	else if (trait == "dowser") {
-		unit['passiveEarning']['water'] += 1;
-	}
-	else if (trait == "sick") {
-		unit['health'] -= 2;
-	}
-	else if (trait == "archer") {
-		unit['weaponProficiency']['bow'] += 1;
-	}
-	else if (trait == "warrior") {
-		unit['attacks']['damageAbs'] += 1;
-		unit['resistance']['phyDefense'] += 1;
-		unit['weaponProficiency']['melee'] += 1;
-	}
-	else if (trait == "protector") {
-		unit['resistance']['defense'] += 1;
-		unit['resistance']['phyDefense'] += 1;
-		unit['health'] += 5;
-	}
-	else if (trait == "healthy") {
-		unit['health'] += 2;
-	}
-	else if (trait == "mummy") {
-		unit['needs']['water'] = 0;
-		unit['needs']['morale'] = 0;
-		unit['needs']['food'] = 0;
-	}
-	else if (trait == "spearman") {
-		unit['attacks']['piercing'] += 1;
-		unit['weaponProficiency']['spear'] += 1;
-	}
-	else if (trait == "swordsman") {
-		unit['attacks']['slashing'] += 1;
-		unit['weaponProficiency']['sword'] += 1;
-	}
-	else if (trait == "farmer") {
-		unit['skills']['foodGatheringAbs'] += 1;
-	}
-	else if (trait == "strong") {
-		unit['skills']['waterGatheringAbs'] += 1;
-		unit['health'] += 2;
-		unit['attacks']['damageAbs'] += 1;
-		unit['resistance']['defense'] += 1;
-	}
-	else if (trait == "fragile") {
-		unit['resistance']['phyDefense'] -= 1;
-	}
-	else if (trait == "weak") {
-		unit['resistance']['phyDefense'] -= 1;
-		unit['resistance']['defense'] -= 1;
-	}
-	else if (trait == "aggressive") {
-		unit['resistance']['phyDefense'] -= 1;
-		unit['weaponProficiency']['melee'] += 1;
-	}
-	else if (trait == "coward") {
-		unit['resistance']['phyDefense'] += 1;
-		unit['weaponProficiency']['melee'] -= 1;
-	}
-	else if (trait == "depressed") {
-		unit['skills']['moraleGatheringAbs'] -= 1;
-		unit['needs']['morale'] += 1;
-	}
-	else if (trait == "unlucky") {
-		unit['skills']['gatheringAbs'] -= 1;
-	}
-	else if (trait == "clumsy") {
-		unit['skills']['foodGatheringAbs'] -= 1;
-		unit['skills']['waterGatheringAbs'] -= 1;
-		unit['weaponProficiency']['weapon'] -= 1;
-	}
-	else if (trait == "cheerful") {
-		unit['skills']['moraleGatheringAbs'] += 1;
-	}
-	else if (trait == "optimistic") {
-		unit['needs']['morale'] -= 1;
-		unit['passiveEarning']['morale'] += 1;
-	}
-	else if (trait == "pesimistic") {
-		unit['needs']['morale'] -= 1;
-		unit['passiveEarning']['morale'] -= 1;
-	}
-	else if (trait == "charming") {
-		unit['skills']['moraleGatheringAbs'] += 1;
-		unit['passiveEarning']['morale'] += 1;
-		unit['resistance']['phyDefense'] += 1;
-	}
-	else if (trait == "exhausted") {
-		unit['skills']['GatheringAbs'] += 1;
-		unit['resistance']['defense'] -= 1;
-		unit['attacks']['damageAbs'] -= 1;
-	}
-	else if (trait == "chivalrous") {
-		unit['resistance']['defense'] += 1;
-		unit['weaponProficiency']['melee'] += 1;
-		unit['health'] += 2;
-	}
-	else if (trait == "weapon master") {
-		unit['weaponProficiency']['weapon'] += 1;
-	}
-	else if (trait == "heartless") {
-		unit['attacks']['damageAbs'] += 1;
-		unit['passiveEarning']['morale'] -= 1;
-	}
-	return unit;
-}
 
 var specialsTraits = [
 	"hungry", // Needs two times more food.
@@ -525,7 +394,7 @@ var specialsTraits = [
 	"normie",
 	"fragile",
 	"weak",
-	"brave", // Doesn't lose morale after fight maybe.  // TBA
+	//"brave", // Doesn't lose morale after fight maybe.  // TBA
 	"aggressive",
 	"coward",
 	"depressed",
@@ -538,9 +407,432 @@ var specialsTraits = [
 	"exhausted",
 	"chivalrous",
 	"weapon master",
-	"hard-working", // TBA
-	"heartless"
+	"hard-working",
+	"heartless",
+	"overweight",
+	"anorexic",
+	"child of the Nil", // Will always find more ressources.
+	"noble", // Requires way more ressources but enlighten others bc it's a privilege to be with a noble, and is very competent in term of warfare.
+	"orphan", // Doesn't require ressources but is bad at everything.
 ]
+
+specialsTraitsManager = {
+	hungry: {
+		needs: {
+			food: 1,
+		}
+	},
+	drought: {
+		needs: {
+			water: 1,
+		}
+	},
+	ascetic: {
+		skills: {
+			moraleGatheringFactor: -1,
+		},
+		needs: {
+			morale: -1,
+		}
+	},
+	faithful: {
+
+	},
+	lucky: {
+		skills: {
+			gatheringAbs: 1,
+		},
+	},
+	entertainer: {
+		passiveEarning: {
+			morale: 1,
+		}
+	},
+	dowser: {
+		passiveEarning: {
+			water: 1,
+		}
+	},
+	sick: {
+		health: -2,
+	},
+	archer: {
+		weaponProficiency: {
+			bow: 1,
+		},
+		vision: 5,
+	},
+	warrior: {
+		weaponProficiency: {
+			melee: 1,
+		},
+		attacks: {
+			damageAbs: 1,
+		},
+		resistance: {
+			phyDefense: 1,
+		},
+	},
+	protector: {
+		resistance: {
+			phyDefense: 1,
+			defense: 1,
+		},
+		health: 5,
+	},
+	healthy: {
+		health: 2,
+	},
+	mummy: {
+		needs: {
+			water: -1,
+			food: -1,
+			morale: -1,
+		}
+	},
+	spearman: {
+		weaponProficiency: {
+			spear: 1,
+		},
+		attacks: {
+			piercing: 1,
+		},
+	},
+	swordsman: {
+		weaponProficiency: {
+			sword: 1,
+		},
+		attacks: {
+			slashing: 1,
+		}
+	},
+	farmer: {
+		skills: {
+			foodGatheringAbs: 1,
+		}
+	},
+	strong: {
+		skills: {
+			waterGatheringAbs: 1,
+		},
+		health: 2,
+		attacks: {
+			damageAbs: 1,
+		},
+		resistance: {
+			phyDefense: 1,
+		},
+		carryValue: 10,
+	},
+	fragile: {
+		resistance: {
+			phyDefense: -1,
+		}
+	},
+	weak: {
+		resistance: {
+			phyDefense: -1,
+			defense: -1,
+		},
+		carryValue: -1,
+	},
+	aggressive: {
+		resistance: {
+			phyDefense: -1,
+		},
+		weaponProficiency: {
+			melee: 1,
+		}
+	},
+	coward: {
+		resistance: {
+			phyDefense: 1,
+		},
+		attacks: {
+			melee: -1,
+		}
+	},
+	depressed: {
+		skills: {
+			moraleGatheringAbs: -1,
+		},
+		needs: {
+			morale: -1,
+		}
+	},
+	unlucky: {
+		skills: {
+			gatheringAbs: -1,
+		}
+	},
+	clumsy: {
+		skills: {
+			foodGatheringAbs: -1,
+			waterGatheringAbs: -1,
+		},
+		weaponProficiency: {
+			weapon: -1,
+		}
+	},
+	cheerful: {
+		skills: {
+			moraleGatheringAbs: 1,
+		}
+	},
+	optimistic: {
+		needs: {
+			morale: -1,
+		},
+		passiveEarning: {
+			morale: 1,
+		}
+	},
+	pesimistic: {
+		needs: {
+			morale: -1,
+		},
+		passiveEarning: {
+			morale: -1,
+		}
+	},
+	charming: {
+		skills: {
+			moraleGatheringAbs: 1,
+		},
+		passiveEarning: {
+			morale: 1,
+		},
+		resistance: {
+			phyDefense: 1,
+		}
+	},
+	exhausted: {
+		skills: {
+			gatheringAbs: -1,
+		},
+		resistance: {
+			defense: -1,
+		},
+		attacks: {
+			damageAbs: -1,
+		},
+		carryValue: -2,
+	},
+	chivalrous: {
+		resistance: {
+			defense: 1,
+		},
+		weaponProficiency: {
+			melee: 1,
+		},
+		health: 2,
+	},
+	"weapon master": {
+		weaponProficiency: {
+			weapon: 2,
+		},
+	},
+	heartless: {
+		attacks: {
+			damageAbs: 1,
+		},
+		passiveEarning: {morale: -1},
+	},
+	overweight: {
+		health: -2,
+		needs: {
+			food: 1,
+		},
+		resistance: {
+			phyDefense: 1,
+		}
+	},
+	anorexic: {
+		health: -2,
+		needs: {
+			food: -1,
+		},
+		resistance: {
+			phyDefense: -1,
+		}
+	},
+	"hard-working": {
+		skills: {
+			gatheringAbs: 1,
+		},
+		carryValue: 2,
+	},
+	hunter: {
+		skills: {
+			foodGatheringAbs: 1,
+		},
+		weaponProficiency: {
+			bow: 1,
+		}
+	},
+	"child of the Nil": {
+		skills: {
+			waterGatheringAbs: 1,
+			foodGatheringAbs: 1,
+		},
+		health: 5,
+		vision: 5,
+	},
+	noble: {
+		needs: {
+			food: 1,
+			water: 1,
+		},
+		weaponProficiency: {
+			weapon: 1,
+			sword: 1,
+		},
+		passiveEarning: {
+			money: 2,
+			morale: 1,
+		}
+	},
+	orphan: {
+		needs: {
+			food: -1,
+			water: -1,
+		},
+		health: -2,
+		skills: {
+			gatheringAbs: -1,
+		},
+		weaponProficiency: {
+			weapon: -1,
+		}
+	},
+	slave: {
+		health: -2,
+		skills: {
+			moraleGatheringAbs: -1,
+		}
+	},
+	Horus: {
+		vision: 10,
+		attacks: {
+			damageAbs: 1,
+		},
+		resistance: {
+			defense: 1,
+		}
+	},
+	Osiris: {
+		skills: {
+			foodGatheringAbs: 2,
+			waterGatheringAbs: 1,
+			moraleGatheringAbs: 2,
+		},
+		health: 10,
+	},
+	normie: {},
+}
+
+var baseCrewNumber = 20;
+var crewMembers = [];
+for (i = 0; i < baseCrewNumber; i++) {
+  crewMembers.push(createCharacter());
+}
+
+var allItems = {
+	0: {
+		type: "carrier",
+		name: "Camel",
+		volume: 2,
+		price: 1000,
+		carryValue: 100,
+		weight: 0,
+	 },
+  	1: {
+		type: "food",
+		name: "Food",
+		foodValue: 1,
+		quantity: 0,
+		value: 10,
+		description: "Miam miam",
+		weight: 1,
+  	},
+  	2: {
+		type: "weapon",
+		name: "bow",
+		quantity: 0,
+		value: 10,
+		power: [1, 2, 3],
+		attackType: "piercing",
+		weaponType: "bow",
+		attackStyle: "distance",
+		description: "Classic wooden bow.",
+		weight: 1,
+  	},
+  	3: {
+		type: "weapon",
+		quantity: 0,
+		value: 10,
+		name: "spear",
+		power: [2, 3, 0],
+		attackType: "piercing",
+		weaponType: "spear",
+		attackStyle: "melee",
+		description: "Classic wooden bow.",
+		weight: 1,
+  	},
+		4: {
+		type: "weapon",
+		quantity: 0,
+		value: 10,
+		name: "sword",
+		power: [3, 2, 0],
+		attackType: "slashing",
+		weaponType: "sword",
+		attackStyle: "melee",
+		description: "Classic wooden bow.",
+		weight: 1,
+  	},
+  	5: {
+		type: "food",
+		name: "Rations",
+		foodValue: 1,
+		volume: 100,
+		price: 6,
+		weight: 1,
+	},
+	6: {
+		type: "goods",
+		name: "Papyrus",
+		volume: 50,
+		price: 20,
+		weight: 1,
+	},
+	7: {
+		type: "mount",
+		name: "Horse",
+		volume: 3,
+		price: 500,
+		carryValue: 30,
+		weight: 0,
+	},
+};
+
+baseInventory = {0: {volume: 1},1: {volume: 80}, 2: {volume: 2}, 3: {volume: 2}, 4: {volume: 2}, 7: {volume: 2}, 6: {volume: 10},}
+
+function inputTrait(newTraitName, newUnit) {
+	let newTrait = specialsTraitsManager[newTraitName];
+	newUnit['special'][newTraitName] = true;
+	for (let property in newTrait) {
+		if (typeof newTrait[property] == "object") {
+			for (let subProperty in newTrait[property]) {
+				newUnit[property][subProperty] += newTrait[property][subProperty];
+			}
+		}
+		else {
+			newUnit[property] += newTrait[property];
+		}
+	}
+	return newUnit;
+}
 
 function createCharacter () {
 	var newUnit = JSON.parse(JSON.stringify(baseUnit));
@@ -549,58 +841,81 @@ function createCharacter () {
 	newUnit["name"] = listOfNames["firstname"][newUnit["gender"]][Math.floor(listOfNames["firstname"][newUnit["gender"]].length * Math.random())];
 	newUnit["age"] = 18 + Math.floor(60 * Math.random());
 	newUnit['image'] = "Images/crew/"+newUnit["gender"]+"/"+String(Math.floor(Math.random()*(listCrewImages[newUnit["gender"]]-1)))+".png";
-	console.log(newUnit['image']);
+	if (newUnit["name"] == "Jonathan") {
+		console.log("Easter Egg");
+		newUnit['image'] = "Images/crew/jonathan.png";
+		newUnit = inputTrait("strong", newUnit)
+	}
+	else if (newUnit["name"] == "Horus" && Math.floor(Math.random() * 5) == 0) {
+		console.log("Easter Egg");
+		newUnit = inputTrait("Horus", newUnit)
+		newUnit['image'] = "Images/crew/horus.png";
+	}
+	else if (newUnit["name"] == "Osiris" && Math.floor(Math.random() * 5) == 0) {
+		console.log("Easter Egg Osiris");
+		newUnit = inputTrait("Osiris", newUnit)
+		newUnit['image'] = "Images/crew/osiris.png";
+	}
 	if (newUnit['age'] > 65) {newUnit['health'] -= 1;}
 	for (let i=0; i < luckTrait.length; i++) {
 			if (Math.random() > luckTrait[i]) {
-				let newTrait = specialsTraits[Math.floor(specialsTraits.length * Math.random())]
-				newUnit['special'][newTrait] = true;
-				manageSpecials(newUnit, newTrait);
+				let newTraitName = specialsTraits[Math.floor(specialsTraits.length * Math.random())];
+				let newTrait = specialsTraitsManager[newTraitName];
+				if (newTraitName in newUnit['special']) {
+					continue;
+				}
+				newUnit['special'][newTraitName] = true;
+				for (let property in newTrait) {
+					if (typeof newTrait[property] == "object") {
+						for (let subProperty in newTrait[property]) {
+							newUnit[property][subProperty] += newTrait[property][subProperty];
+						}
+					}
+					else {
+						newUnit[property] += newTrait[property];
+					}
+				}
 			};
 	}
-	newUnit = manageSpecials(newUnit);
 	newUnit['max_health'] = newUnit["health"];
 	return newUnit;
 }
 
-var baseCrewNumber = 10;
-var crewMembers = [];
-
-for (i = 0; i < baseCrewNumber; i++) {
-  crewMembers.push(createCharacter());
-}
-
 // Define starting values.
 function initSessionStorage() {
-  save("statusTurn", "");
+	save("allTraits", specialsTraitsManager);
+  save("statusTurn", "narration");
+  save("allItems", allItems);
   save("crewMembers", crewMembers);
   // Number of people player has, thus number of people he can use.
-  save("crewTotal", 10);
+  save("crewTotal", crewMembers);
   // Distribution of the crew, the total can't be > crewTotal.
   save("crewTypes", { scouts: 0, guards: 0, carriers: 0 }); // Free crew can become carriers to carry more goods.
-  save("idleCrew", 10); // Number of remaining people to distribute.
-  save("morale", 10);
-  save("money", 10);
+  save("idleCrew", crewMembers.lenght); // Number of remaining people to distribute.
+  save("morale", 100);
+  save("money", 1000);
   save("authority", 10);
-  save("water", 10);
+  save("water", 50);
   save("numberOfTurns", 0);
   save("famineTurns", 0);
-  save("inventory", [{type: "food", name: "Food", volume: 0}, {
-		type: "goods", name: "Papyrus", volume: 30,price: 40,}]);
-  save("playerLocation", {
-    type: "desert",
-    name: "Desert",
-    isTradable: false,
-    description: "Bunch of sand.",
-    gatheringValues: {},
-    possibleEvents: [],
-    possibleDestinations: [
-      { type: "village", luck: 0.1 },
-      { type: "nil_shore", luck: 1 },
-      { type: "desert", luck: 1 },
-      { type: "oasis", luck: 0.1 },
-      { type: "desert_city", luck: 0.1 },
-    ],
+  save("inventory", baseInventory);
+  save("playerLocation", {	
+	type: "nil_shore",
+	name: "Nil shore",
+	isTradable: false,
+	description:
+	  "A fertile place escaping the harsh life of the desert. In this place you can freely gather high quantity of water and decent quantity of food.",
+	gatheringValues: {
+	  waterYield: 3,
+	  foodYield: 2,
+	},
+	possibleEvents: [],
+	possibleDestinations: [
+	  { type: "village", luck: 0.5 },
+	  { type: "nil_shore", luck: 1 },
+	  { type: "desert", luck: 1 },
+	  { type: "fluvial_city", luck: 0.2 },
+	],
   });
   save("gatherer", {
     water: [],

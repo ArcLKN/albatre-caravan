@@ -9,7 +9,7 @@
     background-color: white;
     height: 100%;
     width: 50%;
-    border-right: 2px black solid;
+ 
     
 }
 
@@ -17,6 +17,8 @@
     background-color: white;
     height: 100%;
     width: 50%;
+    border-left: 1px black solid;
+
     
 }
 
@@ -35,7 +37,7 @@
     justify-content: space-around;
     align-items: center;
     text-align: center;
-    border-bottom: 2px brown solid;
+    border-bottom: 1px black solid;
     
     
 }
@@ -59,7 +61,7 @@ img{
 #generate{
  
     position: absolute;
-    top: 60%;
+    top: 80%;
     left: 45%;
     width: 10%;
     height: 10%;
@@ -119,21 +121,25 @@ h1{
 #res {
     background-color: brown;
     font-size: 25px;
+
 }
 
 #recap {
     display: none;
+
     position: absolute;
     width: 50%;
-    height: 50%;
+    height: 50vh;
     top: 10%;
     left: 25%;
     background-color: white;
     text-align: center;
-    border: 2px brown solid;
+    border: 1px black solid;
 }
 
 #compute{
+    position: absolute;
+    top: 55vh;
     width: 10%;
     height: 5%;
     font-size: 20px;
@@ -155,8 +161,14 @@ h1{
 }
 
 #terminer, #continue {
+
     width: 65%;
     height: 15%;
     font-size: 15px;
-    margin: 5% 55% 0 0;
+
 }
+
+#continue{
+    margin-left: 120%;
+}
+

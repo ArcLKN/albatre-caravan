@@ -1,6 +1,6 @@
 .inventory-container {
     border: 3px solid #ccc; /* Add border around inventory container */
-    padding: 10px; /* Add padding inside the border */
+    padding: 3px; /* Add padding inside the border */
 }
 
 .inventory-group {
@@ -14,7 +14,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 3px;
     border: 3px solid #ccc;
     cursor: pointer;
 }

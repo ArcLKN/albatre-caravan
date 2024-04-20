@@ -7,7 +7,8 @@
             value: 10,
             imgFile: "sword.jpeg",
             description: "Restores health when consumed",
-            rarity: "Common"
+            rarity: "Common",
+            assignedTo:"timmy"
         },
         { 
             name: "Sword",
@@ -16,7 +17,8 @@
             value: 50,
             imgFile: "sword.jpeg",
             description: "A basic sword for melee combat",
-            rarity: "Epic"
+            rarity: "Epic",
+            assignedTo:"jesus, joanne"
         },
         { 
             name: "Armor",
@@ -25,7 +27,8 @@
             value: 100,
             imgFile: "Pablo.jpg",
             description: "Protective armor for defense",
-            rarity: "Legendary"
+            rarity: "Legendary",
+            assignedTo:"hassan"
         },
         { 
             name: "Magic Elixir",
@@ -34,7 +37,8 @@
             value: 20,
             imgFile: "Pablo.jpg",
             description: "Grants temporary magical abilities",
-            rarity: "Rare"
+            rarity: "Rare",
+            assignedTo:""
         },
         { 
             name: "Shield",
@@ -43,7 +47,8 @@
             value: 80,
             imgFile: "sword.jpeg",
             description: "Provides additional defense against attacks",
-            rarity: "Common"
+            rarity: "Common",
+            assignedTo:""
         },
         { 
             name: "Bow",
@@ -52,7 +57,8 @@
             value: 60,
             imgFile: "sword.jpeg",
             description: "Ranged weapon for precise attacks",
-            rarity: "Epic"
+            rarity: "Epic",
+            assignedTo:""
         }
     ];//this js will generate the itemboxes for each item
     //filters out items based on selected type before generating the item list
@@ -91,7 +97,8 @@
                 const extraInfoElement = document.createElement('div');
                 extraInfoElement.className = 'extra-info';
                 //this line formats the info presented during hover
-                extraInfoElement.innerHTML = `Type: ${item.type}<br>Description: ${item.description}<br>Quantity: ${item.quantity}<br>Value: ${item.value}`;
+                //added the assigned to element to the extra info, the spacing needs to be fixed
+                extraInfoElement.innerHTML = `Type: ${item.type}<br>Description: ${item.description}<br>Quantity: ${item.quantity}<br>Value: ${item.value}<br>Assigned To:${item.assignedTo}`;
                 itemElement.appendChild(extraInfoElement);
 
                 //removes title,img,info button during hover over info button

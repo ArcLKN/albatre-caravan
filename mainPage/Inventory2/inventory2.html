@@ -1,0 +1,32 @@
+<!--to do-->
+<!--fix grid spacing when sorting-->
+<!--add a card flipping animation during info hover??-->
+<!--make the dimensions 100% scalable-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory</title>
+    <link rel="stylesheet" href="inventory2.css">
+</head>
+<body>
+
+<!-- Filter dropdown menu -->
+<div class="filter-container">
+    <label for="item-type-filter">Filter by Type:</label>
+    <select id="item-type-filter">
+        <option value="all">All Items</option>
+        <option value="Health">Health</option>
+        <option value="Weapon">Weapon</option>
+        <option value="Armor">Armor</option>
+    </select>
+</div>
+
+<div class="inventory-container" id="item-list">
+    <!-- Inventory items will be dynamically added here -->
+</div>
+
+<script src="inventory2.js"></script>
+</body>
+</html>

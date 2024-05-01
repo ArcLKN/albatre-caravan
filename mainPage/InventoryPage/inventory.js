@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function() {
         healthList.innerHTML = '';
         weaponList.innerHTML = '';
         armorList.innerHTML = '';
-
+        
         inventoryItems.forEach(item => {
             const li = document.createElement("li");
             li.classList.add('inventory-item');

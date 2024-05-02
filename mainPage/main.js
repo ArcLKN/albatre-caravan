@@ -14,12 +14,13 @@ function save(varName, value) {
 
 // Used to get all the new values from the sessionStorage.
 function loadSessionStorage() {
+	money = parseInt(sessionStorage.getItem("money"));
   crewMembers = JSON.parse(sessionStorage.getItem("crewMembers"));
   crewTotal = JSON.parse(sessionStorage.getItem("crewTotal"));
   crewTypes = JSON.parse(sessionStorage.getItem("crewTypes"));
   idleCrew = parseInt(sessionStorage.getItem("idleCrew"));
   morale = parseInt(sessionStorage.getItem("morale"));
-  money = parseInt(sessionStorage.getItem("money"));
+  
   authority = parseInt(sessionStorage.getItem("authority"));
   water = parseInt(sessionStorage.getItem("water"));
   numberOfTurns = sessionStorage.getItem("numberOfTurns");
@@ -71,6 +72,8 @@ var locations = [
 	type: "nil_shore",
 	name: "Nil shore",
 	isTradable: false,
+	doEnemySpawn: true,
+	enemyType: {"legionary": 0.70, "bandit":1},
 	description:
 	  "A fertile place escaping the harsh life of the desert. In this place you can freely gather high quantity of water and decent quantity of food.",
 	gatheringValues: {
@@ -89,6 +92,7 @@ var locations = [
 	type: "village",
 	name: "Village",
 	isTradable: true,
+	doEnemySpawn: false,
 	description:
 	  "A bunch of organized houses near the shore of the Nil assuring your caravan a bit of peace in the desert. Don't hesitate to find a local merchant to buy useful items for the lowest prices of the country.",
 	gatheringValues: {
@@ -217,6 +221,8 @@ var locations = [
 	type: "oasis",
 	name: "Oasis",
 	isTradable: false,
+	doEnemySpawn: true,
+	enemyType: {"legionary": 1},
 	description:
 	  "In the middle of the desert it's the closest thing to what you could call Paradise.",
 	gatheringValues: {
@@ -884,8 +890,11 @@ function foodConsumption () {
 }
 
 function manageEndTurnEvent () {
+	if (!playerLocation['doEnemySpawn']) {
+		return changeMenu("turnX");
+	}
 	if (numberOfTurns > -1) {
-		let pBattle = 0;
+		let pBattle = 1;
 		pBattle += (crewTotal.length) / 100;
 		let pRandom = Math.random();
 		if (pRandom < pBattle) {
@@ -1056,10 +1065,16 @@ function manageArmy() {
 	saveSessionStorage();
 	window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
 
-	enemyType = "bandit";
-	let numberOfEnnemy = 0
+	let enemyTypeRand = Math.random();
+	for (let enemyType in playerLocation['enemyType']) {
+		if (enemyTypeRand <= playerLocation['enemyType'][eachType]) {
+			break;
+		}
+	}
+
+	let numberOfEnnemy = 0;
 	if (enemyType == "bandit") {
-		//numberOfEnnemy = Math.getRandomIntInclusive(5, Math.max(7, Math.round(crewTotal.length/4)))
+		numberOfEnnemy = Math.getRandomIntInclusive(5, Math.max(7, Math.round(crewTotal.length/4)))
 	}
 	
 
@@ -1074,18 +1089,18 @@ function manageArmy() {
 	ennemyApprochingText.textContent = "Ennemy in sight: a group of bandits is approaching you.";
 	node.appendChild(ennemyApprochingText);
 
-	tempIDs.push("ennemyText");
-	var ennemyApprochingText = document.createElement("p");
-	ennemyApprochingText.setAttribute("id", "ennemyApprochingText");
-	ennemyApprochingText.textContent = "Ennemy in sight: a group of bandits is approaching you.";
-	node.appendChild(ennemyApprochingText);
+	tempIDs.push("deployArmy");
+	var deployArmy = document.createElement("button");
+	deployArmy.setAttribute("id", "deployArmy");
+	deployArmy.textContent = "Deploy Army";
+	node.appendChild(deployArmy);
 
-	newText.addEventListener("click", function () {
-	  changeMenu(this.id);
+	deployArmy.addEventListener("click", function () {
+	  statusTurn = "fight";
+		saveSessionStorage();
+		window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
 	});
-	statusTurn = "fight";
-	saveSessionStorage();
-	window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
+	
 }
 
 function changeMenu(newMenu = "None", option = null) {

@@ -360,7 +360,7 @@ function displayNew () { //y a update argent dedans aussi
             else {
                 inputID = eachItem + "ShopInput";
                 let quantityBought = parseInt(document.getElementById(inputID).value);
-                newItem.textContent = allItems[eachItem]["name"] + ": quantity: " + inventaireMagasin[eachItem]["volume"] + "+" + quantityBought;
+                newItem.textContent = allItems[eachItem]["name"] + ": quantity: " + inventaire[eachItem]["volume"] + "+" + quantityBought;
             }
             recap.appendChild(newItem);
         }

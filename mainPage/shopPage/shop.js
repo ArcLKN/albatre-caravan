@@ -356,6 +356,7 @@ function displayNew () { //y a update argent dedans aussi
                 inputID = eachItem + "Input";
                 let quantitySold = parseInt(document.getElementById(inputID).value);
                 newItem.textContent = allItems[eachItem]["name"] + ": quantity: " + inventaire[eachItem]["volume"] + " " + "-" + quantitySold;
+		
             }
             else {
                 inputID = eachItem + "ShopInput";

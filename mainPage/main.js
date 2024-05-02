@@ -393,14 +393,7 @@ function onLoad() {
 	}
 }
 
-// Create item depending of itemName.
-function createItem(nameItem) {
-  for (var eachItem in allItems) {
-	if (allItems[eachItem]["name"] == nameItem) {
-	  return allItems[eachItem];
-	}
-  }
-}
+
 // Create randomized person.
 function defineUnit() {
   var newUnit = {};

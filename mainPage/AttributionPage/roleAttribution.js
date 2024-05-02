@@ -208,11 +208,53 @@ function moraleCheck(idInput) {
   manageDEr("morale", idInput);
 }
 
-function showWeaponInventory(itemId) {
+// Create item depending of itemName.
+function searchItemFromName(nameItem) {
+  for (var eachItem in allItems) {
+		if (allItems[eachItem]["name"] == nameItem) {
+	  	return eachItem;
+		}
+  }
+}
+
+function equipItem(itemId, memberId) {
+	if (itemId < 1000 && inventory[itemId]['volume'] <= 0) {
+		return;
+	}
+	let thisMember;
+	for (let eachMember in crewTotal) {
+		if (crewTotal[eachMember]['id'] == memberId) {
+			thisMember = crewTotal[eachMember];
+		}
+	}
+	previousItem = thisMember[allItems[itemId]['type']];
+	console.log("Previous", previousItem)
+	thisMember[allItems[itemId]['type']] = allItems[itemId];
+	if (searchItemFromName(previousItem['name']) < 1000) {
+		inventory[searchItemFromName(previousItem['name'])]['volume'] += 1;
+	}
+	if (itemId < 1000) {
+		inventory[searchItemFromName(allItems[itemId]['name'])]['volume'] -= 1;
+	}
+	console.log(searchItemFromName(previousItem['name']));
+	console.log(document.getElementById("item"), "item"+searchItemFromName(previousItem['name']));
+	document.getElementById("item"+searchItemFromName(previousItem['name'])).style.backgroundColor = "white";
+	document.getElementById("item"+itemId).style.backgroundColor = "LightGreen";
+}
+
+function showItemInventory(itemType, itemId) {
     document.querySelectorAll('[class="inventory"]').forEach(e => e.remove());
     let inventoryDiv = document.createElement("div");
     inventoryDiv.classList.add("inventory");
     let wpButtonNode = document.getElementById(itemId);
+    let memberId = itemId.slice(11);
+    let actualItemId;
+    for (let eachMember in crewTotal) {
+			if (crewTotal[eachMember]['id'] == memberId) {
+				actualItemId = searchItemFromName(crewTotal[eachMember][itemType]['name']);
+			}
+		}
+    
     let memberNode = wpButtonNode.parentNode.parentNode;
     memberNode.parentNode.insertBefore(inventoryDiv, memberNode.nextSibling);
 
@@ -220,22 +262,42 @@ function showWeaponInventory(itemId) {
     newItemNode.classList.add("itemGroup");
     
     let itemButton = document.createElement("button");
+    
     let itemName = document.createElement("p");
-    itemName.textContent = "Hand";
+    if (itemType == "weapon") {
+    	itemName.textContent = "Hand";
+    	itemButton.addEventListener("click", function () {
+                equipItem(1000, memberId);
+      })
+      itemButton.setAttribute("id", "item1000");
+      if (actualItemId == "1000") {
+            	itemButton.style.backgroundColor = "LightGreen";
+            }
+    }
+    else {
+    	itemName.textContent = "Cloth";
+    	itemButton.addEventListener("click", function () {
+                equipItem(1001, memberId);
+            })
+    	itemButton.setAttribute("id", "item1001");
+    	if (actualItemId == "1001") {
+            	itemButton.style.backgroundColor = "LightGreen";
+            }
+    }
 
     inventoryDiv.appendChild(newItemNode)
     newItemNode.appendChild(itemButton);
     newItemNode.appendChild(itemName);
 
     for (let eachItem in inventory) {
-        if (allItems[eachItem]['type'] == "weapon") {
+        if (allItems[eachItem]['type'] == itemType) {
             let newItemNode = document.createElement("div");
             newItemNode.classList.add("itemGroup");
             
             let itemButton = document.createElement("button");
             itemButton.setAttribute("id", "item"+eachItem);
             itemButton.addEventListener("click", function () {
-                
+                equipItem(eachItem, memberId);
             })
             let itemName = document.createElement("p");
             itemName.textContent = allItems[eachItem]['name'];
@@ -247,6 +309,10 @@ function showWeaponInventory(itemId) {
             newItemNode.appendChild(itemButton);
             newItemNode.appendChild(itemName);
             newItemNode.appendChild(itemQtt);
+
+            if (actualItemId == eachItem) {
+            	itemButton.style.backgroundColor = "LightGreen";
+            }
         }
       }
 }
@@ -421,14 +487,14 @@ function createMemberAndAssign(menu = "") {
         weaponEquipButton.setAttribute("id", "weaponEquip"+crewTotal[eachPerson]["id"])
         weaponEquipButton.classList.add("weaponEquipButton");
         weaponEquipButton.addEventListener("click", function () {
-            showWeaponInventory(this.id);
+            showItemInventory("weapon", this.id);
         })
         endRowPerson.appendChild(weaponEquipButton);
         let armorEquipButton = document.createElement("button");
         armorEquipButton.setAttribute("id", "armorEquip"+crewTotal[eachPerson]["id"])
         armorEquipButton.classList.add("armorEquipButton");
         armorEquipButton.addEventListener("click", function () {
-            showArmorInventory(this.id);
+            showItemInventory("armor", this.id);
         })
         endRowPerson.appendChild(armorEquipButton);
 	}

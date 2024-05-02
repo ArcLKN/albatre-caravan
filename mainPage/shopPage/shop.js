@@ -312,7 +312,7 @@ console.log(inventaireMagasin);
 displayInventory();
 defPreviousValues();
 
-function displayNew () {
+/*function displayNew () {
 	let recap = document.getElementById("recap");
 	recap.style.display = "inline-block";
 	let parent = document.getElementById("recap");
@@ -325,14 +325,15 @@ function displayNew () {
 		newItem.textContent = allItems[eachItem]["name"] + "        :       quantity: " + inventaire[eachItem]["volume"];
 		parent.appendChild(newItem);
 	}
-}
+}*/
 
-/*function displayNew () { //y a update argent dedans aussi
+function displayNew () { //y a update argent dedans aussi
 
 	let recap = document.getElementById("recap");
 	recap.style.display = "inline-block";
 	let parent = document.getElementById("recap");
 	var newItem = document.createElement("p");
+ 	var newItemS = document.createElement("p");
 
 	newItem.classList.add("text");
 	let money = document.getElementById("résultat");
@@ -357,13 +358,14 @@ function displayNew () {
 				inputID = eachItem+"Input";
 				let quantitySold = parseInt(document.getElementById(inputID).value);
 				newItem.textContent = allItems[eachItem]["name"] + ":quantity: " + inventaire[eachItem]["volume"] + "-" + quantity;
+    				parent.appendChild(newItem);
 			}
 			else{
 				inputID = eachItem+"ShopInput";
 				let quantityBought = parseInt(document.getElementById(inputID).value);
 				newItem.textContent = allItems[eachItem]["name"] + ":quantity: " + inventaireMagasin[eachItem]["volume"] + "+" + quantity;
-				parent.appendChild(newItem);
+				parent.appendChild(newItemS);
 			}
 		}
 	}	
-}*/
+}

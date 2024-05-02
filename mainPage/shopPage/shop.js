@@ -355,12 +355,12 @@ function displayNew () { //y a update argent dedans aussi
             if (e == "player") {
                 inputID = eachItem + "Input";
                 let quantitySold = parseInt(document.getElementById(inputID).value);
-                newItem.textContent = allItems[eachItem]["name"] + ": quantity: " + inventaire[eachItem]["volume"] + "-" + quantitySold;
+                newItem.textContent = allItems[eachItem]["name"] + ": quantity: " + inventaire[eachItem]["volume"] + " " + "-" + quantitySold;
             }
             else {
                 inputID = eachItem + "ShopInput";
                 let quantityBought = parseInt(document.getElementById(inputID).value);
-                newItem.textContent = allItems[eachItem]["name"] + ": quantity: " + inventaire[eachItem]["volume"] + "+" + quantityBought;
+                newItem.textContent = allItems[eachItem]["name"] + ": quantity: " + inventaire[eachItem]["volume"] + " " + "+" + quantityBought;
             }
             recap.appendChild(newItem);
         }

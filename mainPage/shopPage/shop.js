@@ -312,7 +312,7 @@ console.log(inventaireMagasin);
 displayInventory();
 defPreviousValues();
 
-function displayNew () {
+/*function displayNew () {
 	let recap = document.getElementById("recap");
 	recap.style.display = "inline-block";
 	let parent = document.getElementById("recap");
@@ -325,45 +325,51 @@ function displayNew () {
 		newItem.textContent = allItems[eachItem]["name"] + "        :       quantity: " + inventaire[eachItem]["volume"];
 		parent.appendChild(newItem);
 	}
+}*/
+
+function displayNew () { //y a update argent dedans aussi
+    let resultatNode = document.getElementById("finali");
+    let res = parseInt(resultatNode.textContent);
+    let recap = document.getElementById("recap");
+    recap.style.display = "inline-block";
+    let money = document.getElementById("résultat");
+
+    // Update argent
+    argent = argent + res;
+    money.textContent = argent;
+
+    ["player", "shop"].forEach(e => {
+        let eInventaire;
+        if (e == "player") {
+            if (!playerLocation['sellableGoods']) {return;}
+            eInventaire = inventaire;
+        }
+        else {
+            eInventaire = inventaireMagasin;
+        }
+        for(let eachItem in eInventaire) {
+            let itemVolume;
+            let itemPrice;
+            let newItem = document.createElement("p");
+            newItem.classList.add("text");
+            if (e == "player") {
+                inputID = eachItem + "Input";
+                let quantitySold = parseInt(document.getElementById(inputID).value);
+                newItem.textContent = allItems[eachItem]["name"] + ": quantity: " + inventaire[eachItem]["volume"] + " " + "-" + quantitySold;
+		
+            }
+            else {
+                inputID = eachItem + "ShopInput";
+                let quantityBought = parseInt(document.getElementById(inputID).value);
+		    if(quantityBought > 0){
+                	newItem.textContent = allItems[eachItem]["name"] + ": quantity: " + "0" + " " + "+" + quantityBought;
+		    }
+		    else{
+			continue
+		}
+            }
+            recap.appendChild(newItem);
+        }
+    });
 }
 
-/*function displayNew () { //y a update argent dedans aussi
-
-	let recap = document.getElementById("recap");
-	recap.style.display = "inline-block";
-	let parent = document.getElementById("recap");
-	var newItem = document.createElement("p");
-
-	newItem.classList.add("text");
-	let money = document.getElementById("résultat");
-	//update argent
-	
-	argent = argent + res;
-	money.textContent = argent;
-
-	["player", "shop"].forEach(e => {
-		let eInventaire;
-		if (e == "player") {
-			if (!playerLocation['sellableGoods']) {return;}
-			eInventaire = inventaire;
-		}
-		else {
-			eInventaire = inventaireMagasin;
-		}
-		for(let eachItem in eInventaire) {
-			let itemVolume;
-			let itemPrice;
-			if (e=="player"){
-				inputID = eachItem+"Input";
-				let quantitySold = parseInt(document.getElementById(inputID).value);
-				newItem.textContent = allItems[eachItem]["name"] + ":quantity: " + inventaire[eachItem]["volume"] + "-" + quantity;
-			}
-			else{
-				inputID = eachItem+"ShopInput";
-				let quantityBought = parseInt(document.getElementById(inputID).value);
-				newItem.textContent = allItems[eachItem]["name"] + ":quantity: " + inventaireMagasin[eachItem]["volume"] + "+" + quantity;
-				parent.appendChild(newItem);
-			}
-		}
-	}	
-}*/

@@ -13,16 +13,33 @@
                 <li> <img src="../Images/item-water.png"> <p id="nb_water">5</p> <p id="bonus_water"></p></li>
                 <li> <img src="../Images/item-food.png"> <p id="nb_food">5</p> <p id="bonus_food"></p></li>
                 <li> <img src="../Images/item-money.png"> <p id="nb_money">5</p> <p id="bonus_money"></p></li>
-		<li><p id="locationName">Desert</p> </li>
+		        <li><p id="locationName">Desert</p> </li>
                 <li> <img src="../Images/item-crew.png"> <p id="nb_crew">5</p> </li>
                 <li> <img src="../Images/item-morale.png"> <p id="nb_morale">5</p> </li>
-		<li> <img src="../Images/ressource.png"> <p id="nb_goods">5</p> </li>
+		        <li> <img src="../Images/ressource.png"> <p id="nb_goods">5</p> </li>
             </ul>
         </div>
-        <div id="middle menu"><img id="center-image" src="../Images/Illustration.jpg"></div>
+        <div id="middle menu"><img id="center-image" src="../Images/Illustration.jpg">
+            <div id="inventoryPage" class="hidden">
+                <!-- Filter dropdown menu -->
+                <div class="filter-container">
+                    <label for="item-type-filter">Filter by Type:</label>
+                    <select id="item-type-filter">
+                        <option value="all">All Items</option>
+                        <option value="Health">Health</option>
+                        <option value="Weapon">Weapon</option>
+                        <option value="Armor">Armor</option>
+                    </select>
+                </div>
+                <!-- Inventory items container -->
+                <div class="inventory-container" id="item-list">
+                    <!-- Inventory items will be dynamically added here -->
+                </div>
+            </div>
+        </div>
         <div id="bottom menu">
             <div class="buttons">
-                <div id="inventoryButton" class="strangeButton"> <a href="inventory.html"> <img src="../Images/menu-inventory.png"> </a> </div>
+                <div id="inventoryButton" class="strangeButton">  <img src="../Images/menu-inventory.png"> </div>
                 <div id="unitsButton" class="strangeButton"> <a href="units.html"> <img src="../Images/item-crew.png"> </a> </div>
                 <div id="loreButton" class="strangeButton"> <a href="lore.html"> <img src="../Images/menu-lore.png"> </a> </div>
             </div>

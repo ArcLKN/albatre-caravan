@@ -11,22 +11,23 @@
     <link rel="stylesheet" href="inventory2.css">
 </head>
 <body>
-
-<!-- Filter dropdown menu -->
-<div class="filter-container">
-    <label for="item-type-filter">Filter by Type:</label>
-    <select id="item-type-filter">
-        <option value="all">All Items</option>
-        <option value="Health">Health</option>
-        <option value="Weapon">Weapon</option>
-        <option value="Armor">Armor</option>
-    </select>
+    <div id="inventoryPage" class="hidden">
+        <!-- Filter dropdown menu -->
+        <div class="filter-container">
+            <label for="item-type-filter">Filter by Type:</label>
+            <select id="item-type-filter">
+                <option value="all">All Items</option>
+                <option value="Health">Health</option>
+                <option value="Weapon">Weapon</option>
+                <option value="Armor">Armor</option>
+            </select>
+        </div>
+    </div>
+</body>
+    <div class="inventory-container" id="item-list">
+        <!-- Inventory items will be dynamically added here -->
+    </div>
 </div>
-
-<div class="inventory-container" id="item-list">
-    <!-- Inventory items will be dynamically added here -->
-</div>
-
 <script src="inventory2.js"></script>
 </body>
 </html>

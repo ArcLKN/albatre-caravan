@@ -1139,3 +1139,82 @@ function changeMenu(newMenu = "None", option = null) {
 }
 
 onLoad();
+
+// renders the invntory items as they would be seen in the inventory page
+function renderItems(filterType = 'all') {
+    const itemList = document.getElementById('item-list');
+    itemList.innerHTML = ''; // Clear previous items
+
+    inventory.forEach(item => {
+        if (filterType === 'all' || item.type === filterType) {
+            //creates the itembox
+            const itemElement = document.createElement('div');
+            //harvests rarity variable to assign color later
+            itemElement.className = `inventory-item rarity-${item.rarity.toLowerCase()}`;
+            
+            //adds item img to the grid item card
+            const imgElement = document.createElement('img');
+            imgElement.src = item.imgFile;
+            imgElement.alt = item.name;
+            itemElement.appendChild(imgElement);
+
+            //adds title
+            const titleElement = document.createElement('div');
+            titleElement.className = 'item-title';
+            titleElement.textContent = item.name;
+            itemElement.appendChild(titleElement);
+
+            //adds the info button for each item
+            //there is probably a better way to do this but idk
+            const infoImg = document.createElement('img');
+            infoImg.src = "info.png"; 
+            infoImg.alt = "Info";
+            infoImg.className = 'info-img';
+            itemElement.appendChild(infoImg);
+            
+            //creates extra info element that is presented during hover
+            const extraInfoElement = document.createElement('div');
+            extraInfoElement.className = 'extra-info';
+            //this line formats the info presented during hover
+            //added the assigned to element to the extra info, the spacing needs to be fixed
+            extraInfoElement.innerHTML = `Type: ${item.type}<br>Description: ${item.description}<br>Quantity: ${item.quantity}<br>Value: ${item.value}<br>Assigned To:${item.assignedTo}`;
+            itemElement.appendChild(extraInfoElement);
+
+            //removes title,img,info button during hover over info button
+            infoImg.addEventListener('mouseenter', () => {
+                infoImg.style.display = 'none';
+                extraInfoElement.style.display = 'block';
+                titleElement.style.display='none';
+                imgElement.style.display='none';
+            });
+            //redisplayes the title img,info button after hover, while hiding extra info
+            infoImg.addEventListener('mouseleave', () => {
+                infoImg.style.display = 'block';
+                extraInfoElement.style.display = 'none';
+                titleElement.style.display='block';
+                imgElement.style.display='block';
+            });
+
+            itemList.appendChild(itemElement);
+        }
+    });
+}
+
+// This will make the inventory appear when the inventory button is pressed
+const inventoryButton = document.getElementById('inventoryButton');
+const inventoryPage = document.getElementById('inventoryPage');
+
+inventoryButton.addEventListener('click', function() {
+    inventoryPage.classList.toggle('hidden');
+    inventoryPage.classList.toggle('visible');
+});
+
+//THE INVENTORY BUTTON DOESNT FUCKING WORK ANYMORE AHHHHHHHHHHHHHHHHHHH
+inventoryButton.addEventListener('click', function() {
+    console.log('Inventory button clicked'); // Check if the event listener callback is executed
+    // Rest of the code for toggling the inventory page
+});
+
+
+
+

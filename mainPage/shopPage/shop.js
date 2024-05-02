@@ -361,7 +361,12 @@ function displayNew () { //y a update argent dedans aussi
             else {
                 inputID = eachItem + "ShopInput";
                 let quantityBought = parseInt(document.getElementById(inputID).value);
-                newItem.textContent = allItems[eachItem]["name"] + ": quantity: " + inventaire[eachItem]["volume"] + " " + "+" + quantityBought;
+		    if(quantityBought > 0){
+                	newItem.textContent = allItems[eachItem]["name"] + ": quantity: " + "0" + " " + "+" + quantityBought;
+		    }
+		    else{
+			continue
+		}
             }
             recap.appendChild(newItem);
         }

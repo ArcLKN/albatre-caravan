@@ -323,11 +323,11 @@ function removeCharacterBox() {
 
 //Function that create a member component (his image, his informations, his role...)
 function createMemberAndAssign(menu = "") {
-  removeCharacterBox();
-  document.querySelectorAll('[class="inventory"]').forEach(e => e.remove());
- 	updateTotal(menu);
+	removeCharacterBox();
+	document.querySelectorAll('[class="inventory"]').forEach(e => e.remove());
+	updateTotal(menu);
 
-  	// Clone the button
+	// Clone the button
 	const clonedSelectButton = selectAllChar.cloneNode(true);
 	const clonedDeselectButton = deselectAllChar.cloneNode(true);
 
@@ -340,210 +340,211 @@ function createMemberAndAssign(menu = "") {
 
 	// Now, the clonedButton has no event listeners attached to it
 
-  selectAllChar.addEventListener("click", function () {
+	selectAllChar.addEventListener("click", function () {
 	for (let eachMember in crew) {
-	  gatherer[menu].push(crew[eachMember]);
-	  document.querySelectorAll("input").forEach((e) => (e.checked = true));
+		gatherer[menu].push(crew[eachMember]);
+		document.querySelectorAll("input").forEach((e) => (e.checked = true));
 	}
 	crew = [];
 	updateTotal(menu);
-  });
+	});
 
-  deselectAllChar.addEventListener("click", function () {
+	deselectAllChar.addEventListener("click", function () {
 	for (let eachMember in gatherer[menu]) {
-	  crew.push(gatherer[menu][eachMember]);
-	  document.querySelectorAll("input").forEach((e) => (e.checked = false));
+		crew.push(gatherer[menu][eachMember]);
+		document.querySelectorAll("input").forEach((e) => (e.checked = false));
 	}
 	gatherer[menu] = [];
 	updateTotal(menu);
-  });
+	});
 
-  for (let eachPerson in crewTotal) {
-	let isNotIdle = false;
-	for (let eachMenu in gatherer) {
-	  if (eachMenu == menu) {
-		continue;
-	  }
-	  for (let eachConnard in gatherer[eachMenu]) {
-		if (
-		  crewTotal[eachPerson]["id"] == gatherer[eachMenu][eachConnard]["id"]
-		) {
-		  isNotIdle = true;
+  	for (let eachPerson in crewTotal) {
+		let isNotIdle = false;
+		for (let eachMenu in gatherer) {
+	  		if (eachMenu == menu) {
+				continue;
+	  		}
+	  		for (let eachConnard in gatherer[eachMenu]) {
+				if (
+		  			crewTotal[eachPerson]["id"] == gatherer[eachMenu][eachConnard]["id"]
+				) {
+		  		isNotIdle = true;
+				}
+	  		}
 		}
-	  }
-	}
-	if (isNotIdle) {
-	  continue;
-	}
+		if (isNotIdle) {
+	  		continue;
+		}
 
-	let person = document.createElement("div");
-	let personAbout = document.createElement("div");
-	let endRowPerson = document.createElement("div");
-	endRowPerson.classList.add("endRowPerson");
-	let attributionContainer = document.createElement("div");
-	let namePtrait = document.createElement("div");
-	let traitBox = document.createElement("div");
-	let personImage = document.createElement("img");
-	let personFullName = document.createElement("span");
-	let attributionCheck = document.createElement("input");
-	person.classList.add("member");
-	let newId = crewTotal[eachPerson]["id"];
-	attributionCheck.setAttribute("id", newId);
-	personAbout.classList.add("member-about");
-	attributionContainer.classList.add("checkbox");
+		let person = document.createElement("div");
+		let personAbout = document.createElement("div");
+		let endRowPerson = document.createElement("div");
+		endRowPerson.classList.add("endRowPerson");
+		let attributionContainer = document.createElement("div");
+		let namePtrait = document.createElement("div");
+		let traitBox = document.createElement("div");
+		let personImage = document.createElement("img");
+		let personFullName = document.createElement("span");
+		let attributionCheck = document.createElement("input");
+		person.classList.add("member");
+		let newId = crewTotal[eachPerson]["id"];
+		attributionCheck.setAttribute("id", newId);
+		personAbout.classList.add("member-about");
+		attributionContainer.classList.add("checkbox");
 
-	personImage.src = "../../" + crewTotal[eachPerson]["image"];
-	personFullName.classList.add("description");
-	personFullName.innerHTML = crewTotal[eachPerson]["name"];
-	attributionCheck.type = "checkbox";
-	attributionCheck.name = "check";
-	attributionCheck.classList.add("check");
-	person.appendChild(personAbout);
-	person.appendChild(endRowPerson);
+		personImage.src = "../../" + crewTotal[eachPerson]["image"];
+		personFullName.classList.add("description");
+		personFullName.innerHTML = crewTotal[eachPerson]["name"];
+		attributionCheck.type = "checkbox";
+		attributionCheck.name = "check";
+		attributionCheck.classList.add("check");
+		person.appendChild(personAbout);
+		person.appendChild(endRowPerson);
 
-	personAbout.appendChild(personImage);
-	personAbout.appendChild(namePtrait);
-	namePtrait.appendChild(personFullName);
-	namePtrait.classList.add("namePtrait");
-	namePtrait.appendChild(traitBox);
-	traitBox.classList.add("traitBox");
-	attributionContainer.appendChild(attributionCheck);
-	crewList.appendChild(person);
+		personAbout.appendChild(personImage);
+		personAbout.appendChild(namePtrait);
+		namePtrait.appendChild(personFullName);
+		namePtrait.classList.add("namePtrait");
+		namePtrait.appendChild(traitBox);
+		traitBox.classList.add("traitBox");
+		attributionContainer.appendChild(attributionCheck);
+		crewList.appendChild(person);
 
-	for (let eachTrait in crewTotal[eachPerson]["special"]) {
-	  if (crewTotal[eachPerson]["special"][eachTrait]) {
-		let nodeTrait = document.createElement("span");
-		nodeTrait.innerHTML = eachTrait;
-		nodeTrait.classList.add("trait");
-		traitBox.appendChild(nodeTrait);
+		for (let eachTrait in crewTotal[eachPerson]["special"]) {
+		if (crewTotal[eachPerson]["special"][eachTrait]) {
+			let nodeTrait = document.createElement("span");
+			nodeTrait.innerHTML = eachTrait;
+			nodeTrait.classList.add("trait");
+			traitBox.appendChild(nodeTrait);
+
+			if (["water", "food", "morale"].includes(menu)) {
+			let bonus = 0;
+			if ("skills" in allTraits[eachTrait]) {
+				if ("gatheringAbs" in allTraits[eachTrait]["skills"]) {
+				bonus += allTraits[eachTrait]["skills"]["gatheringAbs"];
+				}
+				if (menu + "GatheringAbs" in allTraits[eachTrait]["skills"]) {
+				bonus += allTraits[eachTrait]["skills"][menu + "GatheringAbs"];
+				}
+			}
+			if (bonus > 0) {
+				nodeTrait.style.backgroundColor = "LightGreen";
+			} else if (bonus < 0) {
+				nodeTrait.style.backgroundColor = "LightPink";
+			}
+			} else if (menu == "scout") {
+			if ("vision" in allTraits[eachTrait]) {
+				if (allTraits[eachTrait]["vision"] > 0) {
+				nodeTrait.style.backgroundColor = "LightGreen";
+				} else if (allTraits[eachTrait]["vision"] < 0) {
+				nodeTrait.style.backgroundColor = "LightPink";
+				}
+			}
+			} else if (menu == "carrier") {
+			if ("vision" in allTraits[eachTrait]) {
+				if (allTraits[eachTrait]["carryValue"] > 0) {
+				nodeTrait.style.backgroundColor = "LightGreen";
+				} else if (allTraits[eachTrait]["carryValue"] < 0) {
+				nodeTrait.style.backgroundColor = "LightPink";
+				}
+			}
+			}
+		}
+		}
 
 		if (["water", "food", "morale"].includes(menu)) {
-		  let bonus = 0;
-		  if ("skills" in allTraits[eachTrait]) {
-			if ("gatheringAbs" in allTraits[eachTrait]["skills"]) {
-			  bonus += allTraits[eachTrait]["skills"]["gatheringAbs"];
-			}
-			if (menu + "GatheringAbs" in allTraits[eachTrait]["skills"]) {
-			  bonus += allTraits[eachTrait]["skills"][menu + "GatheringAbs"];
-			}
-		  }
-		  if (bonus > 0) {
-			nodeTrait.style.backgroundColor = "LightGreen";
-		  } else if (bonus < 0) {
-			nodeTrait.style.backgroundColor = "LightPink";
-		  }
-		} else if (menu == "scout") {
-		  if ("vision" in allTraits[eachTrait]) {
-			if (allTraits[eachTrait]["vision"] > 0) {
-			  nodeTrait.style.backgroundColor = "LightGreen";
-			} else if (allTraits[eachTrait]["vision"] < 0) {
-			  nodeTrait.style.backgroundColor = "LightPink";
-			}
-		  }
-		} else if (menu == "carrier") {
-		  if ("vision" in allTraits[eachTrait]) {
-			if (allTraits[eachTrait]["carryValue"] > 0) {
-			  nodeTrait.style.backgroundColor = "LightGreen";
-			} else if (allTraits[eachTrait]["carryValue"] < 0) {
-			  nodeTrait.style.backgroundColor = "LightPink";
-			}
-		  }
+		let ressourcesObtained =
+			playerLocation["gatheringValues"][menu + "Yield"] *
+			(crewTotal[eachPerson]["skills"]["gatheringFactor"] +
+				crewTotal[eachPerson]["skills"][menu + "GatheringFactor"]) +
+			crewTotal[eachPerson]["skills"]["gatheringAbs"] +
+			crewTotal[eachPerson]["skills"][menu + "GatheringAbs"];
+		let ressourceText = document.createElement("p");
+		if (ressourcesObtained > 0) {
+			ressourceText.innerHTML = "+";
+			ressourceText.style.color = "green";
+		} else if (ressourcesObtained < 0) {
+			ressourceText.innerHTML = "-";
+			ressourceText.style.color = "red";
+		} else {
+			ressourceText.innerHTML = "";
+			ressourceText.style.color = "grey";
 		}
-	  }
-	}
+		ressourceText.innerHTML += String(ressourcesObtained);
+		endRowPerson.appendChild(ressourceText);
+		} else if (menu == "carrier") {
+		let carryText = document.createElement("p");
+		carryText.innerHTML = String(crewTotal[eachPerson]["carryValue"]);
+		endRowPerson.appendChild(carryText);
+		} else if (menu == "scout") {
+		let carryText = document.createElement("p");
+		carryText.innerHTML = String(crewTotal[eachPerson]["vision"]);
+		endRowPerson.appendChild(carryText);
+		}
 
-	if (["water", "food", "morale"].includes(menu)) {
-	  let ressourcesObtained =
-		playerLocation["gatheringValues"][menu + "Yield"] *
-		  (crewTotal[eachPerson]["skills"]["gatheringFactor"] +
-			crewTotal[eachPerson]["skills"][menu + "GatheringFactor"]) +
-		crewTotal[eachPerson]["skills"]["gatheringAbs"] +
-		crewTotal[eachPerson]["skills"][menu + "GatheringAbs"];
-	  let ressourceText = document.createElement("p");
-	  if (ressourcesObtained > 0) {
-		ressourceText.innerHTML = "+";
-		ressourceText.style.color = "green";
-	  } else if (ressourcesObtained < 0) {
-		ressourceText.innerHTML = "-";
-		ressourceText.style.color = "red";
-	  } else {
-		ressourceText.innerHTML = "";
-		ressourceText.style.color = "grey";
-	  }
-	  ressourceText.innerHTML += String(ressourcesObtained);
-	  endRowPerson.appendChild(ressourceText);
-	} else if (menu == "carrier") {
-	  let carryText = document.createElement("p");
-	  carryText.innerHTML = String(crewTotal[eachPerson]["carryValue"]);
-	  endRowPerson.appendChild(carryText);
-	} else if (menu == "scout") {
-	  let carryText = document.createElement("p");
-	  carryText.innerHTML = String(crewTotal[eachPerson]["vision"]);
-	  endRowPerson.appendChild(carryText);
-	}
+		if (["row1", "row2", "row3"].includes(menu)) {
+			let weaponEquipButton = document.createElement("button");
+			weaponEquipButton.setAttribute("id", "weaponEquip"+crewTotal[eachPerson]["id"])
+			weaponEquipButton.classList.add("weaponEquipButton");
+			weaponEquipButton.addEventListener("click", function () {
+				showItemInventory("weapon", this.id);
+			})
+			endRowPerson.appendChild(weaponEquipButton);
+			let armorEquipButton = document.createElement("button");
+			armorEquipButton.setAttribute("id", "armorEquip"+crewTotal[eachPerson]["id"])
+			armorEquipButton.classList.add("armorEquipButton");
+			armorEquipButton.addEventListener("click", function () {
+				showItemInventory("armor", this.id);
+			})
+			endRowPerson.appendChild(armorEquipButton);
+		}
 
-	if (["row1", "row2", "row3"].includes(menu)) {
-	    let weaponEquipButton = document.createElement("button");
-        weaponEquipButton.setAttribute("id", "weaponEquip"+crewTotal[eachPerson]["id"])
-        weaponEquipButton.classList.add("weaponEquipButton");
-        weaponEquipButton.addEventListener("click", function () {
-            showItemInventory("weapon", this.id);
-        })
-        endRowPerson.appendChild(weaponEquipButton);
-        let armorEquipButton = document.createElement("button");
-        armorEquipButton.setAttribute("id", "armorEquip"+crewTotal[eachPerson]["id"])
-        armorEquipButton.classList.add("armorEquipButton");
-        armorEquipButton.addEventListener("click", function () {
-            showItemInventory("armor", this.id);
-        })
-        endRowPerson.appendChild(armorEquipButton);
-	}
+		endRowPerson.appendChild(attributionContainer);
 
-	endRowPerson.appendChild(attributionContainer);
+		for (let eachGatherer in gatherer[menu]) {
+		if (gatherer[menu][eachGatherer]["id"] == crewTotal[eachPerson]["id"]) {
+			attributionCheck.checked = true;
+		}
+		}
 
-	for (let eachGatherer in gatherer[menu]) {
-	  if (gatherer[menu][eachGatherer]["id"] == crewTotal[eachPerson]["id"]) {
-		attributionCheck.checked = true;
-	  }
-	}
-
-	if (menu == "scout") {
-	  attributionCheck.addEventListener("click", function () {
-		scoutCheck(this.id);
-	  });
-	} else if (menu == "guard") {
-	  attributionCheck.addEventListener("click", function () {
-		guardCheck(this.id);
-	  });
-	} else if (menu == "carrier") {
-	  attributionCheck.addEventListener("click", function () {
-		carrierCheck(this.id);
-	  });
-	} else if (menu == "water") {
-	  attributionCheck.addEventListener("click", function () {
-		waterCheck(this.id);
-	  });
-	} else if (menu == "food") {
-	  attributionCheck.addEventListener("click", function () {
-		foodCheck(this.id);
-	  });
-	} else if (menu == "morale") {
-	  attributionCheck.addEventListener("click", function () {
-		moraleCheck(this.id);
-	  });
-	} else if (menu == "row1") {
+		if (menu == "scout") {
 		attributionCheck.addEventListener("click", function () {
-		  moraleCheck(this.id);
+			scoutCheck(this.id);
 		});
-  	} else if (menu == "row2") {
+		} else if (menu == "guard") {
 		attributionCheck.addEventListener("click", function () {
-		  moraleCheck(this.id);
+			guardCheck(this.id);
 		});
-  	} else if (menu == "row3") {
+		} else if (menu == "carrier") {
 		attributionCheck.addEventListener("click", function () {
-		  moraleCheck(this.id);
+			carrierCheck(this.id);
 		});
-  	}
+		} else if (menu == "water") {
+		attributionCheck.addEventListener("click", function () {
+			waterCheck(this.id);
+		});
+		} else if (menu == "food") {
+		attributionCheck.addEventListener("click", function () {
+			foodCheck(this.id);
+		});
+		} else if (menu == "morale") {
+		attributionCheck.addEventListener("click", function () {
+			moraleCheck(this.id);
+		});
+		} else if (menu == "row1") {
+			attributionCheck.addEventListener("click", function () {
+			moraleCheck(this.id);
+			});
+		} else if (menu == "row2") {
+			attributionCheck.addEventListener("click", function () {
+			moraleCheck(this.id);
+			});
+		} else if (menu == "row3") {
+			attributionCheck.addEventListener("click", function () {
+			moraleCheck(this.id);
+			});
+		}
+	}
 }
 
 // ---------- END FUNCTIONS INITIALIZATION ----------

@@ -230,14 +230,17 @@ function equipItem(itemId, memberId) {
 	previousItem = thisMember[allItems[itemId]['type']];
 	console.log("Previous", previousItem)
 	thisMember[allItems[itemId]['type']] = allItems[itemId];
+	// Update the unequipped item volume in inventory and text.
+	// Might cause a problem if player has no more of this item. But idk if it's possible.
 	if (searchItemFromName(previousItem['name']) < 1000) {
 		inventory[searchItemFromName(previousItem['name'])]['volume'] += 1;
+		document.getElementById("itemQtt"+searchItemFromName(previousItem['name'])).textContent = "x"+String(inventory[searchItemFromName(previousItem['name'])]['volume']);
 	}
+	// Update the equipped item volume in inventory and text.
 	if (itemId < 1000) {
 		inventory[searchItemFromName(allItems[itemId]['name'])]['volume'] -= 1;
+		document.getElementById("itemQtt"+itemId).textContent = "x"+String(inventory[searchItemFromName(allItems[itemId]['name'])]['volume']);
 	}
-	console.log(searchItemFromName(previousItem['name']));
-	console.log(document.getElementById("item"), "item"+searchItemFromName(previousItem['name']));
 	document.getElementById("item"+searchItemFromName(previousItem['name'])).style.backgroundColor = "white";
 	document.getElementById("item"+itemId).style.backgroundColor = "LightGreen";
 }

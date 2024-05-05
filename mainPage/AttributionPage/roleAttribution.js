@@ -324,7 +324,7 @@ function removeCharacterBox() {
 //Function that create a member component (his image, his informations, his role...)
 function createMemberAndAssign(menu = "") {
   removeCharacterBox();
-
+  document.querySelectorAll('[class="inventory"]').forEach(e => e.remove());
  	updateTotal(menu);
 
   	// Clone the button
@@ -531,8 +531,19 @@ function createMemberAndAssign(menu = "") {
 	  attributionCheck.addEventListener("click", function () {
 		moraleCheck(this.id);
 	  });
-	}
-  }
+	} else if (menu == "row1") {
+		attributionCheck.addEventListener("click", function () {
+		  moraleCheck(this.id);
+		});
+  	} else if (menu == "row2") {
+		attributionCheck.addEventListener("click", function () {
+		  moraleCheck(this.id);
+		});
+  	} else if (menu == "row3") {
+		attributionCheck.addEventListener("click", function () {
+		  moraleCheck(this.id);
+		});
+  	}
 }
 
 // ---------- END FUNCTIONS INITIALIZATION ----------

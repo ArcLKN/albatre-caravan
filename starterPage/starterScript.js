@@ -936,6 +936,9 @@ function initSessionStorage() {
     scout: [],
     guard: [],
     carrier: [],
+	row1: [],
+	row2: [],
+	row3: [],
   });
 }
 

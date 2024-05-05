@@ -633,8 +633,47 @@ function computePortage() {
 	return [portage, portageNeeded];
 }
 
-function manageBattle() {
+function tableCreate(node) {
+	tbl = document.createElement('table');
+	tbl.style.width = '100%';
+	tbl.style.height = '100%';
+	tbl.style.border = '1px solid black';
 
+	console.log(gatherer)
+  
+	for (let i = 1; i < 4; i++) {
+		const tr = tbl.insertRow();
+		const td = tr.insertCell();
+		td.appendChild(document.createTextNode(`Row ${3 - i + 1}`));
+		td.classList.add("armyRowCell");
+		for (let unit in gatherer["row"+i]) {
+			const td = tr.insertCell();
+			td.style.width = '15vw';
+			td.appendChild(document.createTextNode(gatherer["row"+i][unit]['name']));
+			td.classList.add("unitCell");
+	  }
+	}
+	node.appendChild(tbl);
+  }
+
+function manageBattle() {
+	console.log("MANAGE BATTLE");
+
+	let actionBar = document.getElementById("actionMenu");
+	document.getElementById("center-image").classList.add("hidden");
+
+	let middleMenu = document.getElementById("middle menu");
+	let playerSide = document.createElement("div");
+	playerSide.classList.add("unitList");
+	let enemySide = document.createElement("div");
+	enemySide.classList.add("unitList");
+	middleMenu.appendChild(playerSide);
+	middleMenu.appendChild(enemySide);
+	tableCreate(playerSide);
+
+	let titleText = document.createElement("p");
+	titleText.textContent = "TURN 1";
+	actionBar.appendChild(titleText);
 }
 
 function yourTurn(phase) {

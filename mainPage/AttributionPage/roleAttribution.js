@@ -188,6 +188,19 @@ function guardCheck(idInput) {
   manageDEr("guard", idInput);
 }
 
+//Checks if a member is assigned to the guard role
+function row1Check(idInput) {
+	manageDEr("row1", idInput);
+  }
+  //Checks if a member is assigned to the guard role
+function row2Check(idInput) {
+	manageDEr("row2", idInput);
+  }
+  //Checks if a member is assigned to the guard role
+function row3Check(idInput) {
+	manageDEr("row3", idInput);
+  }
+
 //Checks if a member is assigned to the carrier role
 function carrierCheck(idInput) {
   manageDEr("carrier", idInput);
@@ -537,15 +550,15 @@ function createMemberAndAssign(menu = "") {
 		});
 		} else if (menu == "row1") {
 			attributionCheck.addEventListener("click", function () {
-			moraleCheck(this.id);
+				row1Check(this.id);
 			});
 		} else if (menu == "row2") {
 			attributionCheck.addEventListener("click", function () {
-			moraleCheck(this.id);
+				row2Check(this.id);
 			});
 		} else if (menu == "row3") {
 			attributionCheck.addEventListener("click", function () {
-			moraleCheck(this.id);
+				row3Check(this.id);
 			});
 		}
 	}

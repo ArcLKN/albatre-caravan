@@ -358,7 +358,7 @@ baseUnit = {
 		mace: 0
 	},
 	weapon: {
-		name: "hand",
+		name: "Hand",
 		power: [1, 0, 0],
 		attackType: "blunt",
 		weaponType: "mace",
@@ -814,6 +814,16 @@ var allItems = {
 		carryValue: 30,
 		weight: 0,
 	},
+	1000: {
+		type: "weapon",
+		name: "Hand",
+		weight: 0,
+	},
+	1001: {
+		type: "armor",
+		name: "Cloth",
+		weight: 0,
+	}
 };
 
 baseInventory = {0: {volume: 1},1: {volume: 80}, 2: {volume: 2}, 3: {volume: 2}, 4: {volume: 2}, 7: {volume: 2}, 6: {volume: 10},}

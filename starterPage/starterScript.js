@@ -365,7 +365,9 @@ baseUnit = {
 		attackStyle: "melee"
 	},
 	mount: {},
-	armor: {},
+	armor: {
+		name: "Cloth",
+	},
 	injuries: 0,
 }
 

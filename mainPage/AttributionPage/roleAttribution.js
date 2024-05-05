@@ -193,17 +193,17 @@ function carrierCheck(idInput) {
   manageDEr("carrier", idInput);
 }
 
-//Checks if a member is assigned to the carrier role
+//Checks if a member is assigned to the water gathering role
 function waterCheck(idInput) {
   manageDEr("water", idInput);
 }
 
-//Checks if a member is assigned to the carrier role
+//Checks if a member is assigned to the food gathering role
 function foodCheck(idInput) {
   manageDEr("food", idInput);
 }
 
-//Checks if a member is assigned to the carrier role
+//Checks if a member is assigned to the morale gathering role
 function moraleCheck(idInput) {
   manageDEr("morale", idInput);
 }
@@ -227,8 +227,8 @@ function equipItem(itemId, memberId) {
 			thisMember = crewTotal[eachMember];
 		}
 	}
+	console.log(itemId, allItems[itemId]['type'], thisMember, memberId);
 	previousItem = thisMember[allItems[itemId]['type']];
-	console.log("Previous", previousItem)
 	thisMember[allItems[itemId]['type']] = allItems[itemId];
 	// Update the unequipped item volume in inventory and text.
 	// Might cause a problem if player has no more of this item. But idk if it's possible.
@@ -267,6 +267,7 @@ function showItemInventory(itemType, itemId) {
     let itemButton = document.createElement("button");
     
     let itemName = document.createElement("p");
+	console.log("member ID", memberId)
     if (itemType == "weapon") {
     	itemName.textContent = "Hand";
     	itemButton.addEventListener("click", function () {
@@ -494,7 +495,7 @@ function createMemberAndAssign(menu = "") {
 			})
 			endRowPerson.appendChild(weaponEquipButton);
 			let armorEquipButton = document.createElement("button");
-			armorEquipButton.setAttribute("id", "armorEquip"+crewTotal[eachPerson]["id"])
+			armorEquipButton.setAttribute("id", "armor-Equip"+crewTotal[eachPerson]["id"])
 			armorEquipButton.classList.add("armorEquipButton");
 			armorEquipButton.addEventListener("click", function () {
 				showItemInventory("armor", this.id);

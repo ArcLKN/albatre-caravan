@@ -747,6 +747,7 @@ var allItems = {
 		price: 1000,
 		carryValue: 100,
 		weight: 0,
+		rarity:"common",
 	 },
   	1: {
 		type: "food",
@@ -756,6 +757,7 @@ var allItems = {
 		value: 10,
 		description: "Miam miam",
 		weight: 1,
+		rarity:"common",
   	},
   	2: {
 		type: "weapon",
@@ -768,6 +770,7 @@ var allItems = {
 		attackStyle: "distance",
 		description: "Classic wooden bow.",
 		weight: 1,
+		rarity:"common",
   	},
   	3: {
 		type: "weapon",
@@ -780,6 +783,7 @@ var allItems = {
 		attackStyle: "melee",
 		description: "Classic wooden bow.",
 		weight: 1,
+		rarity:"common",
   	},
 		4: {
 		type: "weapon",
@@ -792,6 +796,7 @@ var allItems = {
 		attackStyle: "melee",
 		description: "Classic wooden bow.",
 		weight: 1,
+		rarity:"common",
   	},
   	5: {
 		type: "food",
@@ -800,6 +805,7 @@ var allItems = {
 		volume: 100,
 		price: 6,
 		weight: 1,
+		rarity:"common",
 	},
 	6: {
 		type: "goods",
@@ -807,6 +813,7 @@ var allItems = {
 		volume: 50,
 		price: 20,
 		weight: 1,
+		rarity:"common",
 	},
 	7: {
 		type: "mount",
@@ -815,20 +822,23 @@ var allItems = {
 		price: 500,
 		carryValue: 30,
 		weight: 0,
+		rarity:"common",
 	},
 	1000: {
 		type: "weapon",
 		name: "Hand",
 		weight: 0,
+		rarity:"common",
 	},
 	1001: {
 		type: "armor",
 		name: "Cloth",
 		weight: 0,
+		rarity:"common",
 	}
 };
-
-baseInventory = {0: {volume: 1},1: {volume: 80}, 2: {volume: 2}, 3: {volume: 2}, 4: {volume: 2}, 7: {volume: 2}, 6: {volume: 10},}
+//changed volume to "amount" since we already have a volume for each
+baseInventory = {0: {quantity: 1},1: {quantity: 80}, 2: {quantity: 2}, 3: {quantity: 2}, 4: {quantity: 2}, 7: {quantity: 2}, 6: {quantity: 10},}
 
 function inputTrait(newTraitName, newUnit) {
 	let newTrait = specialsTraitsManager[newTraitName];

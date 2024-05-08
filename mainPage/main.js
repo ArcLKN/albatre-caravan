@@ -1192,64 +1192,77 @@ function renderItems(filterType = 'all') {
     const itemList = document.getElementById('item-list');
     itemList.innerHTML = ''; // Clear previous items
 
-    inventory.forEach(item => {
-        if (filterType === 'all' || item.type === filterType) {
-            //creates the itembox
-            const itemElement = document.createElement('div');
-            //harvests rarity variable to assign color later
-            itemElement.className = `inventory-item rarity-${item.rarity.toLowerCase()}`;
-            
-            //adds item img to the grid item card
-            const imgElement = document.createElement('img');
-            imgElement.src = item.imgFile;
-            imgElement.alt = item.name;
-            itemElement.appendChild(imgElement);
+    // Iterate over the keys of the baseInventory object
+    for (const itemId in inventory) {
+        if (Object.hasOwnProperty.call(inventory, itemId)) {
+            const quantity = inventory[itemId].quantity;
+            const item = allItems[itemId]; // Get item details from allItems using itemId
 
-            //adds title
-            const titleElement = document.createElement('div');
-            titleElement.className = 'item-title';
-            titleElement.textContent = item.name;
-            itemElement.appendChild(titleElement);
+            // Check if the item matches the filter type
+            if (filterType === 'all' || item.type === filterType) {
+                for (let i = 0; i < quantity; i++) {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = `inventory-item rarity-${item.rarity.toLowerCase()}`;
 
-            //adds the info button for each item
-            //there is probably a better way to do this but idk
-            const infoImg = document.createElement('img');
-            infoImg.src = "info.png"; 
-            infoImg.alt = "Info";
-            infoImg.className = 'info-img';
-            itemElement.appendChild(infoImg);
-            
-            //creates extra info element that is presented during hover
-            const extraInfoElement = document.createElement('div');
-            extraInfoElement.className = 'extra-info';
-            //this line formats the info presented during hover
-            //added the assigned to element to the extra info, the spacing needs to be fixed
-            extraInfoElement.innerHTML = `Type: ${item.type}<br>Description: ${item.description}<br>Quantity: ${item.quantity}<br>Value: ${item.value}<br>Assigned To:${item.assignedTo}`;
-            itemElement.appendChild(extraInfoElement);
+                    const imgElement = document.createElement('img');
+                    imgElement.src = item.imgFile;
+                    imgElement.alt = item.name;
+                    itemElement.appendChild(imgElement);
 
-            //removes title,img,info button during hover over info button
-            infoImg.addEventListener('mouseenter', () => {
-                infoImg.style.display = 'none';
-                extraInfoElement.style.display = 'block';
-                titleElement.style.display='none';
-                imgElement.style.display='none';
-            });
-            //redisplayes the title img,info button after hover, while hiding extra info
-            infoImg.addEventListener('mouseleave', () => {
-                infoImg.style.display = 'block';
-                extraInfoElement.style.display = 'none';
-                titleElement.style.display='block';
-                imgElement.style.display='block';
-            });
+                    const titleElement = document.createElement('div');
+                    titleElement.className = 'item-title';
+                    titleElement.textContent = item.name;
+                    itemElement.appendChild(titleElement);
 
-            itemList.appendChild(itemElement);
+                    const infoImg = document.createElement('img');
+                    infoImg.src = "info.png";
+                    infoImg.alt = "Info";
+                    infoImg.className = 'info-img';
+                    itemElement.appendChild(infoImg);
+
+                    const extraInfoElement = document.createElement('div');
+                    extraInfoElement.className = 'extra-info';
+
+                    // Populate extraInfoElement based on item type
+                    if (item.type === "weapon") {
+                        extraInfoElement.innerHTML = `Attack Style: ${item.attackStyle}<br>Quantity: ${quantity}<br>Value: ${item.value}<br>Weight:${item.weight}<br>Description: ${item.description}`;
+                    } else if (item.type === "food") {
+                        extraInfoElement.innerHTML = `Type: ${item.type}<br>Item Name: ${item.name}<br>Restoration: ${item.foodValue}<br>Quantity: ${quantity}<br>Value: ${item.price}<br>Weight:${item.weight}<br>Description: ${item.description}`;
+                    } else if (item.type === "mount" || item.type === "carrier") {
+                        extraInfoElement.innerHTML = `Type: ${item.type}<br>Item Name: ${item.name}<br>Volume: ${item.volume}<br>Value: ${item.price}<br>Weight:${item.weight}<br>Description: ${item.description}`;
+                    } else {
+                        extraInfoElement.innerHTML = `Type: ${item.type}<br>Description: ${item.description}<br>Quantity: ${quantity}<br>Value: ${item.value}<br>Carry Value: ${item.carryValue}<br>Weight:${item.weight}`;
+                    }
+
+                    itemElement.appendChild(extraInfoElement);
+
+                    infoImg.addEventListener('mouseenter', () => {
+                        infoImg.style.display = 'none';
+                        extraInfoElement.style.display = 'block';
+                        titleElement.style.display = 'none';
+                        imgElement.style.display = 'none';
+                    });
+
+                    infoImg.addEventListener('mouseleave', () => {
+                        infoImg.style.display = 'block';
+                        extraInfoElement.style.display = 'none';
+                        titleElement.style.display = 'block';
+                        imgElement.style.display = 'block';
+                    });
+
+                    itemList.appendChild(itemElement);
+                }
+            }
         }
-    });
+    }
 }
+const filterSelect = document.getElementById('item-type-filter');
+    filterSelect.addEventListener('change', function() {
+        const selectedType = this.value;
+        renderItems(selectedType);
+    });
 
 // This will make the inventory appear when the inventory button is pressed
-/*Had to add domContentLoaded since the centerImage was being grabbed before it was initialized
-	this prevented the cutsecnes from playing*/
 document.addEventListener('DOMContentLoaded', function() {
     const inventoryButton = document.getElementById('inventoryButton');
     const inventoryPage = document.getElementById('inventoryPage');
@@ -1260,8 +1273,8 @@ document.addEventListener('DOMContentLoaded', function() {
         inventoryPage.classList.toggle('visible');
         centerImage.classList.toggle('visible');
         centerImage.classList.toggle('hidden');
+        if (!inventoryPage.classList.contains('hidden')) {
+            renderItems();
+        }
     });
 });
-
-
-//Delete middle image to make room for inventory

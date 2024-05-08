@@ -184,8 +184,9 @@ buttton is clicked*/
 }
 /* Container for the entire inventory */
 .inventory-container {
-
-  height: 65 vh; 
+  height: 57vh !important;
+  width:92vw !important;
+  overflow-y: auto !important;
   display: flex;
   gap: 5px; /* Gap between grid items */
   align-items: center;

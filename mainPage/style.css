@@ -41,6 +41,9 @@ ul li img{
 align-content: center;
 }
 
+tr { display: block; float: left; align-content: center;}
+th, td { display: block; align-content: center;}
+
 div[id='top menu'] {
   display: flex;
   flex-direction: row;
@@ -56,6 +59,12 @@ div[id='bottom menu'] {
   display: flex;
   flex-direction: row;
   height: 30vh;
+}
+div[id='middle menu'] {
+  margin: 0px 0px 0px 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 button {
   background-color: cream;
@@ -250,6 +259,16 @@ buttton is clicked*/
   
 }
 
+.unitList {
+  height: 65vh;
+  width: 50vw;
+}
+.unitCell {
+  border: 1px solid black;
+}
+.armyRowCell {
+  border: 1px solid black;
+}
 
 
 /* Background color based on item rarity */

@@ -133,6 +133,8 @@ justify-content: center;
 
 #center-image {
   height: 65vh;
+  margin: 0 auto;
+
 }
 
 #resolveButton {
@@ -173,6 +175,8 @@ buttton is clicked*/
 }
 /* Container for the entire inventory */
 .inventory-container {
+
+  height: 65 vh; 
   display: flex;
   gap: 5px; /* Gap between grid items */
   align-items: center;

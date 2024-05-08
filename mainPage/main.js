@@ -1216,20 +1216,20 @@ function renderItems(filterType = 'all') {
 }
 
 // This will make the inventory appear when the inventory button is pressed
-const inventoryButton = document.getElementById('inventoryButton');
-const inventoryPage = document.getElementById('inventoryPage');
+/*Had to add domContentLoaded since the centerImage was being grabbed before it was initialized
+	this prevented the cutsecnes from playing*/
+document.addEventListener('DOMContentLoaded', function() {
+    const inventoryButton = document.getElementById('inventoryButton');
+    const inventoryPage = document.getElementById('inventoryPage');
+    const centerImage = document.getElementById('center-image');
 
-inventoryButton.addEventListener('click', function() {
-    inventoryPage.classList.toggle('hidden');
-    inventoryPage.classList.toggle('visible');
+    inventoryButton.addEventListener('click', function() {
+        inventoryPage.classList.toggle('hidden');
+        inventoryPage.classList.toggle('visible');
+        centerImage.classList.toggle('visible');
+        centerImage.classList.toggle('hidden');
+    });
 });
 
-//THE INVENTORY BUTTON DOESNT FUCKING WORK ANYMORE AHHHHHHHHHHHHHHHHHHH
-inventoryButton.addEventListener('click', function() {
-    console.log('Inventory button clicked'); // Check if the event listener callback is executed
-    // Rest of the code for toggling the inventory page
-});
 
-
-
-
+//Delete middle image to make room for inventory

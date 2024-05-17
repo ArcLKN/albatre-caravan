@@ -838,7 +838,7 @@ var allItems = {
 	}
 };
 //changed volume to "amount" since we already have a volume for each
-baseInventory = {0: {quantity: 1},1: {quantity: 80}, 2: {quantity: 2}, 3: {quantity: 2}, 4: {quantity: 2}, 7: {quantity: 2}, 6: {quantity: 10},}
+baseInventory = {0: {volume: 1},1: {volume: 80}, 2: {volume: 2}, 3: {volume: 2}, 4: {volume: 2}, 7: {volume: 2}, 6: {volume: 10},}
 
 function inputTrait(newTraitName, newUnit) {
 	let newTrait = specialsTraitsManager[newTraitName];

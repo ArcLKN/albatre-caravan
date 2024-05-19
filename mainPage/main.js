@@ -30,6 +30,8 @@ function loadSessionStorage() {
   gatherer = JSON.parse(sessionStorage.getItem("gatherer"));
   statusTurn = sessionStorage.getItem("statusTurn");
   allItems = JSON.parse(sessionStorage.getItem("allItems"));
+  baseUnit = JSON.parse(sessionStorage.getItem("baseUnit"));
+  specialsTraitsManager = JSON.parse(sessionStorage.getItem("allTraits"));
 }
 
 // All the variables we want to save and share through every JS files.
@@ -681,84 +683,6 @@ specialNames = [
   "Aten",
 ];
 
-baseUnit = {
-	id: 0,
-	image: null,
-	name: "",
-	gender: null,
-	age: null,
-	max_health: 10,
-	health: 10,
-	carryValue: 10,
-	vision: 5,
-	attacks : {
-		damageAbs: 0,
-		piercing: 0,
-		slashing: 0,
-		melee: 0,
-		distance: 0,
-		elemental: 0,
-		blunt: 0,
-		poison: 0,
-		fire: 0,
-		ice: 0
-	},
-	resistance: {
-		defense: 0,
-		phyDefense: 0,
-		elemDefense: 0,
-		piercing: 0,
-		slashing: 0,
-		blunt: 0,
-		poison: 0,
-		fire: 0,
-		ice: 0
-	},
-	skills: {
-		gatheringFactor: 1,
-		gatheringAbs: 0,
-		foodGatheringAbs: 0,
-		waterGatheringAbs: 0,
-		moraleGatheringAbs: 0,
-		foodGatheringFactor: 0,
-		waterGatheringFactor: 0,
-		moraleGatheringFactor: 0
-	},
-	special: {},
-	needs: {
-		water: 1,
-		food: 1,
-		morale: 1
-	},
-	passiveEarning : {
-		morale: 0,
-		food: 0,
-		money: 0,
-		water: 0
-	},
-	weaponProficiency: {
-		weapon: 0,
-		melee: 0,
-		distance: 0,
-		sword: 0,
-		lance: 0,
-		bow: 0,
-		mace: 0
-	},
-	weapon: {
-		name: "Hand",
-		power: [1, 0, 0],
-		attackType: "blunt",
-		weaponType: "mace",
-		attackStyle: "melee"
-	},
-	mount: {},
-	armor: {
-		name: "Cloth",
-	},
-	injuries: 0,
-}
-
 var luckTrait = [0.6, 0.7, 0.8, 0.9, 0.95];
 
 var genderArr = ["male", "female"];
@@ -805,428 +729,6 @@ var specialsTraits = [
 	"noble", // Requires way more ressources but enlighten others bc it's a privilege to be with a noble, and is very competent in term of warfare.
 	"orphan", // Doesn't require ressources but is bad at everything.
 ]
-
-specialsTraitsManager = {
-	hungry: {
-		needs: {
-			food: 1,
-		}
-	},
-	drought: {
-		needs: {
-			water: 1,
-		}
-	},
-	ascetic: {
-		skills: {
-			moraleGatheringFactor: -1,
-		},
-		needs: {
-			morale: -1,
-		}
-	},
-	faithful: {
-
-	},
-	lucky: {
-		skills: {
-			gatheringAbs: 1,
-		},
-	},
-	entertainer: {
-		passiveEarning: {
-			morale: 1,
-		}
-	},
-	dowser: {
-		passiveEarning: {
-			water: 1,
-		}
-	},
-	sick: {
-		health: -2,
-	},
-	archer: {
-		weaponProficiency: {
-			bow: 1,
-		},
-		vision: 5,
-	},
-	warrior: {
-		weaponProficiency: {
-			melee: 1,
-		},
-		attacks: {
-			damageAbs: 1,
-		},
-		resistance: {
-			phyDefense: 1,
-		},
-	},
-	protector: {
-		resistance: {
-			phyDefense: 1,
-			defense: 1,
-		},
-		health: 5,
-	},
-	healthy: {
-		health: 2,
-	},
-	mummy: {
-		needs: {
-			water: -1,
-			food: -1,
-			morale: -1,
-		}
-	},
-	spearman: {
-		weaponProficiency: {
-			spear: 1,
-		},
-		attacks: {
-			piercing: 1,
-		},
-	},
-	swordsman: {
-		weaponProficiency: {
-			sword: 1,
-		},
-		attacks: {
-			slashing: 1,
-		}
-	},
-	farmer: {
-		skills: {
-			foodGatheringAbs: 1,
-		}
-	},
-	strong: {
-		skills: {
-			waterGatheringAbs: 1,
-		},
-		health: 2,
-		attacks: {
-			damageAbs: 1,
-		},
-		resistance: {
-			phyDefense: 1,
-		},
-		carryValue: 10,
-	},
-	fragile: {
-		resistance: {
-			phyDefense: -1,
-		}
-	},
-	weak: {
-		resistance: {
-			phyDefense: -1,
-			defense: -1,
-		},
-		carryValue: -1,
-	},
-	aggressive: {
-		resistance: {
-			phyDefense: -1,
-		},
-		weaponProficiency: {
-			melee: 1,
-		}
-	},
-	coward: {
-		resistance: {
-			phyDefense: 1,
-		},
-		attacks: {
-			melee: -1,
-		}
-	},
-	depressed: {
-		skills: {
-			moraleGatheringAbs: -1,
-		},
-		needs: {
-			morale: -1,
-		}
-	},
-	unlucky: {
-		skills: {
-			gatheringAbs: -1,
-		}
-	},
-	clumsy: {
-		skills: {
-			foodGatheringAbs: -1,
-			waterGatheringAbs: -1,
-		},
-		weaponProficiency: {
-			weapon: -1,
-		}
-	},
-	cheerful: {
-		skills: {
-			moraleGatheringAbs: 1,
-		}
-	},
-	optimistic: {
-		needs: {
-			morale: -1,
-		},
-		passiveEarning: {
-			morale: 1,
-		}
-	},
-	pesimistic: {
-		needs: {
-			morale: -1,
-		},
-		passiveEarning: {
-			morale: -1,
-		}
-	},
-	charming: {
-		skills: {
-			moraleGatheringAbs: 1,
-		},
-		passiveEarning: {
-			morale: 1,
-		},
-		resistance: {
-			phyDefense: 1,
-		}
-	},
-	exhausted: {
-		skills: {
-			gatheringAbs: -1,
-		},
-		resistance: {
-			defense: -1,
-		},
-		attacks: {
-			damageAbs: -1,
-		},
-		carryValue: -2,
-	},
-	chivalrous: {
-		resistance: {
-			defense: 1,
-		},
-		weaponProficiency: {
-			melee: 1,
-		},
-		health: 2,
-	},
-	"weapon master": {
-		weaponProficiency: {
-			weapon: 2,
-		},
-	},
-	heartless: {
-		attacks: {
-			damageAbs: 1,
-		},
-		passiveEarning: {morale: -1},
-	},
-	overweight: {
-		health: -2,
-		needs: {
-			food: 1,
-		},
-		resistance: {
-			phyDefense: 1,
-		}
-	},
-	anorexic: {
-		health: -2,
-		needs: {
-			food: -1,
-		},
-		resistance: {
-			phyDefense: -1,
-		}
-	},
-	"hard-working": {
-		skills: {
-			gatheringAbs: 1,
-		},
-		carryValue: 2,
-	},
-	hunter: {
-		skills: {
-			foodGatheringAbs: 1,
-		},
-		weaponProficiency: {
-			bow: 1,
-		}
-	},
-	"child of the Nil": {
-		skills: {
-			waterGatheringAbs: 1,
-			foodGatheringAbs: 1,
-		},
-		health: 5,
-		vision: 5,
-	},
-	noble: {
-		needs: {
-			food: 1,
-			water: 1,
-		},
-		weaponProficiency: {
-			weapon: 1,
-			sword: 1,
-		},
-		passiveEarning: {
-			money: 2,
-			morale: 1,
-		}
-	},
-	orphan: {
-		needs: {
-			food: -1,
-			water: -1,
-		},
-		health: -2,
-		skills: {
-			gatheringAbs: -1,
-		},
-		weaponProficiency: {
-			weapon: -1,
-		}
-	},
-	slave: {
-		health: -2,
-		skills: {
-			moraleGatheringAbs: -1,
-		}
-	},
-	Horus: {
-		vision: 10,
-		attacks: {
-			damageAbs: 1,
-		},
-		resistance: {
-			defense: 1,
-		}
-	},
-	Osiris: {
-		skills: {
-			foodGatheringAbs: 2,
-			waterGatheringAbs: 1,
-			moraleGatheringAbs: 2,
-		},
-		health: 10,
-	},
-	normie: {},
-}
-
-var baseCrewNumber = 20;
-var crewMembers = [];
-for (i = 0; i < baseCrewNumber; i++) {
-  crewMembers.push(createCharacter());
-}
-
-var allItems = {
-	0: {
-		type: "carrier",
-		name: "Camel",
-		volume: 2,
-		price: 1000,
-		carryValue: 100,
-		weight: 0,
-		rarity:"common",
-	 },
-  	1: {
-		type: "food",
-		name: "Food",
-		foodValue: 1,
-		quantity: 0,
-		value: 10,
-		description: "Miam miam",
-		weight: 1,
-		rarity:"common",
-  	},
-  	2: {
-		type: "weapon",
-		name: "bow",
-		quantity: 0,
-		value: 10,
-		power: [1, 2, 3],
-		attackType: "piercing",
-		weaponType: "bow",
-		attackStyle: "distance",
-		description: "Classic wooden bow.",
-		weight: 1,
-		rarity:"common",
-  	},
-  	3: {
-		type: "weapon",
-		quantity: 0,
-		value: 10,
-		name: "spear",
-		power: [2, 3, 0],
-		attackType: "piercing",
-		weaponType: "spear",
-		attackStyle: "melee",
-		description: "Classic wooden bow.",
-		weight: 1,
-		rarity:"common",
-  	},
-		4: {
-		type: "weapon",
-		quantity: 0,
-		value: 10,
-		name: "sword",
-		power: [3, 2, 0],
-		attackType: "slashing",
-		weaponType: "sword",
-		attackStyle: "melee",
-		description: "Classic wooden bow.",
-		weight: 1,
-		rarity:"common",
-  	},
-  	5: {
-		type: "food",
-		name: "Rations",
-		foodValue: 1,
-		volume: 100,
-		price: 6,
-		weight: 1,
-		rarity:"common",
-	},
-	6: {
-		type: "goods",
-		name: "Papyrus",
-		volume: 50,
-		price: 20,
-		weight: 1,
-		rarity:"common",
-	},
-	7: {
-		type: "mount",
-		name: "Horse",
-		volume: 3,
-		price: 500,
-		carryValue: 30,
-		weight: 0,
-		rarity:"common",
-	},
-	1000: {
-		type: "weapon",
-		name: "Hand",
-		weight: 0,
-		rarity:"common",
-	},
-	1001: {
-		type: "armor",
-		name: "Cloth",
-		weight: 0,
-		rarity:"common",
-	}
-};
-//changed volume to "amount" since we already have a volume for each
-baseInventory = {0: {volume: 1},1: {volume: 80}, 2: {volume: 2}, 3: {volume: 2}, 4: {volume: 2}, 7: {volume: 2}, 6: {volume: 10},}
 
 function inputTrait(newTraitName, newUnit) {
 	let newTrait = specialsTraitsManager[newTraitName];
@@ -1297,7 +799,8 @@ function fight(team1, team2, team1Aim, team2Aim) {
 		for (let unit1 in team1["row"+String(i)]) {
 	  	thisUnit = team1["row"+String(i)][unit1];
 	  	trueAim = Math.min(3 - 1, Math.max(0, team1Aim[String(i)] - i));
-	  	
+		console.log("TEAM 1 AIM", team1Aim)
+	  	console.log("TRUE AIM T1", trueAim)
 	  	maxIndex = team2["row"+String(trueAim+1)].length - 1;
 	  	if (maxIndex == 0) {
 				unitIndex = 0;
@@ -1306,23 +809,28 @@ function fight(team1, team2, team1Aim, team2Aim) {
 	  	} else {
 				unitIndex = unit1;
 	  	}
-	  console.log("TRUE AIM", trueAim)
+	  
 	  ennemyUnit = team2["row"+String(trueAim+1)][unitIndex];
+	  console.log("ATTACKER", thisUnit);
+	  console.log("DEFENDER", ennemyUnit);
+	  console.log(thisUnit["weapon"]["power"][team1Aim[i]], thisUnit["weaponProficiency"][thisUnit["weapon"]["weaponType"]], thisUnit["weaponProficiency"][thisUnit["weapon"]["attackStyle"][team1Aim[String(i)]]])
 	  atk =
 		thisUnit["weapon"]["power"][team1Aim[i]] +
 		thisUnit["weaponProficiency"][thisUnit["weapon"]["weaponType"]] +
 		thisUnit["weaponProficiency"][
-		  thisUnit["weapon"]["attackStyle"][team1Aim[i]]
+		  thisUnit["weapon"]["attackStyle"][team1Aim[String(i)]]
 		] +
 		thisUnit["weaponProficiency"]["weapon"] +
-		thisUnit["attacks"][thisUnit["weapon"]["attackType"][team1Aim[i]]] +
+		thisUnit["attacks"][thisUnit["weapon"]["attackType"][team1Aim[String(i)]]] +
 		thisUnit["attacks"]["damageAbs"];
+		
 	  res =
 		ennemyUnit["resistance"][
-		  thisUnit["weapon"]["attackType"][team1Aim[i]]
+		  thisUnit["weapon"]["attackType"][team1Aim[String(i)]]
 		] +
 		ennemyUnit["resistance"]["defense"] +
 		ennemyUnit["resistance"]["phyDefense"];
+		console.log("ATK RES", atk, res)
 	  damageCalc = Math.max(0, atk - res);
 	  if (ennemyUnit["health"] > 0 && ennemyUnit["health"] - damageCalc <= 0) {
 		console.log(ennemyUnit["name"], "died from the next attack.");
@@ -1344,7 +852,7 @@ function fight(team1, team2, team1Aim, team2Aim) {
 	for (let unit2 in team2["row"+String(i)]) {
 	  thisUnit = team2["row"+String(i)][unit2];
 	  trueAim = Math.min(3 - 1, Math.max(0, team2Aim[String(i)] - i));
-	  console.log("TRUE AIM", trueAim, team2Aim)
+	  console.log("T2 TRUE AIM", trueAim, team2Aim)
 	  maxIndex = team1["row"+String(trueAim+1)].length - 1;
 	  if (maxIndex == 0) {
 		unitIndex = 0;
@@ -1389,7 +897,7 @@ function fight(team1, team2, team1Aim, team2Aim) {
   }
   for (let team in [team1, team2]) {
 	for (let i = 0; i < 3; i++) {
-	  [team1, team2][team]["row"+String(i)] = [team1, team2][team]["row"+String(i)].filter(
+	  [team1, team2][team]["row"+String(i+1)] = [team1, team2][team]["row"+String(i+1)].filter(
 		(unit) => unit["health"] > 0
 	  );
 	}
@@ -1408,12 +916,12 @@ function battle(team1, team2) {
 		team1, team2 = fight(team1, team2);
 		team1 = team1.filter((row) => row.length > 0);
 		team2 = team2.filter((row) => row.length > 0);
-	console.log(team1, team2);
-	nbrT1 = 0;
-	nbrT2 = 0;
-	team1.forEach((e1) => e1.forEach((e2) => (nbrT1 += 1)));
-	team2.forEach((e1) => e1.forEach((e2) => (nbrT2 += 1)));
-	turn++;
+		console.log(team1, team2);
+		nbrT1 = 0;
+		nbrT2 = 0;
+		team1.forEach((e1) => e1.forEach((e2) => (nbrT1 += 1)));
+		team2.forEach((e1) => e1.forEach((e2) => (nbrT2 += 1)));
+		turn++;
   }
 }
 
@@ -1422,7 +930,8 @@ function battle(team1, team2) {
 // Second level is weapon and proficiency.
 // Third levels is weapon, proficiency and attack type compared to ennemy defense type.
 function chooseAim(team, level, team2=null) {
-  var aimList = [];
+  var aimList = [0, 0, 0];
+  console.log("log: choosing level",level,"aim")
   if (level == 1) {
 	for (let i = 1; i < 4; i++) {
 	  let sumDamage = [0, 0, 0];
@@ -1432,7 +941,7 @@ function chooseAim(team, level, team2=null) {
 		  	sumDamage[eachRange] += thisUnit["weapon"]["power"][eachRange];
 			}
 	  }
-	  let maxDmg = 0;
+	  let maxDmg = -Infinity;
 	  // console.log(sumDamage);
 	  for (let eachRange in sumDamage) {
 			if (sumDamage[eachRange] > maxDmg) {
@@ -1474,19 +983,20 @@ function chooseAim(team, level, team2=null) {
 		  	sumDamage[eachRange] +=
 					thisUnit["weapon"]["power"][eachRange] +
 					thisUnit["weaponProficiency"][thisUnit["weapon"]["weaponType"]] +
-					thisUnit["weaponProficiency"][thisUnit["weapon"]["attackStyle"]] +
+					thisUnit["weaponProficiency"][thisUnit["weapon"]["attackStyle"][i]] +
 					thisUnit["weaponProficiency"]["weapon"];
 		  	let totalRes = 0;
 		  	team2["row"+String(parseInt(eachRange) + 1)].forEach((e1) => {
-					totalRes += e1["resistance"][thisUnit["weapon"]["attackType"]];
+					totalRes += e1["resistance"][thisUnit["weapon"]["attackType"][i]];
 		  	});
 		  totalRes /= team2["row"+String(parseInt(eachRange) + 1)].length;
 		  sumDamage[eachRange] +=
-			thisUnit["attacks"][thisUnit["weapon"]["attackType"]] - totalRes;
+			thisUnit["attacks"][thisUnit["weapon"]["attackType"][i]] - totalRes;
 		  // console.log(sumDamage[eachRange]);
 		}
 	  }
-	  let maxDmg = 0;
+	  let maxDmg = -Infinity;
+	  console.log("log: see each sum damage", sumDamage)
 	  for (let eachRange in sumDamage) {
 		if (sumDamage[eachRange] > maxDmg) {
 		  aimList[i-1] = eachRange;
@@ -1517,25 +1027,22 @@ function computePortage() {
 }
 
 function tableCreate(node, army, reverse=false) {
-	console.log(army)
+	//console.log(army)
 	tbl = document.createElement('table');
 	tbl.style.width = '100%';
 	tbl.style.height = '100%';
 	tbl.style.border = '1px solid black';
 
 	function createCol(tr, i) {
-		console.log(i)
 		for (let unit in army["row"+i]) {
 			const td = tr.insertCell();
 			td.style.width = '15vw';
-			td.appendChild(document.createTextNode(army["row"+i][unit]['name']));
+			td.appendChild(document.createTextNode(`${army["row"+i][unit]['name']}: ${army["row"+i][unit]['health']}/${army["row"+i][unit]['max_health']}`));
 			td.classList.add("unitCell");
 		}
 	}
-
-	console.log(army)
   if (reverse) {
-  	console.log("reverse")
+  	//console.log("reverse")
   	for (let i = 1; i < 4; i++) {
   		const tr = tbl.insertRow();
 			const td = tr.insertCell();
@@ -1545,7 +1052,7 @@ function tableCreate(node, army, reverse=false) {
   	}
   }
   else {
-  	console.log("not reverse")
+  	//console.log("not reverse")
   	for (let i = 1; i < 4; i++) {
   		const tr = tbl.insertRow();
 			const td = tr.insertCell();
@@ -1561,7 +1068,7 @@ var battleNbrTurn = 0;
 
 function initBattle() {
 	console.log("INIT BATTLE")
-	
+	console.log("log: start create enemy team")
 	let enemyTypeRand = Math.random();
 	for (let enemyType in playerLocation['enemyType']) {
 		if (enemyTypeRand <= playerLocation['enemyType'][enemyType]) {
@@ -1569,15 +1076,16 @@ function initBattle() {
 		}
 	}
 
-	let numberOfEnnemy = 3;
+	let numberOfEnnemy = 15;
 	if (enemyType == "bandit") {
 		numberOfEnnemy = Math.getRandomIntInclusive(5, Math.max(7, Math.round(crewTotal.length/4)))
 	}
-
-	for (let i = 0; i < numberOfEnnemy; i++) {
+	groupOfEnemies["row1"].push(createCharacter())
+	groupOfEnemies["row2"].push(createCharacter())
+	for (let i = 0; i < numberOfEnnemy-2; i++) {
 		groupOfEnemies["row"+String(Math.floor(Math.random() * 3)+1)].push(createCharacter())
 	}
-
+	console.log("log: END create enemy team")
 	let actionBar = document.getElementById("actionMenu");
 	document.getElementById("center-image").classList.add("hidden");
 
@@ -1588,6 +1096,7 @@ function initBattle() {
 	enemySide.classList.add("unitList");
 	middleMenu.appendChild(playerSide);
 	middleMenu.appendChild(enemySide);
+	console.log("log: start create tables team")
 	tableCreate(playerSide, gatherer);
 	tableCreate(enemySide, groupOfEnemies, true);
 
@@ -1597,6 +1106,8 @@ function initBattle() {
 	actionBar.appendChild(titleText);
 	let nextTurnButton = document.createElement("button");
 	nextTurnButton.textContent = "Next Turn";
+	tempIDs.push("nextTurnButton")
+	nextTurnButton.setAttribute("id", "nextTurnButton");
 	nextTurnButton.addEventListener('click', function () {
 		manageBattle();
 	})
@@ -1609,13 +1120,74 @@ function manageBattle() {
 	console.log("MANAGE BATTLE");
 	battleNbrTurn += 1;
 	document.getElementById("nbrTurnBattle").textContent = "TURN "+String(battleNbrTurn);
+	console.log("log: start choose aim player team")
 	let aimPlayer = chooseAim(copy_playerTeam, 3, copy_enemyTeam);
+	console.log("log: END choose aim player team")
+	console.log("log: start choose aim enemy team")
 	let aimEnemy = chooseAim(copy_enemyTeam, 1)
+	console.log("log: END choose aim enemy team")
 	console.log("AIM", aimPlayer, aimEnemy)
 	console.log("ENEMY",copy_enemyTeam)
 	copy_playerTeam, copy_enemyTeam = fight(copy_playerTeam, copy_enemyTeam, aimPlayer, aimEnemy);
 	console.log(copy_playerTeam)
-	
+
+	document.querySelectorAll('[class="unitList"]').forEach((e) => e.remove());
+
+	let middleMenu = document.getElementById("middle menu");
+	let playerSide = document.createElement("div");
+	playerSide.classList.add("unitList");
+	let enemySide = document.createElement("div");
+	enemySide.classList.add("unitList");
+	middleMenu.appendChild(playerSide);
+	middleMenu.appendChild(enemySide);
+
+	if (copy_playerTeam["row1"].length == 0) {
+		copy_playerTeam["row1"] = copy_playerTeam["row2"]
+		copy_playerTeam["row2"] = [];
+	}
+	if (copy_playerTeam["row2"].length == 0) {
+		copy_playerTeam["row2"] = copy_playerTeam["row3"]
+		copy_playerTeam["row3"] = [];
+	}
+	if (copy_enemyTeam["row1"].length == 0) {
+		copy_enemyTeam["row1"] = copy_enemyTeam["row2"]
+		copy_enemyTeam["row2"] = [];
+	}
+	if (copy_enemyTeam["row2"].length == 0) {
+		copy_enemyTeam["row2"] = copy_enemyTeam["row3"]
+		copy_enemyTeam["row3"] = [];
+	}
+
+	console.log("log: start create tables team")
+	tableCreate(playerSide, copy_playerTeam, true);
+	tableCreate(enemySide, copy_enemyTeam, true);
+
+	let nbrUnitT1 = 0;
+  	let nbrUnitT2 = 0;
+	for (let i = 0; i < 3; i++) {
+		nbrUnitT1 += copy_playerTeam["row"+String(i+1)].length;
+		nbrUnitT2 += copy_enemyTeam["row"+String(i+1)].length;
+	}
+	if (nbrUnitT1 <= 0 || nbrUnitT2 <= 0) {
+		
+		let actionMenu = document.getElementById("actionMenu");
+		console.log("ENEMY TEAM WON")
+		removeTempIDs();
+		let finishBattleButton = document.createElement("button");
+		finishBattleButton.textContent = "Finish Battle";
+		tempIDs.push("finishBattleButton")
+		finishBattleButton.setAttribute("id", "finishBattleButton");
+		finishBattleButton.addEventListener('click', function () {
+			concludeBattle();
+		})
+		actionMenu.appendChild(finishBattleButton);
+	}
+}
+
+function concludeBattle() {
+	tempIDs.push("nbrTurnBattle")
+	removeTempIDs()
+	changeLocation
 }
 
 function yourTurn(phase) {

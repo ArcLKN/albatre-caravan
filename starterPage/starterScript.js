@@ -360,9 +360,9 @@ baseUnit = {
   weapon: {
     name: "Hand",
     power: [1, 0, 0],
-    attackType: "blunt",
+    attackType: ["blunt", "blunt", "blunt"],
     weaponType: "mace",
-    attackStyle: "melee",
+    attackStyle: ["melee", "melee", "melee"],
   },
   mount: {},
   armor: {
@@ -765,7 +765,7 @@ var allItems = {
     power: [1, 2, 3],
     attackType: "piercing",
     weaponType: "bow",
-    attackStyle: "distance",
+    attackStyle: ["melee", "distance", "distance"],
     description: "Classic wooden bow.",
     weight: 1,
     rarity: "common",
@@ -778,7 +778,7 @@ var allItems = {
     power: [2, 3, 0],
     attackType: "piercing",
     weaponType: "spear",
-    attackStyle: "melee",
+    attackStyle: ["melee", "melee", "distance"],
     description: "Classic wooden bow.",
     weight: 1,
     rarity: "common",
@@ -791,7 +791,7 @@ var allItems = {
     power: [3, 2, 0],
     attackType: "slashing",
     weaponType: "sword",
-    attackStyle: "melee",
+    attackStyle: ["melee", "melee", "distance"],
     description: "Classic wooden bow.",
     weight: 1,
     rarity: "common",
@@ -827,6 +827,10 @@ var allItems = {
     name: "Hand",
     weight: 0,
     rarity: "common",
+    power: [1, 0, 0],
+    attackType: "blunt",
+    weaponType: "mace",
+    attackStyle: ["melee", "melee", "melee"],
   },
   1001: {
     type: "armor",
@@ -927,6 +931,7 @@ function createCharacter() {
 function initSessionStorage() {
   save("allTraits", specialsTraitsManager);
   save("statusTurn", "narration");
+  save("baseUnit", baseUnit)
   save("allItems", allItems);
   save("crewMembers", crewMembers);
   // Number of people player has, thus number of people he can use.

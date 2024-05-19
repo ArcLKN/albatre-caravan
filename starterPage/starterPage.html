@@ -4,31 +4,44 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <!--To use icons as font-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
     <title>Alabaster Caravan</title>
   </head>
+
   <body>
-    <div class="box-title">
-      <h1>Alabaster Caravan</h1>
-    </div>
-    <audio controls autoplay>
-      <source src="nassam.mp3" type="audio/mpeg" />
-    </audio>
-    <div class="container-style">
-      <div id="play" class="box-style">
-        <!-- Play -->
+    <div class="dark-background"></div>
+
+    <div class="center-text">
+      <h1>قافلة المرمر</h1>
+      <h2 class="subtitle">ALABASTER CARAVAN</h2>
+
+      <audio controls autoplay>
+        <source src="nassam.mp3" type="audio/mpeg" />
+      </audio>
+
+      <div id="play" class="container">
+        <i class="bx bx-play-circle"></i>
         <h2>Play</h2>
       </div>
-      <div class="box-style">
-        <!-- Settings -->
+    </div>
+
+    <div class="other-options">
+      <div class="settings">
+        <i class="bx bx-cog"></i>
         <h2>Settings</h2>
       </div>
-      <div class="box-style">
-        <!-- Exit -->
-        <h2>Exit</h2>
-      </div>
-      <div id="credits" class="box-credits">
-        <!-- Credits -->
+      <div class="credits">
+        <i class="bx bx-user"></i>
         <h2>Credits</h2>
+      </div>
+      <div class="exit">
+        <i class="bx bx-exit"></i>
+        <h2>Exit</h2>
       </div>
     </div>
   </body>

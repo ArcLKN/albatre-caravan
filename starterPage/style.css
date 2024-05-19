@@ -1,111 +1,126 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
   background-image: url('../Images/ancient-egypt-wallpaper.jpg');
   background-size: cover;
   background-repeat: no-repeat;
-  font-family: Franklin Gothic, Arial, sans-serif;
-  display: flex;
-  flex-direction: column; /* Set flex direction to column */
-  align-items: flex-start; /* Align items to the left */
+  font-family: 'Poppins', sans-serif;
   height: 100vh;
+  overflow: hidden;
 }
-.title {
-  font-size: 48px; /* Increase font size */
-  color: #f4150d; /* Change text color to white */
-  margin: 20px 0; /* Add margin to the top and bottom */
+
+/* ---- DARK BACKGROUND ---- */
+
+.dark-background {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(34,34,34,.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
+
+/* ---- TITLES ---- */
+
+.center-text {
+  text-align: center;
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.center-text h1 {
+  font-family: 'Amiri';
+  color: #fff;
+  font-size: 80px;
+}
+
+.subtitle {
+  font-size: 24px;
+  font-weight: 300;
+  color: #fff;
+  letter-spacing: 10px;
+  margin-bottom: 32px;
+}
+
+audio {
+display: none;
+}
+
+/* ---- PLAY BUTTON ---- */
+
 .container {
   display: flex;
-  flex-direction: column; /* Set flex direction to column */
-  align-items: flex-start; /* Align to the left */
-  margin-left: 20px; /* Add some margin for spacing */
+  align-items: center;
+  border: 2px solid white;
+  border-radius: 50px;
+  width: 128px;
+  justify-content: center;
+  margin: 0 auto;
 }
-.box {
-  width: 250px;
-  height: 75px;
-  background-image: url('../Images/PlayButton.png');
-  background-size: cover;
-  background-color: lightblue;
-  background-repeat: no-repeat;
-  border-radius: 10px;
-  text-align: center;
+
+.container:hover {
   cursor: pointer;
-  transition: transform 0.3s ease;
-  margin-bottom: 20px;
 }
-.box:hover {
-  transform: scale(1.05);
+
+.container h2 {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  padding-left: 8px;
+  color: #fff;
+  margin: 8px;
 }
-.box:hover h2 {
-  color: burlywood;
+
+.container .bx-play-circle {
+  font-size: 24px;
+  color: #fff;
 }
-.container-style {
+
+/* ---- OTHER OPTIONS ---- */
+
+.other-options {
+  position: fixed;
+  bottom: 4%;
+  left: 32px;
+}
+
+.settings, .credits, .exit {
+  width: 136px;
   display: flex;
-  flex-direction: column; /* Set flex direction to column */
-  align-items: flex-start; /* Align to the left */
-  margin-left: 5vw; /* Add some margin for spacing */
-  margin-top: 10vh; /* Increase the distance from the top */
+  align-items: center;
 }
-.box-title {
-  font-size: 48px;
-  width: 400px;
-  height: 120px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  border-radius: 10px;
-  text-align: center;
+
+.settings h2, .credits h2, .exit h2 {
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  padding-left: 8px;
+  color: #fff;
+  margin: 4px;
+}
+
+.settings .bx, .credits .bx, .exit .bx {
+  font-size: 16px;
+  color: #fff;
+  margin: 4px;
+}
+
+.settings:hover, .credits:hover, .exit:hover {
   cursor: pointer;
-  position: absolute;
-  top: 20px; /* Adjust as needed */
-  left: 50%; /* Position at the center horizontally */
-  transform: translateX(-50%); /* Center horizontally */
-  display: flex; /* Center text horizontally and vertically */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
 }
 
-.box-style {
-  width: 334px; /* Adjusted width */
-  height: 120px;
-  background-image: url('../Images/PlayButton.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  border-radius: 10px;
-  text-align: center;
+.settings h2:hover, .credits h2:hover, .exit h2:hover {
   cursor: pointer;
-  transition: transform 0.3s ease;
-  margin-bottom: 20px;
-  display: flex; /* Center text horizontally and vertically */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-}
-
-.box-style:hover {
-  transform: scale(1.05);
-}
-
-.box-style:hover h2 {
-  color: burlywood;
-}
-
-h2 {
-  color: #000;
-}
-
-.box-credits {
-  width: 334px;
-  height: 120px;
-  background-image: url('../Images/PlayButton.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  border-radius: 10px;
-  text-align: center;
-  cursor: pointer;
-  position: absolute;
-  bottom: 20px; /* Adjust as needed */
-  right: 20px; /* Adjust as needed */
-  display: flex; /* Center text horizontally and vertically */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  font-weight: 600;
+  transition: .3s ease;
 }

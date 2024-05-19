@@ -1,54 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="style.css" />
-        <title>Alabaster Caravan</title>
-    </head>
-    <body>
-        <div id="top menu">
-            <!--<div id="escapeBox"><img src="../Images/back_arrow.png"></div>-->
-            <ul class="ressources">
-                <li> <img src="../Images/item-water.png"> <p id="nb_water">5</p> <p id="bonus_water"></p></li>
-                <li> <img src="../Images/item-food.png"> <p id="nb_food">5</p> <p id="bonus_food"></p></li>
-                <li> <img src="../Images/item-money.png"> <p id="nb_money">5</p> <p id="bonus_money"></p></li>
-		        <li><p id="locationName">Desert</p> </li>
-                <li> <img src="../Images/item-crew.png"> <p id="nb_crew">5</p> </li>
-                <li> <img src="../Images/item-morale.png"> <p id="nb_morale">5</p> </li>
-		        <li> <img src="../Images/ressource.png"> <p id="nb_goods">5</p> </li>
-            </ul>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <title>Alabaster Caravan</title>
+  </head>
+
+  <body>
+    <div id="top menu">
+      <!--<div id="escapeBox"><img src="../Images/back_arrow.png"></div>-->
+      <ul class="ressources">
+        <li>
+          <img src="../Images/item-water.png" />
+          <p id="nb_water">5</p>
+          <p id="bonus_water"></p>
+        </li>
+        <li>
+          <img src="../Images/item-food.png" />
+          <p id="nb_food">5</p>
+          <p id="bonus_food"></p>
+        </li>
+        <li>
+          <img src="../Images/item-money.png" />
+          <p id="nb_money">5</p>
+          <p id="bonus_money"></p>
+        </li>
+        <li><p id="locationName">Desert</p></li>
+        <li>
+          <img src="../Images/item-crew.png" />
+          <p id="nb_crew">5</p>
+        </li>
+        <li>
+          <img src="../Images/item-morale.png" />
+          <p id="nb_morale">5</p>
+        </li>
+        <li>
+          <img src="../Images/ressource.png" />
+          <p id="nb_goods">5</p>
+        </li>
+      </ul>
+    </div>
+    <div id="middle menu">
+      <img id="center-image" class="visible" src="../Images/Illustration.jpg" />
+      <div id="inventoryPage" class="hidden">
+        <!-- Filter dropdown menu -->
+        <div class="filter-container">
+          <label for="item-type-filter">Filter by Type:</label>
+          <select id="item-type-filter">
+            <option value="all">All Items</option>
+            <option value="food">Food</option>
+            <option value="goods">Goods</option>
+            <option value="mount">Mount</option>
+            <option value="carrier">Carrier</option>
+            <option value="weapon">Weapon</option>
+            <option value="armor">Armor</option>
+          </select>
         </div>
-        <div id="middle menu"><img id="center-image" class="visible" src="../Images/Illustration.jpg">
-            <div id="inventoryPage" class="hidden">
-                <!-- Filter dropdown menu -->
-                <div class="filter-container">
-                    <label for="item-type-filter">Filter by Type:</label>
-                    <select id="item-type-filter">
-                        <option value="all">All Items</option>
-                        <option value="food">Food</option>
-                        <option value="goods">Goods</option>
-                        <option value="mount">Mount</option>
-                        <option value="carrier">Carrier</option>
-                        <option value="weapon">Weapon</option>
-                        <option value="armor">Armor</option>
-                        
-                    </select>
-                </div>
-                <!-- Inventory items container -->
-                <div class="inventory-container" id="item-list">
-                    <!-- Inventory items will be dynamically added here -->
-                </div>
-            </div>
+        <!-- Inventory items container -->
+        <div class="inventory-container" id="item-list">
+          <!-- Inventory items will be dynamically added here -->
         </div>
-        <div id="bottom menu">
-            <div class="buttons">
-                <div id="inventoryButton" class="strangeButton">  <img src="../Images/menu-inventory.png"> </div>
-                <div id="unitsButton" class="strangeButton"> <a href="units.html"> <img src="../Images/item-crew.png"> </a> </div>
-                <div id="loreButton" class="strangeButton"> <a href="lore.html"> <img src="../Images/menu-lore.png"> </a> </div>
-            </div>
-            <div id="actionMenu"></div>
+      </div>
+    </div>
+    <div id="bottom menu">
+      <div class="buttons">
+        <div id="inventoryButton" class="strangeButton">
+          <img src="../Images/menu-inventory.png" />
         </div>
-    </body>
-    <script src="main.js"></script>
+        <div id="unitsButton" class="strangeButton">
+          <a href="units.html"> <img src="../Images/item-crew.png" /> </a>
+        </div>
+        <div id="loreButton" class="strangeButton">
+          <a href="lore.html"> <img src="../Images/menu-lore.png" /> </a>
+        </div>
+      </div>
+      <div id="actionMenu"></div>
+    </div>
+  </body>
+  <script src="main.js"></script>
 </html>

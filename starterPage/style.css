@@ -21,7 +21,7 @@ body {
 .dark-background {
   width: 100vw;
   height: 100vh;
-  background-color: rgba(34,34,34,.6);
+  background-color: rgba(46, 40, 40, 0.6);
   position: fixed;
   top: 0;
   left: 0;

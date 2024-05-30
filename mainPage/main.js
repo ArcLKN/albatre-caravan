@@ -1059,7 +1059,7 @@ function tableCreate(node, army, reverse=false) {
 			const td = tr.insertCell();
 			td.appendChild(document.createTextNode(`Row ${3 - i + 1}`));
 			td.classList.add("armyRowCell");
-  		createCol(tr, i);
+  		createCol(tr, 3 - i + 1);
   	}
   }
 	node.appendChild(tbl);
@@ -1160,7 +1160,7 @@ function manageBattle() {
 	}
 
 	console.log("log: start create tables team")
-	tableCreate(playerSide, copy_playerTeam, true);
+	tableCreate(playerSide, copy_playerTeam, false);
 	tableCreate(enemySide, copy_enemyTeam, true);
 
 	let nbrUnitT1 = 0;

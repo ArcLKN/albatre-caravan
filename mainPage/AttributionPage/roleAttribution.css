@@ -38,6 +38,20 @@ h2 {
     color: white;
 }
 
+.global-ressources {
+    display: flex;
+}
+
+.left-ressources, .right-ressources {
+    display: flex;
+    flex-direction: column;
+    margin-right: 64px;
+}
+
+#role span {
+    margin-top: 8px;
+}
+
 #role button {
     border: none;
     padding: 16px;

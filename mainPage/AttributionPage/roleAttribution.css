@@ -73,6 +73,12 @@ h2 {
     font-weight: 500;
 }
 
+#select-all:hover, #deselect-all:hover {
+    background-color: white;
+    color: #222;
+    transition: .3s ease;
+}
+
 #crewMembers p {
     margin-bottom: 16px;
     text-transform: uppercase;

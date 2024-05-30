@@ -110,6 +110,7 @@ h2 {
 
 .member .member-about {
     display: flex;
+    align-items: center
 }
 
 .trait {

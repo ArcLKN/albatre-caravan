@@ -1,101 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
 body {
   overflow: hidden;
-  background-color: #FFEBCD;
+  background-image: url('https://cdn.britannica.com/86/115086-050-0C320EC1/Camel-caravan-Sahara-Morocco.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
   text-align: center;
-  margin: 0px 0px 0px 0px;
-  padding: 0px 0px 0px 0px;
-font-family: "Franklin Gothic", Arial;
 }
 
+.dark-background {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(34,34,34,.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+/* Number of turn text */
+#turnX {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: 8px;
+}
+
+/* Possible destinations text */
 h1 {
-font-size: 40px;
-font-family: Berlin Sans FB;
-text-align: center;
+  font-size: 40px;
+  font-weight: 800;
 }
 
+/* Resources bar */
 ul {
-  margin: 0px 0px 0px 0px;
   display: flex;
   flex-direction: row;
 }
 
+/* Resources bar */
 li {
-  margin: 0px 0px 0px 0px;
-    list-style-type: none ;
-    padding: 8px;
-    border: 1px grey solid;
-    width: 20vw;
-    background-color: #ebdfd1;
+  list-style-type: none ;
+  padding: 16px;
+  width: 100%;
+  background-color: rgba(115, 115, 115, .3);
 	display: flex;
   flex-direction: row;
-align-content: center;
+  align-content: center;
   flex-wrap: wrap;
-justify-content: space-evenly;
+  justify-content: space-evenly;
   align-items: center;
+  color: white;
 }
 
-ul li img{
+.left-list {
+  transform: skewX(30deg);
+  margin-right: 8px;
+
+}
+.left-list p, .left-list i {
+  transform: skewX(-30deg);
+}
+.center-list {
+  background-color: #fff;
+  clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 12% 100%);
+}
+#locationName {
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #222222;
+}
+.right-list {
+  transform: skewX(-30deg);
+  margin-left: 8px;
+}
+.right-list p, .right-list i {
+  transform: skewX(30deg);
+}
+
+
+/* Image pas remplacée de la ressource bleue là */
+/* ul li img{
   margin: 0px 0px 0px 0px;
   width: 40px;
   height: 40px;
 align-content: center;
-}
+} */
 
+/* ------ ??? ------ */
 tr { display: block; float: left; align-content: center;}
 th, td { display: block; align-content: center;}
 
 div[id='top menu'] {
+  margin: 0 auto;
   display: flex;
   flex-direction: row;
-  width: max;
+  width: 80%;
   height: 5vh;
-  margin: 0px 0px 0px 0px;
 }
 div[id='top menu'] h1 {
-  margin: 0px 0px 0px 0px;
+  margin: 0;
 }
 div[id='bottom menu'] {
-  background-color: white;
+  background: linear-gradient(to top, rgba(24,24,24,1), rgba(24,24,24,0.5), rgba(24,24,24,0));
   display: flex;
   flex-direction: row;
-  height: 30vh;
+  height: 40vh;
 }
 div[id='middle menu'] {
   margin: 0px 0px 0px 0px;
   display: flex;
   flex-direction: row;
   justify-content: center;
+  height: 56vh;
 }
+
 button {
-  background-color: cream;
-  color: black;
+  background-color: rgba(0,0,0,0);
+  color: white;
   font-size: 16px;
-  border-radius: 1px;
-  width: 500px;
-  height: 50px;
+  text-transform: uppercase;
+  letter-spacing: 8px;
+  border: 1px solid white;
+  border-radius: 50px;
+  width: 256px;
+  height: 48px;
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 div.buttons {
   display: flex;
   flex-direction: column;
-  width: 3vw;
-  background-color: white;
+  width: 8vw;
+  background-color: rgba(0,0,0,0);
   justify-content: space-evenly;
   align-items: stretch;
 }
 
-
-div.strangeButton {
-  height: 10vh;
-  margin: 1px 1px 0px 1px;
- background-color: #ebdfd1;
-display: flex;
-align-items: center;
-justify-content: center;
+button:hover {
+  background-color: white;
+  color: rgba(115, 115, 115, 1);
+  transition: .3s ease;
 }
 
-div.strangeButton img {
-  width: 40px;
-  height: 40px;
+div.strangeButton {
+  height: 8vh;
+  width: 8vh;
+  margin: 0px 0px 0px 32px;
+  background-color: rgba(115, 115, 115, .3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.strangeButton:hover {
+  height: 9vh;
+  width: 9vh;
+  transition: .3s ease;
+}
+
+.bx-box, .bx-group, .bx-book-open {
+  font-size: 24px;
+  color: white;
 }
 
 .ressources {
@@ -110,16 +183,15 @@ div.strangeButton img {
 }
 
 #actionMenu {
-  margin: 1px 1px 1px 0px;
-  width: 97vw;
-  height: 30vh;
-  background-color: OldLace;
+  width: 86vw;
+  background-color: rgba(24, 24, 24, 0);
   display: flex;
   flex-direction: column;
   align-content: center;
   flex-wrap: wrap;
-justify-content: center;
-align-items: center
+  justify-content: center;
+  align-items: center;
+  color: white;
 }
 
 #actionMenu button {

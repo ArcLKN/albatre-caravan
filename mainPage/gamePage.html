@@ -13,39 +13,42 @@
   </head>
 
   <body>
+    <div class="dark-background"></div>
+
     <div id="top menu">
       <!--<div id="escapeBox"><img src="../Images/back_arrow.png"></div>-->
       <ul class="ressources">
-        <li>
-          <img src="../Images/item-water.png" />
+        <li class="left-list">
+          <i class="bx bx-water"></i>
           <p id="nb_water">5</p>
           <p id="bonus_water"></p>
         </li>
-        <li>
-          <img src="../Images/item-food.png" />
+        <li class="left-list">
+          <i class="bx bx-baguette"></i>
           <p id="nb_food">5</p>
           <p id="bonus_food"></p>
         </li>
-        <li>
-          <img src="../Images/item-money.png" />
+        <li class="left-list">
+          <i class="bx bx-coin"></i>
           <p id="nb_money">5</p>
           <p id="bonus_money"></p>
         </li>
-        <li><p id="locationName">Desert</p></li>
-        <li>
-          <img src="../Images/item-crew.png" />
+        <li class="center-list"><p id="locationName">Desert</p></li>
+        <li class="right-list">
+          <i class="bx bx-group"></i>
           <p id="nb_crew">5</p>
         </li>
-        <li>
-          <img src="../Images/item-morale.png" />
+        <li class="right-list">
+          <i class="bx bx-happy-alt"></i>
           <p id="nb_morale">5</p>
         </li>
-        <li>
+        <li class="right-list">
           <img src="../Images/ressource.png" />
           <p id="nb_goods">5</p>
         </li>
       </ul>
     </div>
+
     <div id="middle menu">
       <img id="center-image" src="../Images/Illustration.jpg" />
       <div id="inventoryPage" class="hidden">
@@ -86,16 +89,17 @@
         </div>
       </div>
     </div>
+
     <div id="bottom menu">
       <div class="buttons">
         <div id="inventoryButton" class="strangeButton">
-          <img src="../Images/menu-inventory.png" />
+          <i class="bx bx-box"></i>
         </div>
         <div id="unitsButton" class="strangeButton">
-          <a href="units.html"> <img src="../Images/item-crew.png" /> </a>
+          <a href="units.html"> <i class="bx bx-group"></i> </a>
         </div>
         <div id="loreButton" class="strangeButton">
-          <a href="lore.html"> <img src="../Images/menu-lore.png" /> </a>
+          <a href="lore.html"> <i class="bx bx-book-open"></i> </a>
         </div>
       </div>
       <div id="actionMenu"></div>

@@ -328,8 +328,15 @@ function prepareNarration() {
   ["narration_text", "narration_button", "narration_div"].forEach((e) =>
     tempIDs.push(e)
   );
-
-  centerImage = document.getElementById("center-image");
+  if (document.getElementById("center-image")) {
+	centerImage = document.getElementById("center-image");
+  }
+  else {
+	let middleMenu = document.getElementById("middle menu");
+	centerImage = document.createElement("div");
+	centerImage.setAttribute("id", "center-image")
+	middleMenu.appendChild(centerImage)
+  }
   centerImage.src = "../Images/cine-1-7.png";
   currentTextNumber = 1;
   currentTextPos = 0;

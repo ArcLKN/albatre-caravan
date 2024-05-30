@@ -130,10 +130,6 @@ button {
   border-radius: 50px;
   width: 256px;
   height: 48px;
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
 }
 div.buttons {
   display: flex;
@@ -192,6 +188,8 @@ div.strangeButton {
   justify-content: center;
   align-items: center;
   color: white;
+  font-weight: 400;
+  border: 1px solid white;
 }
 
 #actionMenu button {
@@ -202,20 +200,12 @@ div.strangeButton {
 }
 
 #escapeBox {
-
-display: flex;
-
-align-items: center;
-justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 3vw;
   margin: 0px 0px 0px 0px;
   background-color: white;
-}
-
-#center-image {
-  height: 65vh;
-  margin: 0 auto;
-
 }
 
 #resolveButton {

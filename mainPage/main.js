@@ -1038,7 +1038,12 @@ function tableCreate(node, army, reverse=false) {
 		for (let unit in army["row"+i]) {
 			const td = tr.insertCell();
 			td.style.width = '15vw';
-			td.appendChild(document.createTextNode(`${army["row"+i][unit]['name']}: ${army["row"+i][unit]['health']}/${army["row"+i][unit]['max_health']}`));
+			// What is written in each unit cell.
+			td.appendChild(document.createTextNode(`
+			${army["row"+i][unit]['name']}: 
+			${army["row"+i][unit]['health']}/${army["row"+i][unit]['max_health']} HP 
+			${army["row"+i][unit]['stamina']} SP
+			`));
 			td.classList.add("unitCell");
 		}
 	}
@@ -1141,6 +1146,15 @@ function manageBattle() {
 	enemySide.classList.add("unitList");
 	middleMenu.appendChild(playerSide);
 	middleMenu.appendChild(enemySide);
+
+	for (let each_unit in copy_playerTeam["row1"]) {
+		if (copy_playerTeam["row1"][each_unit]["stamina"] == 0) {
+			copy_playerTeam["row1"][each_unit]["health"] -= 1
+		}
+		else {
+			copy_playerTeam["row1"][each_unit]["stamina"] -= 1
+		}
+	}
 
 	if (copy_playerTeam["row1"].length == 0) {
 		copy_playerTeam["row1"] = copy_playerTeam["row2"]

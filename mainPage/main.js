@@ -67,6 +67,7 @@ function moraleYieldDef() {}
 // The severals yields decrease by one if harvested each turn.
 var groupOfEnemies = {row1:[],row2:[],row3:[]};
 var enemyType;
+let baseEnemyCounterLuck = 1;
 var enemyNumber;
 var possibleDestinations;
 var locations = [
@@ -1184,10 +1185,15 @@ function manageBattle() {
 	}
 }
 
+// Icones pour chaque arme
+// Fond pour les unités en fonction de leur point de vie
+
 function concludeBattle() {
 	tempIDs.push("nbrTurnBattle")
-	removeTempIDs()
-	changeLocation
+	removeTempIDs();
+	document.querySelectorAll('[class="unitList"]').forEach((e) => e.remove());
+	document.getElementById("center-image").classList.remove("hidden");
+	changeMenu("turnX");
 }
 
 function yourTurn(phase) {
@@ -1440,11 +1446,11 @@ function manageEndTurnEvent () {
 		return changeMenu("turnX");
 	}
 	if (numberOfTurns > -1) {
-		let pBattle = 1;
+		let pBattle = baseEnemyCounterLuck;
 		pBattle += (crewTotal.length) / 100;
 		let pRandom = Math.random();
 		if (pRandom < pBattle) {
-			manageArmy();
+			return manageArmy();
 		}
 	}
 	return changeMenu("turnX");
@@ -1585,7 +1591,6 @@ function manageDeployDistribution() {
   window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
 }
 
-
 function Defeat(option) {
   tempIDs.push("dyingText");
   var dyingText = document.createElement("p");
@@ -1605,15 +1610,13 @@ function manageCarrier() {
 	window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
 }
 
+// Function that is executed when a battle is triggered.
 function manageArmy() {
-
-	statusTurn = "fight";
-	saveSessionStorage();
-	window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
+	console.log("MANAGE ARMY")
 
 	let enemyTypeRand = Math.random();
 	for (let enemyType in playerLocation['enemyType']) {
-		if (enemyTypeRand <= playerLocation['enemyType'][eachType]) {
+		if (enemyTypeRand <= playerLocation['enemyType'][enemyType]) {
 			break;
 		}
 	}
@@ -1628,6 +1631,8 @@ function manageArmy() {
 		console.log(newEnemy)
 		groupOfEnemies[Math.floor(Math.random() * 3)].push(newEnemy)
 	}
+
+	let node = document.getElementById("actionMenu")
 
 
 	tempIDs.push("ennemyApprochingText");
@@ -1647,6 +1652,40 @@ function manageArmy() {
 		saveSessionStorage();
 		window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
 	});
+
+	tempIDs.push("fleeArmy");
+	var fleeArmy = document.createElement("button");
+	fleeArmy.setAttribute("id", "fleeArmy");
+	fleeArmy.textContent = "Flee";
+	node.appendChild(fleeArmy);
+
+	fleeArmy.addEventListener("click", function () {
+		removeTempIDs()
+		if (Math.random() <= 0.5) {
+			turnX();
+		}
+		else {
+			removeTempIDs();
+			
+			tempIDs.push("ennemyApprochingText");
+			var ennemyApprochingText = document.createElement("p");
+			ennemyApprochingText.setAttribute("id", "ennemyApprochingText");
+			ennemyApprochingText.textContent = "You did not succeed to flee.";
+			node.appendChild(ennemyApprochingText);
+
+			tempIDs.push("deployArmy");
+			var deployArmy = document.createElement("button");
+			deployArmy.setAttribute("id", "deployArmy");
+			deployArmy.textContent = "Deploy Army";
+			node.appendChild(deployArmy);
+
+			deployArmy.addEventListener("click", function () {
+			statusTurn = "fight";
+			saveSessionStorage();
+			window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
+	});
+		}
+	  });
 	
 }
 
@@ -1702,7 +1741,7 @@ function changeMenu(newMenu = "None", option = null) {
 
 onLoad();
 
-// renders the invntory items as they would be seen in the inventory page
+// renders the inventory items as they would be seen in the inventory page
 function renderItems(filterType = 'all') {
     const itemList = document.getElementById('item-list');
     itemList.innerHTML = ''; // Clear previous items

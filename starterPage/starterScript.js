@@ -369,6 +369,7 @@ baseUnit = {
     name: "Cloth",
   },
   injuries: 0,
+  stamina: 10,
 };
 
 var luckTrait = [0.6, 0.7, 0.8, 0.9, 0.95];
@@ -455,6 +456,7 @@ specialsTraitsManager = {
   },
   sick: {
     health: -2,
+    endurance: -2,
   },
   archer: {
     weaponProficiency: {
@@ -472,6 +474,7 @@ specialsTraitsManager = {
     resistance: {
       phyDefense: 1,
     },
+    endurance: 2,
   },
   protector: {
     resistance: {
@@ -482,6 +485,7 @@ specialsTraitsManager = {
   },
   healthy: {
     health: 2,
+    endurance: 2,
   },
   mummy: {
     needs: {
@@ -617,6 +621,7 @@ specialsTraitsManager = {
       damageAbs: -1,
     },
     carryValue: -2,
+    endurance: -4,
   },
   chivalrous: {
     resistance: {
@@ -646,6 +651,7 @@ specialsTraitsManager = {
     resistance: {
       phyDefense: 1,
     },
+    endurance: -2,
   },
   anorexic: {
     health: -2,

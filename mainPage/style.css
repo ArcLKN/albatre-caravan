@@ -178,6 +178,10 @@ div.strangeButton {
   border-radius: 5px;
 }
 
+#center-image {
+  margin-top: 16px;
+}
+
 #actionMenu {
   width: 86vw;
   background-color: rgba(24, 24, 24, 0);

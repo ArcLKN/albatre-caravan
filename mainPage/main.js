@@ -1039,18 +1039,40 @@ function tableCreate(node, army, reverse=false) {
 	tbl = document.createElement('table');
 	tbl.style.width = '100%';
 	tbl.style.height = '100%';
-	tbl.style.border = '1px solid black';
 
 	function createCol(tr, i) {
 		for (let unit in army["row"+i]) {
 			const td = tr.insertCell();
+			let textTdDiv = document.createElement("div");
+			textTdDiv.classList.add("textTdDiv")
+			let unitImage = document.createElement("img");
+			unitImage.src = "../" + army["row"+i][unit]["image"];
+			console.log("../" + army["row"+i][unit]["image"])
+			td.appendChild(unitImage);
 			td.style.width = '15vw';
 			// What is written in each unit cell.
-			td.appendChild(document.createTextNode(`
-			${army["row"+i][unit]['name']}: 
-			${army["row"+i][unit]['health']}/${army["row"+i][unit]['max_health']} HP 
-			${army["row"+i][unit]['stamina']} SP
+			td.appendChild(textTdDiv);
+			textTdDiv.appendChild(document.createTextNode(`
+			${army["row"+i][unit]['name']}
 			`));
+			let heartDiv = document.createElement("div");
+			textTdDiv.appendChild(heartDiv);
+			let heartIcon = document.createElement("i");
+			heartIcon.classList.add("bx");
+			heartIcon.classList.add("bx-heart");
+			heartDiv.appendChild(document.createTextNode(`
+			${army["row"+i][unit]['health']}
+			`));
+			heartDiv.appendChild(heartIcon);
+			let staminaDiv = document.createElement("div");
+			textTdDiv.appendChild(staminaDiv);
+			let staminaIcon = document.createElement("i");
+			staminaIcon.classList.add("bx");
+			staminaIcon.classList.add("bx-run");
+			staminaDiv.appendChild(document.createTextNode(`
+			${army["row"+i][unit]['stamina']}
+			`));
+			staminaDiv.appendChild(staminaIcon);
 			td.classList.add("unitCell");
 		}
 	}
@@ -1108,6 +1130,10 @@ function initBattle() {
 	let enemySide = document.createElement("div");
 	enemySide.classList.add("unitList");
 	middleMenu.appendChild(playerSide);
+	let vsNode = document.createElement("p")
+	vsNode.textContent = "VS"
+	vsNode.setAttribute("id", "vsNode");
+	middleMenu.appendChild(vsNode);
 	middleMenu.appendChild(enemySide);
 	console.log("log: start create tables team")
 	tableCreate(playerSide, gatherer);
@@ -1145,6 +1171,7 @@ function manageBattle() {
 	console.log(copy_playerTeam)
 
 	document.querySelectorAll('[class="unitList"]').forEach((e) => e.remove());
+	document.getElementById("vsNode").remove()
 
 	let middleMenu = document.getElementById("middle menu");
 	let playerSide = document.createElement("div");
@@ -1152,6 +1179,10 @@ function manageBattle() {
 	let enemySide = document.createElement("div");
 	enemySide.classList.add("unitList");
 	middleMenu.appendChild(playerSide);
+	let vsNode = document.createElement("p")
+	vsNode.textContent = "VS"
+	vsNode.setAttribute("id", "vsNode");
+	middleMenu.appendChild(vsNode);
 	middleMenu.appendChild(enemySide);
 
 	for (let each_unit in copy_playerTeam["row1"]) {
@@ -1160,6 +1191,14 @@ function manageBattle() {
 		}
 		else {
 			copy_playerTeam["row1"][each_unit]["stamina"] -= 1
+		}
+	}
+	for (let each_unit in copy_enemyTeam["row1"]) {
+		if (copy_enemyTeam["row1"][each_unit]["stamina"] == 0) {
+			copy_enemyTeam["row1"][each_unit]["health"] -= 1
+		}
+		else {
+			copy_enemyTeam["row1"][each_unit]["stamina"] -= 1
 		}
 	}
 

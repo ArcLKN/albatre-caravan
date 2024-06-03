@@ -1753,8 +1753,8 @@ function renderItems(filterType = 'all') {
             const item = allItems[itemId]; // Get item details from allItems using itemId
             const quantity = inventory[itemId].volume; // Retrieve the quantity for the current item
 
-            // Check if the item matches the filter type
-            if (filterType === 'all' || item.type === filterType) {
+            // Check if the item matches the filter type and has a non-zero quantity
+            if ((filterType === 'all' || item.type === filterType) && quantity != 0) {
                 const itemElement = document.createElement('div');
                 itemElement.className = `inventory-item rarity-${item.rarity.toLowerCase()}`;
 
@@ -1835,8 +1835,6 @@ function renderItems(filterType = 'all') {
     }
 }
 
-
-
 const filterSelect = document.getElementById('item-type-filter');
 filterSelect.addEventListener('change', function() {
     const selectedType = this.value;
@@ -1850,7 +1848,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const centerImage = document.getElementById('center-image');
 
     inventoryButton.addEventListener('click', function() {
-		toggleHidden(); 
+        toggleHidden();
         inventoryPage.classList.toggle('hidden');
         inventoryPage.classList.toggle('visible');
         // Call the function initially
@@ -1862,7 +1860,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function toggleHidden() {
-	const centerImage = document.getElementById('center-image');
+    const centerImage = document.getElementById('center-image');
     if (centerImage.classList.contains('hidden')) {
         // If it's hidden, remove the 'hidden' class
         centerImage.classList.remove('hidden');

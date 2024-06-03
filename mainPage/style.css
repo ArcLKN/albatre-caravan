@@ -256,7 +256,7 @@ buttton is clicked*/
   display: flex;
   flex-direction: column;
   gap: 1px; /* Gap between grid items */
-  align-content:flex-start;
+  align-content:center;
   border-radius: 3px; /* Rounded border for the container */
   padding: 20px; /* Padding inside the container */
   justify-content: center;

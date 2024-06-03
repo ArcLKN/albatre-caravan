@@ -1142,7 +1142,27 @@ function save(varName, value) {
   var battleNbrTurn = 0;
   
   function initBattle() {
+	
 	console.log("INIT BATTLE");
+	let nbrUnitT1 = 0;
+	for (let i = 0; i < 3; i++) {
+		nbrUnitT1 += gatherer["row" + String(i + 1)].length;
+	  }
+	if (nbrUnitT1 <= 0) {
+		let actionMenu = document.getElementById("actionMenu");
+		console.log("ENEMY TEAM WON");
+		removeTempIDs();
+		let finishBattleButton = document.createElement("button");
+		finishBattleButton.textContent = "Finish Battle";
+		tempIDs.push("finishBattleButton");
+		finishBattleButton.setAttribute("id", "finishBattleButton");
+		finishBattleButton.addEventListener("click", function () {
+		  concludeBattle();
+		});
+		actionMenu.appendChild(finishBattleButton);
+		return
+	  }
+	
 	console.log("Group of Enemies", groupOfEnemies)
 		let actionBar = document.getElementById("actionMenu");
 		document.getElementById("center-image").classList.add("hidden");

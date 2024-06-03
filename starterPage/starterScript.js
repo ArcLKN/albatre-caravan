@@ -743,8 +743,7 @@ specialsTraitsManager = {
     health: 2,
     resistance: {
       slashing: 1,
-    },
-    image: "enemy/legionary.png"
+    }
   }
 };
 

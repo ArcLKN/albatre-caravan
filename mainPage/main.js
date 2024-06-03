@@ -1385,6 +1385,7 @@ function save(varName, value) {
   }
   
   function turnX() {
+	updateRessourcesDisplay();
 	document.getElementById("center-image").classList.toggle("hidden");
 	["turnX", "turnX_button"].forEach((e) => tempIDs.push(e));
   
@@ -1801,9 +1802,7 @@ function save(varName, value) {
 	  removeTempIDs();
 	  if (Math.random() <= 0.5) {
 		turnX();
-	  } else {
-		removeTempIDs();
-  
+	  } else {  
 		tempIDs.push("ennemyApprochingText");
 		var ennemyApprochingText = document.createElement("p");
 		ennemyApprochingText.setAttribute("id", "ennemyApprochingText");
@@ -1825,15 +1824,42 @@ function save(varName, value) {
 	  }
 	});
 
+	
+	if (playerLocation["enemyType"][enemyType]["bribable"]) {
 	tempIDs.push("bribeArmy");
 	var bribeArmy = document.createElement("button");
 	bribeArmy.setAttribute("id", "bribeArmy");
 	bribeArmy.textContent = "Bribe";
 	node.appendChild(bribeArmy);
 
-	fleeArmy.addEventListener("click", function () {
+	bribeArmy.addEventListener("click", function () {
+		removeTempIDs();
+		let sumToPay = numberOfEnnemy * (20 + Math.floor(5 * Math.random()));
+		console.log("Sum to pay", sumToPay)
+		if (sumToPay <= money) {
+			money -= sumToPay;
+			return turnX();
+		}
+		tempIDs.push("ennemyApprochingText");
+		var ennemyApprochingText = document.createElement("p");
+		ennemyApprochingText.setAttribute("id", "ennemyApprochingText");
+		ennemyApprochingText.textContent = "You did not have enough money to bribe the enemies";
+		node.appendChild(ennemyApprochingText);
 		
+		tempIDs.push("deployArmy");
+		var deployArmy = document.createElement("button");
+		deployArmy.setAttribute("id", "deployArmy");
+		deployArmy.textContent = "Deploy Army";
+		node.appendChild(deployArmy);
+  
+		deployArmy.addEventListener("click", function () {
+		  statusTurn = "fight";
+		  saveSessionStorage();
+		  window.location.href =
+			"../mainPage/AttributionPage/roleAttribution.html";
+		});
 	})
+}
 
 	
 	console.log("Group of Enemies", groupOfEnemies)
@@ -1952,7 +1978,7 @@ function save(varName, value) {
 			titleElement.style.display = "block";
 			imgElement.style.display = "block";
 		  });
-  
+
 		  itemList.appendChild(itemElement);
 		}
 	  }

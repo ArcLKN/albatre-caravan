@@ -21,184 +21,196 @@ function loadSessionStorage() {
   idleCrew = parseInt(sessionStorage.getItem("idleCrew"));
   morale = parseInt(sessionStorage.getItem("morale"));
   
-  authority = parseInt(sessionStorage.getItem("authority"));
-  water = parseInt(sessionStorage.getItem("water"));
-  numberOfTurns = sessionStorage.getItem("numberOfTurns");
-  famineTurns = parseInt(sessionStorage.getItem("famineTurns"));
-  inventory = JSON.parse(sessionStorage.getItem("inventory"));
-  playerLocation = JSON.parse(sessionStorage.getItem("playerLocation"));
-  gatherer = JSON.parse(sessionStorage.getItem("gatherer"));
-  statusTurn = sessionStorage.getItem("statusTurn");
-  allItems = JSON.parse(sessionStorage.getItem("allItems"));
-  baseUnit = JSON.parse(sessionStorage.getItem("baseUnit"));
-  specialsTraitsManager = JSON.parse(sessionStorage.getItem("allTraits"));
-}
-
-// All the variables we want to save and share through every JS files.
-function saveSessionStorage() {
-  save("statusTurn", statusTurn);
-  save("crewMembers", crewMembers);
-  // Number of people player has, thus number of people he can use.
-  save("crewTotal", crewTotal);
-  // Distribution of the crew, the total can't be > crewTotal.
-  save("crewTypes", crewTypes); // Free crew can become carriers to carry more goods.
-  save("idleCrew", idleCrew); // Number of remaining people to distribute.
-  save("morale", morale);
-  save("money", money);
-  save("authority", authority);
-  save("water", water);
-  save("numberOfTurns", numberOfTurns);
-  save("famineTurns", famineTurns);
-  save("inventory", inventory);
-  save("playerLocation", playerLocation);
-  save("gatherer", gatherer);
-}
-
-// Simply used to capitalize a word. let capitalizedWord = Capitalize(the_word_you_want_to_capitalize);
-function Capitalize(e) {
-  return e[0].toUpperCase() + e.slice(1);
-}
-
-// Initializing base variables that aren't used on other JS files.
-var currentPorterage; // Capacity of the caravan to carry goods. It is influenced by the number of animals such as camels and the number of carriers.
-var neededPorterage; // Weight of all the items transported by the caravan.
-// Each unit of food and water is equal to one weight unit.
-function moraleYieldDef() {}
-// The severals yields decrease by one if harvested each turn.
-var groupOfEnemies = {row1:[],row2:[],row3:[]};
-var enemyType;
-let baseEnemyCounterLuck = 1;
-var enemyNumber;
-var possibleDestinations;
-var locations = [
-  {	
-	type: "nil_shore",
-	name: "Nil shore",
-	isTradable: false,
-	doEnemySpawn: true,
-	enemyType: {"legionary": 0.70, "bandit":1},
-	description:
-	  "A fertile place escaping the harsh life of the desert. In this place you can freely gather high quantity of water and decent quantity of food.",
-	gatheringValues: {
-	  waterYield: 3,
-	  foodYield: 2,
-	},
-	possibleEvents: [],
-	possibleDestinations: [
-	  { type: "village", luck: 0.5 },
-	  { type: "nil_shore", luck: 1 },
-	  { type: "desert", luck: 1 },
-	  { type: "fluvial_city", luck: 0.2 },
-	],
-  },
-  {
-	type: "village",
-	name: "Village",
-	isTradable: true,
-	doEnemySpawn: false,
-	description:
-	  "A bunch of organized houses near the shore of the Nil assuring your caravan a bit of peace in the desert. Don't hesitate to find a local merchant to buy useful items for the lowest prices of the country.",
-	gatheringValues: {
-	  waterYield: 2,
-	  moraleYield: true,
-	},
-	possibleEvents: [],
-	possibleDestinations: [
-	  { type: "village", luck: 0.1 },
-	  { type: "nil_shore", luck: 0.8 },
-	  { type: "desert", luck: 1 },
-	],
-	buyableGoods: {
-	5: {
-		volume: 100,
-		price: 4,
+	authority = parseInt(sessionStorage.getItem("authority"));
+	water = parseInt(sessionStorage.getItem("water"));
+	numberOfTurns = sessionStorage.getItem("numberOfTurns");
+	famineTurns = parseInt(sessionStorage.getItem("famineTurns"));
+	inventory = JSON.parse(sessionStorage.getItem("inventory"));
+	playerLocation = JSON.parse(sessionStorage.getItem("playerLocation"));
+	gatherer = JSON.parse(sessionStorage.getItem("gatherer"));
+	statusTurn = sessionStorage.getItem("statusTurn");
+	allItems = JSON.parse(sessionStorage.getItem("allItems"));
+	baseUnit = JSON.parse(sessionStorage.getItem("baseUnit"));
+	specialsTraitsManager = JSON.parse(sessionStorage.getItem("allTraits"));
+	groupOfEnemies = JSON.parse(sessionStorage.getItem("groupOfEnemies"));
+  }
+  
+  // All the variables we want to save and share through every JS files.
+  function saveSessionStorage() {
+	save("statusTurn", statusTurn);
+	save("crewMembers", crewMembers);
+	// Number of people player has, thus number of people he can use.
+	save("crewTotal", crewTotal);
+	// Distribution of the crew, the total can't be > crewTotal.
+	save("crewTypes", crewTypes); // Free crew can become carriers to carry more goods.
+	save("idleCrew", idleCrew); // Number of remaining people to distribute.
+	save("morale", morale);
+	save("money", money);
+	save("authority", authority);
+	save("water", water);
+	save("numberOfTurns", numberOfTurns);
+	save("famineTurns", famineTurns);
+	save("inventory", inventory);
+	save("playerLocation", playerLocation);
+	save("gatherer", gatherer);
+	save("groupOfEnemies", groupOfEnemies);
+  }
+  
+  // Simply used to capitalize a word. let capitalizedWord = Capitalize(the_word_you_want_to_capitalize);
+  function Capitalize(e) {
+	return e[0].toUpperCase() + e.slice(1);
+  }
+  
+  // Initializing base variables that aren't used on other JS files.
+  var currentPorterage; // Capacity of the caravan to carry goods. It is influenced by the number of animals such as camels and the number of carriers.
+  var neededPorterage; // Weight of all the items transported by the caravan.
+  // Each unit of food and water is equal to one weight unit.
+  function moraleYieldDef() {}
+  // The severals yields decrease by one if harvested each turn.
+  var enemyType;
+  let baseEnemyCounterLuck = 1;
+  var enemyNumber;
+  var possibleDestinations;
+  var locations = [
+	{
+	  type: "nil_shore",
+	  name: "Nil shore",
+	  isTradable: false,
+	  doEnemySpawn: true,
+	  enemyType: { legionary: {
+		  luck: 0.7,
+		  minSize: 3,
+		  maxSize: 50,
+		  playerCaravanSizeFactor: 0.25,
+		  bribable: true,
+	  }, bandit: {
+		  luck: 1,
+		  minSize: 5,
+		  maxSize: 50,
+		  playerCaravanSizeFactor: 0.15,
+	  } },
+	  description:
+		"A fertile place escaping the harsh life of the desert. In this place you can freely gather high quantity of water and decent quantity of food.",
+	  gatheringValues: {
+		waterYield: 3,
+		foodYield: 2,
 	  },
-	7:{
-		volume: 3,
-		price: 500,
-	  },
+	  possibleEvents: [],
+	  possibleDestinations: [
+		{ type: "village", luck: 0.5 },
+		{ type: "nil_shore", luck: 1 },
+		{ type: "desert", luck: 1 },
+		{ type: "fluvial_city", luck: 0.2 },
+	  ],
 	},
-  },
-  {
-	type: "desert",
-	name: "Desert",
-	isTradable: false,
-	description: "Bunch of sand.",
-	gatheringValues: {},
-	possibleEvents: [],
-	possibleDestinations: [
-	  { type: "village", luck: 0.1 },
-	  { type: "nil_shore", luck: 0.3 },
-	  { type: "desert", luck: 1 },
-	  { type: "oasis", luck: 0.1 },
-	  { type: "desert_city", luck: 0.1 },
-	],
-  },
-  {
-	type: "desert_city",
-	name: "Desert city",
-	isTradable: true,
-	description:
-	  "In the middle of the desert, majestic buildings made of polished sandstones rise from the sand welcoming your caravan.",
-	gatheringValues: {
-	  moraleYield: true,
-	},
-	possibleEvents: [],
-	possibleDestinations: [
-	  { type: "nil_shore", luck: 0.3 },
-	  { type: "desert", luck: 1 },
-	  { type: "oasis", luck: 0.1 },
-	  { type: "desert_city", luck: 0.1 },
-	],
-	buyableGoods: {
-	  5: {
-		volume: 100,
-		price: 8,
+	{
+	  type: "village",
+	  name: "Village",
+	  isTradable: true,
+	  doEnemySpawn: false,
+	  description:
+		"A bunch of organized houses near the shore of the Nil assuring your caravan a bit of peace in the desert. Don't hesitate to find a local merchant to buy useful items for the lowest prices of the country.",
+	  gatheringValues: {
+		waterYield: 2,
+		moraleYield: true,
 	  },
-	  0: {
-		volume: 2,
-		price: 1000,
-	  },
-	},
-	sellableGoods:{ 
-		  6: {
-			volume: 50,
-			price: 40,
-		  },
+	  possibleEvents: [],
+	  possibleDestinations: [
+		{ type: "village", luck: 0.1 },
+		{ type: "nil_shore", luck: 0.8 },
+		{ type: "desert", luck: 1 },
+	  ],
+	  buyableGoods: {
+		5: {
+		  volume: 100,
+		  price: 4,
 		},
-  },
-  {
-	type: "fluvial_city",
-	name: "Fluvial City",
-	isTradable: true,
-	description:
-	  "A city which whole economy resolves on the manufacture of writing materials from the papyrus plant, thanks to the fertility of the Nil shore.",
-	gatheringValues: {
-	  waterYield: 3,
-	  moraleYield: true,
+		7: {
+		  volume: 3,
+		  price: 500,
+		},
+	  },
 	},
-	possibleEvents: [],
-	possibleDestinations: [
-	  { type: "village", luck: 0.1 },
-	  { type: "nil_shore", luck: 1 },
-	  { type: "desert", luck: 1 },
-	],
-	buyableGoods: {
-	6: {
-		volume: 100,
-		price: 6,
+	{
+	  type: "desert",
+	  name: "Desert",
+	  isTradable: false,
+	  description: "Bunch of sand.",
+	  gatheringValues: {},
+	  possibleEvents: [],
+	  possibleDestinations: [
+		{ type: "village", luck: 0.1 },
+		{ type: "nil_shore", luck: 0.3 },
+		{ type: "desert", luck: 1 },
+		{ type: "oasis", luck: 0.1 },
+		{ type: "desert_city", luck: 0.1 },
+	  ],
 	},
-	5: {
-		volume: 50,
-		price: 20,
+	{
+	  type: "desert_city",
+	  name: "Desert city",
+	  isTradable: true,
+	  description:
+		"In the middle of the desert, majestic buildings made of polished sandstones rise from the sand welcoming your caravan.",
+	  gatheringValues: {
+		moraleYield: true,
+	  },
+	  possibleEvents: [],
+	  possibleDestinations: [
+		{ type: "nil_shore", luck: 0.3 },
+		{ type: "desert", luck: 1 },
+		{ type: "oasis", luck: 0.1 },
+		{ type: "desert_city", luck: 0.1 },
+	  ],
+	  buyableGoods: {
+		5: {
+		  volume: 100,
+		  price: 8,
+		},
+		0: {
+		  volume: 2,
+		  price: 1000,
+		},
+	  },
+	  sellableGoods: {
+		6: {
+		  volume: 50,
+		  price: 40,
+		},
+	  },
 	},
-	2: {
-		volume: 20,
-		price: 100,
-	},
-	3: {
-			volume: 20,
-			price: 100,
+	{
+	  type: "fluvial_city",
+	  name: "Fluvial City",
+	  isTradable: true,
+	  description:
+		"A city which whole economy resolves on the manufacture of writing materials from the papyrus plant, thanks to the fertility of the Nil shore.",
+	  gatheringValues: {
+		waterYield: 3,
+		moraleYield: true,
+	  },
+	  possibleEvents: [],
+	  possibleDestinations: [
+		{ type: "village", luck: 0.1 },
+		{ type: "nil_shore", luck: 1 },
+		{ type: "desert", luck: 1 },
+	  ],
+	  buyableGoods: {
+		6: {
+		  volume: 100,
+		  price: 6,
+		},
+		5: {
+		  volume: 50,
+		  price: 20,
+		},
+		2: {
+		  volume: 20,
+		  price: 100,
+		},
+		3: {
+		  volume: 20,
+		  price: 100,
 		},
 	4: {
 			volume: 20,
@@ -1660,88 +1672,100 @@ function manageArmy() {
 	node.appendChild(fleeArmy);
 
 	fleeArmy.addEventListener("click", function () {
-		removeTempIDs()
-		if (Math.random() <= 0.5) {
-			turnX();
-		}
-		else {
-			removeTempIDs();
-			
-			tempIDs.push("ennemyApprochingText");
-			var ennemyApprochingText = document.createElement("p");
-			ennemyApprochingText.setAttribute("id", "ennemyApprochingText");
-			ennemyApprochingText.textContent = "You did not succeed to flee.";
-			node.appendChild(ennemyApprochingText);
-
-			tempIDs.push("deployArmy");
-			var deployArmy = document.createElement("button");
-			deployArmy.setAttribute("id", "deployArmy");
-			deployArmy.textContent = "Deploy Army";
-			node.appendChild(deployArmy);
-
-			deployArmy.addEventListener("click", function () {
-			statusTurn = "fight";
-			saveSessionStorage();
-			window.location.href = "../mainPage/AttributionPage/roleAttribution.html";
+	  removeTempIDs();
+	  if (Math.random() <= 0.5) {
+		turnX();
+	  } else {
+		removeTempIDs();
+  
+		tempIDs.push("ennemyApprochingText");
+		var ennemyApprochingText = document.createElement("p");
+		ennemyApprochingText.setAttribute("id", "ennemyApprochingText");
+		ennemyApprochingText.textContent = "You did not succeed to flee.";
+		node.appendChild(ennemyApprochingText);
+  
+		tempIDs.push("deployArmy");
+		var deployArmy = document.createElement("button");
+		deployArmy.setAttribute("id", "deployArmy");
+		deployArmy.textContent = "Deploy Army";
+		node.appendChild(deployArmy);
+  
+		deployArmy.addEventListener("click", function () {
+		  statusTurn = "fight";
+		  saveSessionStorage();
+		  window.location.href =
+			"../mainPage/AttributionPage/roleAttribution.html";
+		});
+	  }
 	});
-		}
-	  });
-	
-}
 
-function changeMenu(newMenu = "None", option = null) {
-  updateRessourcesDisplay();
-  removeTempIDs();
-  if (newMenu == "turnX") {
-	return turnX();
+	tempIDs.push("bribeArmy");
+	var bribeArmy = document.createElement("button");
+	bribeArmy.setAttribute("id", "bribeArmy");
+	bribeArmy.textContent = "Bribe";
+	node.appendChild(bribeArmy);
+
+	fleeArmy.addEventListener("click", function () {
+		
+	})
+
+	
+	console.log("Group of Enemies", groupOfEnemies)
   }
-  if (newMenu == "special") {
-	if (playerLocation["isTradable"]) {
-	  return yourTurn("special");
-	} else {
-	  return changeMenu("crewAssignment");
+  
+  function changeMenu(newMenu = "None", option = null) {
+	updateRessourcesDisplay();
+	removeTempIDs();
+	if (newMenu == "turnX") {
+	  return turnX();
+	}
+	if (newMenu == "special") {
+	  if (playerLocation["isTradable"]) {
+		return yourTurn("special");
+	  } else {
+		return changeMenu("crewAssignment");
+	  }
+	}
+	  if (newMenu == "yourTurn_trade") {
+	  return manageTrade();
+	}
+	if (newMenu == "crewAssignment") {
+	  return yourTurn("crewAssignment");
+	}
+	if (newMenu == "yourTurn_deploy") {
+	  return manageDeployDistribution();
+	}
+	if (newMenu == "gathering") {
+	  return yourTurn(newMenu);
+	}
+	if (newMenu == "yourTurn_gather") {
+	  return changeMenu("gatherResolution");
+	}
+	if (newMenu == "gatherResolution") {
+	  return gatherResolution();
+	}
+	if (newMenu == "travel") {
+	  return yourTurn(newMenu);
+	}
+	if (newMenu == "uSure") {
+	  return areUSure(option);
+	}
+	if (newMenu == "yourTurn_travel") {
+	  return defineNewDestinations(changeMenu);
+	}
+	if (newMenu == "ressourcesConsumption") {
+	  return ressourcesConsumption(option);
+	}
+	if (newMenu == "Defeat") {
+	  return Defeat(option);
+	} else if (newMenu.slice(0, 5) == "dest_") {
+	  changeLocation(newMenu, defineNewDestinations);
 	}
   }
-  if (newMenu == "yourTurn_trade") {
-	return manageTrade();
-  }
-  if (newMenu == "crewAssignment") {
-	return yourTurn("crewAssignment");
-  }
-  if (newMenu == "yourTurn_deploy") {
-	return manageDeployDistribution();
-  }
-  if (newMenu == "gathering") {
-	return yourTurn(newMenu);
-  }
-  if (newMenu == "yourTurn_gather") {
-	return changeMenu("gatherResolution");
-  }
-  if (newMenu == "gatherResolution") {
-	return gatherResolution();
-  }
-  if (newMenu == "travel") {
-	return yourTurn(newMenu);
-  }
-  if (newMenu == "uSure") {
-	return areUSure(option);
-  }
-  if (newMenu == "yourTurn_travel") {
-	return defineNewDestinations(changeMenu);
-  }
-  if (newMenu == "ressourcesConsumption") {
-	return ressourcesConsumption(option);
-  }
-  if (newMenu == "Defeat") {
-	return Defeat(option);
-  } else if (newMenu.slice(0, 5) == "dest_") {
-	changeLocation(newMenu, defineNewDestinations);
-  }
-}
-
-onLoad();
-
-// Function to render the inventory items
+  
+  onLoad();
+  
+  // Function to render the inventory items
 // renders the inventory items as they would be seen in the inventory page
 function renderItems(filterType = 'all') {
     const itemList = document.getElementById('item-list');

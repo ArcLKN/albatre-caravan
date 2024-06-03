@@ -1911,91 +1911,131 @@ function save(varName, value) {
   
   onLoad();
   
-  // renders the inventory items as they would be seen in the inventory page
-  function renderItems(filterType = "all") {
-	const itemList = document.getElementById("item-list");
-	itemList.innerHTML = ""; // Clear previous items
-  
-	// Iterate over the keys of the baseInventory object
-	for (const itemId in inventory) {
-	  if (Object.hasOwnProperty.call(inventory, itemId)) {
-		const item = allItems[itemId]; // Get item details from allItems using itemId
-		const quantity = inventory[itemId].volume; // Retrieve the quantity for the current item
-  
-		// Check if the item matches the filter type
-		if (filterType === "all" || item.type === filterType) {
-		  const itemElement = document.createElement("div");
-		  itemElement.className = `inventory-item rarity-${item.rarity.toLowerCase()}`;
-  
-		  const imgElement = document.createElement("img");
-		  imgElement.src = item.imgFile;
-		  imgElement.alt = item.name;
-		  itemElement.appendChild(imgElement);
-  
-		  const titleElement = document.createElement("div");
-		  titleElement.className = "item-title";
-		  titleElement.textContent = item.name;
-		  itemElement.appendChild(titleElement);
-  
-		  const infoImg = document.createElement("img");
-		  infoImg.src = "info.png";
-		  infoImg.alt = "Info";
-		  infoImg.className = "info-img";
-		  itemElement.appendChild(infoImg);
-  
-		  const extraInfoElement = document.createElement("div");
-		  extraInfoElement.className = "extra-info";
-  
-		  // Populate extraInfoElement based on item type
-		  if (item.type === "weapon") {
-			extraInfoElement.innerHTML = `Attack Style: ${item.attackStyle}<br>Quantity: ${quantity}<br>Value: ${item.value}<br>Weight:${item.weight}<br>Description: ${item.description}`;
-		  } else if (item.type === "food") {
-			extraInfoElement.innerHTML = `Type: ${item.type}<br>Item Name: ${item.name}<br>Restoration: ${item.foodValue}<br>Quantity: ${quantity}<br>Value: ${item.price}<br>Weight:${item.weight}<br>Description: ${item.description}`;
-		  } else if (item.type === "mount" || item.type === "carrier") {
-			extraInfoElement.innerHTML = `Type: ${item.type}<br>Item Name: ${item.name}<br>Volume: ${item.volume}<br>Value: ${item.price}<br>Weight:${item.weight}<br>Description: ${item.description}`;
-		  } else {
-			extraInfoElement.innerHTML = `Type: ${item.type}<br>Description: ${item.description}<br>Quantity: ${quantity}<br>Value: ${item.value}<br>Carry Value: ${item.carryValue}<br>Weight:${item.weight}`;
-		  }
-  
-		  itemElement.appendChild(extraInfoElement);
-  
-		  infoImg.addEventListener("mouseenter", () => {
-			infoImg.style.display = "none";
-			extraInfoElement.style.display = "block";
-			titleElement.style.display = "none";
-			imgElement.style.display = "none";
-		  });
-  
-		  infoImg.addEventListener("mouseleave", () => {
-			infoImg.style.display = "block";
-			extraInfoElement.style.display = "none";
-			titleElement.style.display = "block";
-			imgElement.style.display = "block";
-		  });
+  // Function to render the inventory items
+// renders the inventory items as they would be seen in the inventory page
+function renderItems(filterType = 'all') {
+    const itemList = document.getElementById('item-list');
+    itemList.innerHTML = ''; // Clear previous items
 
-		  itemList.appendChild(itemElement);
-		}
-	  }
-	}
-  }
-  
-  const filterSelect = document.getElementById("item-type-filter");
-  filterSelect.addEventListener("change", function () {
-	const selectedType = this.value;
-	renderItems(selectedType);
-  });
-  
-  // This will make the inventory appear when the inventory button is pressed
-  document.addEventListener("DOMContentLoaded", function () {
-	const inventoryButton = document.getElementById("inventoryButton");
-	const inventoryPage = document.getElementById("inventoryPage");
-	const centerImage = document.getElementById("center-image");
-  
-	inventoryButton.addEventListener("click", function () {
-	  inventoryPage.classList.toggle("hidden");
-	  inventoryPage.classList.toggle("visible");
-	  if (!inventoryPage.classList.contains("hidden")) {
-		renderItems();
-	  }
-	});
-  });
+    // Iterate over the keys of the baseInventory object
+    for (const itemId in inventory) {
+        if (Object.hasOwnProperty.call(inventory, itemId)) {
+            const item = allItems[itemId]; // Get item details from allItems using itemId
+            const quantity = inventory[itemId].volume; // Retrieve the quantity for the current item
+
+            // Check if the item matches the filter type and has a non-zero quantity
+            if ((filterType === 'all' || item.type === filterType) && quantity != 0) {
+                const itemElement = document.createElement('div');
+                itemElement.className = `inventory-item rarity-${item.rarity.toLowerCase()}`;
+
+                const imgElement = document.createElement('img');
+                imgElement.src = item.imgFile;
+                imgElement.alt = item.name;
+                itemElement.appendChild(imgElement);
+
+                const titleElement = document.createElement('div');
+                titleElement.className = 'item-title';
+                titleElement.textContent = item.name;
+                itemElement.appendChild(titleElement);
+                
+                const basicInfoWrapper = document.createElement('div');
+                basicInfoWrapper.className = 'basic-info';
+
+                const basicInfo = document.createElement('p');
+                basicInfo.textContent = `Quantity: ${quantity} | Weight: ${item.weight} | Value: ${item.value}`;
+                basicInfoWrapper.appendChild(basicInfo);
+
+                const currencyIcon = document.createElement('i');
+                currencyIcon.className = 'bx bx-coin';
+                currencyIcon.style.width = '13px'; // Set width to 13 pixels
+                currencyIcon.style.height = '13px'; // Set height to 13 pixels
+                currencyIcon.style.marginBottom = '3px'; // Align the icon vertically with the text
+                currencyIcon.style.marginLeft = '5px'; // Adjust margin as needed for spacing
+                basicInfoWrapper.appendChild(currencyIcon);
+                itemElement.appendChild(basicInfoWrapper);
+
+                const infoImg = document.createElement('img');
+                infoImg.src = "../Images/info.png";
+                infoImg.alt = "Info";
+                infoImg.className = 'info-img';
+                itemElement.appendChild(infoImg);
+
+                // Function to show the modal with extra info
+                const showExtraInfo = () => {
+                    const modal = document.createElement('div');
+                    modal.className = 'modal';
+                    modal.innerHTML = `
+                        <div class="modal-content">
+                            <span class="close-btn">&times;</span>
+                            <h2 class="modal-title">${item.name}</h2>
+                            <div class="modal-body">
+                                <div class="modal-text">
+                                    ${item.type === "weapon" ? `Type: ${item.type}<br>Attack Style: ${item.attackType}<br>Value: ${item.value}<br>Weight: ${item.weight}<br>Quantity: ${quantity}<br>Description: ${item.description}` : ''}
+                                    ${item.type === "food" ? `Type: ${item.type}<br>Restoration: ${item.foodValue}<br>Quantity: ${quantity}<br>Value: ${item.price}<br>Weight: ${item.weight}<br>Description: ${item.description}` : ''}
+                                    ${item.type === "mount" || item.type === "carrier" ? `Type: ${item.type}<br>Volume: ${item.volume}<br>Value: ${item.price}<br>Weight: ${item.weight}<br>Description: ${item.description}` : ''}
+                                    ${item.type !== "weapon" && item.type !== "food" && item.type !== "mount" && item.type !== "carrier" ? `Type: ${item.type}<br>Quantity: ${quantity}<br>Value: ${item.value}<br>Carry Value: ${item.carryValue}<br>Weight: ${item.weight}<br>Description: ${item.description}` : ''}
+                                </div>
+                                <img src="${item.imgFile}" alt="${item.name}" class="modal-img">
+                            </div>
+                        </div>
+                    `;
+
+                    const inventoryContainer = document.querySelector('.inventory-container');
+                    inventoryContainer.appendChild(modal);
+
+                    // Close modal functionality
+                    const closeBtn = modal.querySelector('.close-btn');
+                    closeBtn.addEventListener('click', () => {
+                        inventoryContainer.removeChild(modal);
+                    });
+
+                    // Close modal on outside click
+                    window.addEventListener('click', (event) => {
+                        if (event.target === modal) {
+                            inventoryContainer.removeChild(modal);
+                        }
+                    });
+                };
+
+                infoImg.addEventListener('click', showExtraInfo);
+
+                itemList.appendChild(itemElement);
+            }
+        }
+    }
+}
+
+const filterSelect = document.getElementById('item-type-filter');
+filterSelect.addEventListener('change', function() {
+    const selectedType = this.value;
+    renderItems(selectedType);
+});
+
+// This will make the inventory appear when the inventory button is pressed
+document.addEventListener('DOMContentLoaded', function() {
+    const inventoryButton = document.getElementById('inventoryButton');
+    const inventoryPage = document.getElementById('inventoryPage');
+    const centerImage = document.getElementById('center-image');
+
+    inventoryButton.addEventListener('click', function() {
+        toggleHidden();
+        inventoryPage.classList.toggle('hidden');
+        inventoryPage.classList.toggle('visible');
+        // Call the function initially
+
+        if (!inventoryPage.classList.contains('hidden')) {
+            renderItems();
+        }
+    });
+});
+
+function toggleHidden() {
+    const centerImage = document.getElementById('center-image');
+    if (centerImage.classList.contains('hidden')) {
+        // If it's hidden, remove the 'hidden' class
+        centerImage.classList.remove('hidden');
+    } else {
+        // If it's not hidden, add the 'hidden' class
+        centerImage.classList.add('hidden');
+    }
+}

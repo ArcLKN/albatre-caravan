@@ -12,6 +12,7 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   text-align: center;
+  color: white;
 }
 
 .dark-background {
@@ -178,6 +179,10 @@ div.strangeButton {
   border-radius: 5px;
 }
 
+#center-image {
+  margin-top: 16px;
+}
+
 #actionMenu {
   width: 86vw;
   background-color: rgba(24, 24, 24, 0);
@@ -325,13 +330,32 @@ buttton is clicked*/
   height: 65vh;
   width: 50vw;
 }
+.unitList table {
+  display: flex;
+  justify-content: center;
+}
 .unitCell {
-  border: 1px solid black;
+  margin: 5px;
+  display: flex;
+  color: white;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.115);
+  border-collapse:collapse
+}
+.unitCell img {
+  width: 40px;
+  height: 40px;
 }
 .armyRowCell {
-  border: 1px solid black;
+  color: white;
 }
-
+.textTdDiv {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
 
 /* Background color based on item rarity */
 .inventory-item.rarity-common {

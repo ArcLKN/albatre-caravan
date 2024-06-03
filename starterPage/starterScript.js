@@ -735,6 +735,17 @@ specialsTraitsManager = {
     health: 10,
   },
   normie: {},
+  bandit: {
+    health: -3,
+    defense: -1,
+  },
+  legionary: {
+    health: 2,
+    resistance: {
+      slashing: 1,
+    },
+    image: "enemy/legionary.png"
+  }
 };
 
 var baseCrewNumber = 20;
@@ -981,6 +992,7 @@ function initSessionStorage() {
     row2: [],
     row3: [],
   });
+  save("groupOfEnemies", { row1: [], row2: [], row3: [] })
 }
 
 function goPlay() {

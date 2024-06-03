@@ -397,19 +397,14 @@ function save(varName, value) {
 	  bonusNode.innerHTML = String(bonus);
 	});
 	if (statusTurn == "deployUnits") {
-	  document.getElementById("center-image").classList.toggle("hidden");
 	  return changeMenu("crewAssignment");
 	} else if (statusTurn == "gatherResolution") {
-	  document.getElementById("center-image").classList.toggle("hidden");
 	  return changeMenu("gatherResolution");
 	} else if (statusTurn == "gatherResolution") {
-	  document.getElementById("center-image").classList.toggle("hidden");
 	  return changeMenu("gatherResolution");
 	} else if (statusTurn == "deployCarrier") {
-	  document.getElementById("center-image").classList.toggle("hidden");
 	  return changeMenu("travel");
 	} else if (statusTurn == "beginFight") {
-	  document.getElementById("center-image").classList.toggle("hidden");
 	  return initBattle();
 	} else if (statusTurn == "narration") {
 	  prepareNarration();
@@ -1386,7 +1381,6 @@ function save(varName, value) {
   
   function turnX() {
 	updateRessourcesDisplay();
-	document.getElementById("center-image").classList.toggle("hidden");
 	["turnX", "turnX_button"].forEach((e) => tempIDs.push(e));
   
 	var node = document.getElementById("actionMenu");

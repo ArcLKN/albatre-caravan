@@ -250,81 +250,153 @@ buttton is clicked*/
 }
 /* Container for the entire inventory */
 .inventory-container {
-  height: 57vh !important;
-  width:92vw !important;
+  height: 50vh !important;
+  width: 92vw !important;
   overflow-y: auto !important;
   display: flex;
-  gap: 5px; /* Gap between grid items */
-  align-items: left;
-  border-radius: 10px; /* Rounded border for the container */
+  flex-direction: row;
+  gap: 1px; /* Gap between grid items */
+  align-content:flex-start;
+  border-radius: 3px; /* Rounded border for the container */
   padding: 20px; /* Padding inside the container */
-  background-color: #ffdd00; /* Light yellow background color */
-  justify-items: center;
-  flex-wrap:wrap ;
-  /*try to make the inventory fit within the text area below the game*/
-  
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-/* Individual item container */
-.inventory-item {
-  position: relative; /* allows for the positioning of info image */
+.basic-info {
+  font-size: 13px; /* Use font-size for text size */
+  text-align: center; 
   display: flex;
-  flex-direction: column;
-  align-items: center; 
-  width: 72px; /* Set width to 192 pixels */
-  height: 96px; /* Set height to 240 pixels */
+  position: absolute; /* Position relative to the inventory-item container */
+  left: 35%; /* Adjust distance from the left as a percentage of the container's width */
+  bottom: 5px;
+}
+
+.inventory-item {
+  position: relative; /* Allows for the positioning of info image */
+  display: flex;
+  flex-direction: row; /* Display items in a row */
+  align-items: center;
+  width: 781px; /* Fixed width */
+  height: 30px; /* Fixed height */
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px; /* Rounded border for each item */
   overflow: hidden; /* Hide overflow content */
-  transition: transform 0.3s ease; /* Transition for hover effect */
-}
-/* Item title styling */
-.item-title {
-  text-align: center;
-  font-size: 16px; /* Adjust the font size as needed */
-  font-weight: bold; /* Optionally make the font bold */
-  margin-bottom: 25px; /* Space below the title */
 }
 
+/* Item title styling */
+.item-title {
+  text-align: left;
+  margin-left: 40px;
+  color:black;
+  font-size: 24px; /* Adjust the font size as needed */
+  font-weight: bold; /* Optionally make the font bold */
+  margin-bottom: 0px; /* Space below the title */
+}
 
 /* General image styling within inventory-item */
 .inventory-item img {
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
   object-fit: contain;
-  margin-bottom: 5px;
+  margin-right: 5px; /* Add space between the image and the next element */
 }
 
 /* Info image icon */
 .info-img {
   position: absolute;
-  bottom: 0%;
   right: 5%;
-  /*The dimensions for the item img override the dims i set for the 
-  info img. So I set a max size to get the desired dimensions this hurts me*/
-  max-width: 15px;
-  max-height: 15px;
+  max-width: 30px;
+  max-height: 30px;
   cursor: pointer;
 }
+
 /* Extra information box */
 .extra-info {
   display: none;
   position: absolute;
-  top: 0;
+  bottom: 0; /* Position at the bottom */
   left: 0;
-  width: 90%; /* Cover entire width of parent */
-  height: 95%; /* Cover entire height of parent */
+  width: 100%; /* Cover entire width of parent */
   padding: 10px;
   color: #0c0808;
   background-color: #b7b4b471;
   text-align: left;
   font-size: 10px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(93, 93, 93, 0.236);
-  
-  
+  box-shadow: 0 2px 4px rgba(93, 93, 93, 0.236);  
 }
+/* everything below is for the box that popps up when u click info button*/
+
+.modal {
+  display: block; /* Hidden by default */
+  position: absolute; /* Stay in place within the inventory container */
+  z-index: 1; /* Sit on top */
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%); /* Center the modal */
+  width: 80%; /* Adjust width as needed */
+  max-width: 600px; /* Max width of the modal */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  border-radius: 10px;
+  text-align: left;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  position: relative;
+}
+
+/* The Close Button */
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Modal title */
+.modal-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #0c0808;
+}
+
+/* Modal body */
+.modal-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* Modal text */
+.modal-text {
+  flex: 1;
+  color: black;
+  padding-right: 20px;
+}
+
+/* Modal image */
+.modal-img {
+  max-width: 150px;
+  max-height: 150px;
+  object-fit: contain;
+  margin-right: 20%;
+}
+
 
 .unitList {
   height: 65vh;
@@ -359,22 +431,18 @@ buttton is clicked*/
 
 /* Background color based on item rarity */
 .inventory-item.rarity-common {
-  background-color: #867e7e; /* Light gray for common items */
+  background-color: #867e7e4f; /* Light gray for common items */
 }
 
 .inventory-item.rarity-rare {
-  background-color: #0e1df3; /* Light blue for rare items */
+  background-color: #0e1df354; /* Light blue for rare items */
 }
 
 .inventory-item.rarity-legendary {
-  background-color: #ffb300; /* Gold for legendary items */
+  background-color: #ffb30053; /* Gold for legendary items */
 }
 
 .inventory-item.rarity-epic {
-  background-color: #5300a1; /* Tomato red for epic items */
+  background-color: #5300a14f; /* Tomato red for epic items */
 }
 
-/*expands item box during hover*/
-.inventory-item:hover {
-  transform: scale(1.1); /* Scale up by 10% on hover */
-}

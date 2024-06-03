@@ -254,7 +254,7 @@ buttton is clicked*/
   width: 92vw !important;
   overflow-y: auto !important;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 1px; /* Gap between grid items */
   align-content:flex-start;
   border-radius: 3px; /* Rounded border for the container */

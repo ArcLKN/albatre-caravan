@@ -82,6 +82,7 @@ function save(varName, value) {
 		  minSize: 3,
 		  maxSize: 50,
 		  playerCaravanSizeFactor: 0.25,
+		  bribable: true,
 	  }, bandit: {
 		  luck: 1,
 		  minSize: 5,
@@ -1823,6 +1824,18 @@ function save(varName, value) {
 		});
 	  }
 	});
+
+	tempIDs.push("bribeArmy");
+	var bribeArmy = document.createElement("button");
+	bribeArmy.setAttribute("id", "bribeArmy");
+	bribeArmy.textContent = "Bribe";
+	node.appendChild(bribeArmy);
+
+	fleeArmy.addEventListener("click", function () {
+		
+	})
+
+	
 	console.log("Group of Enemies", groupOfEnemies)
   }
   

@@ -133,6 +133,10 @@ var locations = [
         volume: 3,
         price: 500,
       },
+      11: {
+        volume: 10,
+        price: 25,
+      },
     },
   },
   {
@@ -175,11 +179,19 @@ var locations = [
         volume: 2,
         price: 1000,
       },
+      11: {
+        volume: 30,
+        price: 40,
+      },
     },
     sellableGoods: {
       6: {
         volume: 50,
         price: 40,
+      },
+      11: {
+        volume: 20,
+        price: 20,
       },
     },
   },
@@ -219,6 +231,10 @@ var locations = [
       4: {
         volume: 20,
         price: 100,
+      },
+      11: {
+        volume: 30,
+        price: 20,
       },
     },
     sellableGoods: {
@@ -1364,12 +1380,13 @@ function concludeBattle(victory) {
   tempIDs.push("nbrTurnBattle");
   removeTempIDs();
   document.querySelectorAll('[class="unitList"]').forEach((e) => e.remove());
+  let lootDiv = document.createElement("div");
+  lootDiv.setAttribute("id", "lootDiv");
+  actionMenu.appendChild(lootDiv);
+  let lootMoney = 0;
   if (victory) {
     let lootInventory = {};
-    let lootMoney = 0;
-    let lootDiv = document.createElement("div");
-    lootDiv.setAttribute("id", "lootDiv");
-    actionMenu.appendChild(lootDiv);
+
     for (let eachRow in groupOfEnemies) {
       for (let eachEnemy in groupOfEnemies[eachRow]) {
         for (let eachLoot in lootTable[
@@ -1419,7 +1436,103 @@ function concludeBattle(victory) {
       newText.textContent = `You obtained ${lootInventory[eachId]} ${ItemName}!`;
       lootDiv.appendChild(newText);
     }
+  } else {
+    // Perte de morale et d'argent.
+    for (let eachRow in groupOfEnemies) {
+      for (let eachEnemy in groupOfEnemies[eachRow]) {
+        lootMoney +=
+          lootTable[groupOfEnemies[eachRow][eachEnemy]["charaType"]][
+            "minMoney"
+          ] +
+          Math.round(
+            Math.random() *
+              lootTable[groupOfEnemies[eachRow][eachEnemy]["charaType"]][
+                "maxMoney"
+              ]
+          );
+      }
+    }
+    money = max(0, money - lootMoney * 2);
+    let newText = document.createElement("p");
+    newText.textContent = "You lost " + String(lootMoney * 2) + " debens!";
+    lootDiv.appendChild(newText);
   }
+
+  let isAlive = false;
+  let numberOfInjured = 0;
+  let numberOfDeath = 0;
+  for (let i = 1; i < 4; i++) {
+    for (let eachGatherer in gatherer["row" + String(i)]) {
+      if (i == 1) {
+        for (let eachCrew in crewMembers) {
+          if (
+            crewMembers[eachCrew]["id"] ==
+            gatherer["row" + String(i)][eachGatherer]["id"]
+          ) {
+            crewMembers[eachCrew]["injuries"] += 1;
+            if (crewMembers[eachCrew]["injuries"] > 2) {
+              numberOfDeath++;
+            } else {
+              numberOfInjured++;
+            }
+          }
+        }
+      }
+      for (let i = 1; i < 4; i++) {
+        if (isAlive) {
+          break;
+        }
+        for (let eachUnit in copy_playerTeam["row" + String(i)]) {
+          if (
+            copy_playerTeam["row" + String(i)][eachUnit]["id"] ==
+            gatherer["row" + String(i)][eachGatherer]["id"]
+          ) {
+            isAlive = true;
+            break;
+          }
+        }
+      }
+      if (!isAlive) {
+        for (let eachCrew in crewMembers) {
+          if (
+            crewMembers[eachCrew]["id"] ==
+            gatherer["row" + String(i)][eachGatherer]["id"]
+          ) {
+            crewMembers[eachCrew]["injuries"] += 2;
+            if (crewMembers[eachCrew]["injuries"] > 2) {
+              numberOfDeath++;
+            } else {
+              numberOfInjured++;
+            }
+          }
+        }
+      }
+    }
+  }
+  let newText = document.createElement("p");
+  newText.textContent = `${numberOfInjured} units have been injured!`;
+  lootDiv.appendChild(newText);
+  newText = document.createElement("p");
+  newText.textContent = `${numberOfDeath} crew members have died!`;
+  lootDiv.appendChild(newText);
+  crewMembers.filter((e) => e.injuries <= 2);
+  let numberOfBandageUsed;
+  let totalBandagesUsed = 0;
+  for (let eachCrew in crewMembers) {
+    if (!inventory["11"]["volume"] > 0) {
+      break;
+    }
+    numberOfBandageUsed = min(
+      crewMembers[eachCrew]["injuries"],
+      inventory["11"]["volume"]
+    );
+    crewMembers[eachCrew]["injuries"] -= numberOfBandageUsed;
+    inventory["11"]["volume"] -= numberOfBandageUsed;
+    totalBandagesUsed += numberOfBandageUsed;
+  }
+  newText = document.createElement("p");
+  newText.textContent = `${totalBandagesUsed} bandages have been used to heal crew members! You have ${inventory["11"]["volume"]} left.`;
+  lootDiv.appendChild(newText);
 
   document.getElementById("center-image").classList.remove("hidden");
   let finishBattleButton = document.createElement("button");

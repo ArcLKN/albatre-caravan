@@ -913,6 +913,14 @@ var allItems = {
       ice: 0,
     },
   },
+  11: {
+    type: "other",
+    name: "bandage",
+    volume: 0,
+    price: 20,
+    weight: 0,
+    rarity: "common",
+  },
   1000: {
     type: "weapon",
     name: "Hand",
@@ -939,6 +947,9 @@ baseInventory = {
   4: { volume: 2 },
   7: { volume: 2 },
   6: { volume: 10 },
+  11: {
+    volume: 5,
+  },
 };
 
 function inputTrait(newTraitName, newUnit) {

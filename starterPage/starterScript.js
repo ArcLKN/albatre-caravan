@@ -740,12 +740,34 @@ specialsTraitsManager = {
     defense: -1,
   },
   legionary: {
-    health: 2,
+    health: 4,
     resistance: {
-      slashing: 1,
+      phyDefense: 1,
     }
   }
 };
+
+let lootTable = {
+  "legionary": {
+    items:{
+      8: 0.3,
+      9: 0.3,
+      5: 0.2,
+    },
+    minMoney: 10,
+    maxMoney: 50,
+  },
+  "bandit": {
+    items:{
+    2: 0.1,
+    3: 0.1,
+    4: 0.1,
+    5: 0.2,
+  },
+  minMoney: 0,
+  maxMoney: 20,
+}
+}
 
 var baseCrewNumber = 20;
 var crewMembers = [];
@@ -802,7 +824,7 @@ var allItems = {
   4: {
     type: "weapon",
     quantity: 0,
-    value: 10,
+    value: 100,
     name: "sword",
     power: [3, 2, 0],
     attackType: "slashing",
@@ -832,11 +854,43 @@ var allItems = {
   7: {
     type: "mount",
     name: "Horse",
-    volume: 3,
+    volume: 0,
     price: 500,
     carryValue: 30,
     weight: 0,
     rarity: "common",
+  },
+  8: {
+    type: "armor",
+    name: "Lorica segmentata",
+    volume: 0,
+    price: 500,
+    weight: 5,
+    rarity: "uncommon",
+    resistance: {
+      defense: 0,
+      phyDefense: 1,
+      elemDefense: 0,
+      piercing: 0,
+      slashing: 0,
+      blunt: 0,
+      poison: 0,
+      fire: 0,
+      ice: 0,
+    },
+  },
+  9: {
+    type: "weapon",
+    quantity: 0,
+    value: 50,
+    name: "Gladius",
+    power: [3, 2, 0],
+    attackType: "slashing",
+    weaponType: "sword",
+    attackStyle: ["melee", "melee", "distance"],
+    description: "Sword stolen from a dead legionary. It is made of fine metal.",
+    weight: 1,
+    rarity: "uncommon",
   },
   1000: {
     type: "weapon",
@@ -992,6 +1046,7 @@ function initSessionStorage() {
     row3: [],
   });
   save("groupOfEnemies", { row1: [], row2: [], row3: [] })
+  save("lootTable", lootTable)
 }
 
 function goPlay() {

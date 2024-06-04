@@ -33,6 +33,7 @@ function save(varName, value) {
 	baseUnit = JSON.parse(sessionStorage.getItem("baseUnit"));
 	specialsTraitsManager = JSON.parse(sessionStorage.getItem("allTraits"));
 	groupOfEnemies = JSON.parse(sessionStorage.getItem("groupOfEnemies"));
+	lootTable = JSON.parse(sessionStorage.getItem("lootTable"));
   }
   
   // All the variables we want to save and share through every JS files.
@@ -675,6 +676,51 @@ function save(varName, value) {
 		"Thoueris",
 		"Yamanut",
 	  ],
+	  legionary: [
+		"Abnur",
+		"Acilius",
+		"Anus",
+		"Aulus",
+		"Atius",
+		"Balthus",
+		"Barbatus",
+		"Bravilius",
+		"Caecus",
+		"Caerellius",
+		"Caesar",
+		"Castorius",
+		"Cornelius",
+		"Corvinus",
+		"Darius",
+		"Decimus",
+		"Dominicus",
+		"Fabius",
+		"Fimius",
+		"Flavius",
+		"Gaiatius",
+		"Gallinius",
+		"Gladius",
+		"Justicus",
+		"Laftrius",
+		"Livianus",
+		"Lupius",
+		"Marcurio",
+		"Maro",
+		"Mercius",
+		"Oppius",
+		"Polus",
+		"Prudus",
+		"Quintilius",
+		"Septimus",
+		"Sergius",
+		"Silanus",
+		"Sophus",
+		"Titus",
+		"Tullius",
+		"Uriel",
+		"Valerius",
+		"Varus",
+	  ]
 	},
 	surname: ["Joestar", "Neith"],
   };
@@ -778,13 +824,19 @@ function save(varName, value) {
 		Math.floor(Math.random() * (listCrewImages[newUnit["gender"]] - 1))
 	  ) +
 	  ".png";
+	  // For enemies
 	  if (charaType) {
+		// Change image to special one
 		  newUnit["image"] = "Images/enemy/" +
 		  charaType + "/" +
-		  String(
-		Math.floor(Math.random() * (listCrewImages[charaType] - 1))
-	  ) +
-	  ".png";
+		  String(Math.floor(Math.random() * (listCrewImages[charaType] - 1))) +".png";
+		  // Add new variable to unit to know it is a special unit.
+		  newUnit["charaType"] = charaType;
+		  if (charaType in listOfNames["firstname"]) {
+			newUnit["name"] = "Legionary " + listOfNames["firstname"][charaType][Math.floor(
+				listOfNames["firstname"][charaType].length * Math.random()
+			  )]
+		  }
 	  }
 	if (newUnit["name"] == "Jonathan") {
 	  console.log("Easter Egg");
@@ -1277,14 +1329,14 @@ function save(varName, value) {
 	}
 	if (nbrUnitT1 <= 0 || nbrUnitT2 <= 0) {
 	  let actionMenu = document.getElementById("actionMenu");
-	  console.log("ENEMY TEAM WON");
 	  removeTempIDs();
 	  let finishBattleButton = document.createElement("button");
 	  finishBattleButton.textContent = "Finish Battle";
 	  tempIDs.push("finishBattleButton");
 	  finishBattleButton.setAttribute("id", "finishBattleButton");
+	  let victory = nbrUnitT2 <= 0
 	  finishBattleButton.addEventListener("click", function () {
-		concludeBattle();
+		concludeBattle(victory);
 	  });
 	  actionMenu.appendChild(finishBattleButton);
 	}
@@ -1293,12 +1345,66 @@ function save(varName, value) {
   // Icones pour chaque arme
   // Fond pour les unités en fonction de leur point de vie
   
-  function concludeBattle() {
+  function concludeBattle(victory) {
 	tempIDs.push("nbrTurnBattle");
 	removeTempIDs();
 	document.querySelectorAll('[class="unitList"]').forEach((e) => e.remove());
+	if (victory) {
+		let lootInventory = {}
+		let lootMoney = 0;
+		let lootDiv = document.createElement("div");
+		lootDiv.setAttribute("id", "lootDiv");
+		actionMenu.appendChild(lootDiv)
+		for (let eachRow in groupOfEnemies) {
+			for (let eachEnemy in groupOfEnemies[eachRow]) {
+				for (let eachLoot in lootTable[groupOfEnemies[eachRow][eachEnemy]['charaType']]['items']) {
+					let randLuck = Math.random();
+					if (randLuck < lootTable[groupOfEnemies[eachRow][eachEnemy]['charaType']]['items'][eachLoot]) {
+						if (eachLoot in lootInventory) {
+							lootInventory[eachLoot] += 1;
+						}
+						else {
+							lootInventory[eachLoot] = 1;
+						}
+					}
+				}
+				lootMoney += lootTable[groupOfEnemies[eachRow][eachEnemy]['charaType']]['minMoney'] 
+					+ Math.round(Math.random() * lootTable[groupOfEnemies[eachRow][eachEnemy]['charaType']]['maxMoney'])
+			}
+		}
+		money+=lootMoney
+		let ItemName;
+		let newText = document.createElement("p")
+		newText.textContent = "You obtained "+String(lootMoney)+" debens!"
+		lootDiv.appendChild(newText)
+		console.log(inventory)
+		for (let eachId in lootInventory) {
+			if (eachId in inventory) {
+				inventory[eachId]['volume'] += 1;
+			}
+			else {
+				inventory[eachId] = {volume: 1};
+			}
+			console.log("Item",eachId)
+			ItemName = allItems[eachId]['name'];
+			let newText = document.createElement("p")
+			newText.textContent = `You obtained ${lootInventory[eachId]} ${ItemName}!`
+			lootDiv.appendChild(newText)
+		}
+		
+	}
+	
+	
 	document.getElementById("center-image").classList.remove("hidden");
-	changeMenu("turnX");
+	let finishBattleButton = document.createElement("button");
+	  finishBattleButton.textContent = "End result";
+	  tempIDs.push("finishBattleButton");
+	  finishBattleButton.setAttribute("id", "finishBattleButton");
+	  finishBattleButton.addEventListener("click", function () {
+		changeMenu("turnX");
+	  });
+	  actionMenu.appendChild(finishBattleButton);
+	
   }
   
   function yourTurn(phase) {
@@ -1748,7 +1854,7 @@ function save(varName, value) {
 	  }
 	}
 	let numberOfEnnemy;
-	numberOfEnnemy = playerLocation["enemyType"][enemyType]["minSize"] + Math.round(crewTotal.length * playerLocation["enemyType"][enemyType]["playerCaravanSizeFactor"]);
+	numberOfEnnemy = playerLocation["enemyType"][enemyType]["minSize"] + Math.round(crewTotal.length * playerLocation["enemyType"][enemyType]["playerCaravanSizeFactor"] * Math.random());
   
 		let newChara;
 	  newChara = createCharacter(enemyType);

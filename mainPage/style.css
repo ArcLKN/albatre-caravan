@@ -252,7 +252,7 @@ buttton is clicked*/
 .inventory-container {
   height: 50vh !important;
   width: 92vw !important;
-  overflow-y: auto !important;
+  overflow-y: scroll !important;
   display: flex;
   flex-direction: column;
   gap: 1px; /* Gap between grid items */
@@ -260,7 +260,7 @@ buttton is clicked*/
   border-radius: 3px; /* Rounded border for the container */
   padding: 20px; /* Padding inside the container */
   justify-content: center;
-  flex-wrap: wrap;
+  align-items: center
 }
 
 .basic-info {
@@ -427,6 +427,11 @@ buttton is clicked*/
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
+}
+#lootDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Background color based on item rarity */

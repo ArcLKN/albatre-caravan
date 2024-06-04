@@ -622,7 +622,7 @@ function removeAssignedCrew() {
 function onLoad() {
   removeAssignedCrew();
   console.log("Status", statusTurn);
-  let roleDiv = document.getElementById("role");
+  let roleDiv = document.getElementById("role-bis");
   let confirmationBtn = document.getElementById("confirm");
 
   if (statusTurn == "deployUnits") {
@@ -637,7 +637,7 @@ function onLoad() {
     ) {
       let newButton = document.createElement("button");
       newButton.setAttribute("id", "roleWater");
-      newButton.textContent = "Water Gatherer";
+      newButton.innerHTML = "Water Gatherer";
       newButton.addEventListener("click", function () {
         document
           .querySelectorAll(".active")

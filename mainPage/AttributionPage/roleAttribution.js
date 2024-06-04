@@ -240,9 +240,21 @@ function equipItem(itemId, memberId) {
       thisMember = crewTotal[eachMember];
     }
   }
+  let thisGatherer;
+  for (let eachCat in gatherer) {
+    for (let eachMember in gatherer[eachCat]) {
+      if (gatherer[eachCat][eachMember]["id"] == memberId) {
+        thisGatherer = gatherer[eachCat][eachMember];
+        console.log("thisGatherer", thisGatherer);
+      }
+    }
+  }
   console.log(itemId, allItems[itemId]["type"], thisMember, memberId);
   previousItem = thisMember[allItems[itemId]["type"]];
   thisMember[allItems[itemId]["type"]] = allItems[itemId];
+  if (thisGatherer) {
+    thisGatherer[allItems[itemId]["type"]] = allItems[itemId];
+  }
   // Update the unequipped item volume in inventory and text.
   // Might cause a problem if player has no more of this item. But idk if it's possible.
   if (searchItemFromName(previousItem["name"]) < 1000) {

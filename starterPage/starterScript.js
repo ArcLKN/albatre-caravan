@@ -353,7 +353,7 @@ baseUnit = {
     melee: 0,
     distance: 0,
     sword: 0,
-    lance: 0,
+    spear: 0,
     bow: 0,
     mace: 0,
   },
@@ -743,13 +743,13 @@ specialsTraitsManager = {
     health: 4,
     resistance: {
       phyDefense: 1,
-    }
-  }
+    },
+  },
 };
 
 let lootTable = {
-  "legionary": {
-    items:{
+  legionary: {
+    items: {
       8: 0.3,
       9: 0.3,
       5: 0.2,
@@ -757,17 +757,18 @@ let lootTable = {
     minMoney: 10,
     maxMoney: 50,
   },
-  "bandit": {
-    items:{
-    2: 0.1,
-    3: 0.1,
-    4: 0.1,
-    5: 0.2,
+  bandit: {
+    items: {
+      2: 0.1,
+      3: 0.1,
+      4: 0.1,
+      5: 0.2,
+      10: 0.1,
+    },
+    minMoney: 0,
+    maxMoney: 20,
   },
-  minMoney: 0,
-  maxMoney: 20,
-}
-}
+};
 
 var baseCrewNumber = 20;
 var crewMembers = [];
@@ -801,7 +802,7 @@ var allItems = {
     quantity: 0,
     value: 10,
     power: [1, 2, 3],
-    attackType: "piercing",
+    attackType: ["blunt", "piercing", "piercing"],
     weaponType: "bow",
     attackStyle: ["melee", "distance", "distance"],
     description: "Classic wooden bow.",
@@ -814,7 +815,7 @@ var allItems = {
     value: 10,
     name: "spear",
     power: [2, 3, 0],
-    attackType: "piercing",
+    attackType: ["slashing", "piercing", "piercing"],
     weaponType: "spear",
     attackStyle: ["melee", "melee", "distance"],
     description: "Classic wooden bow.",
@@ -827,7 +828,7 @@ var allItems = {
     value: 100,
     name: "sword",
     power: [3, 2, 0],
-    attackType: "slashing",
+    attackType: ["slashing", "slashing", "piercing"],
     weaponType: "sword",
     attackStyle: ["melee", "melee", "distance"],
     description: "Classic wooden bow.",
@@ -885,12 +886,32 @@ var allItems = {
     value: 50,
     name: "Gladius",
     power: [3, 2, 0],
-    attackType: "slashing",
+    attackType: ["slashing", "slashing", "piercing"],
     weaponType: "sword",
     attackStyle: ["melee", "melee", "distance"],
-    description: "Sword stolen from a dead legionary. It is made of fine metal.",
+    description:
+      "Sword stolen from a dead legionary. It is made of fine metal.",
     weight: 1,
     rarity: "uncommon",
+  },
+  10: {
+    type: "armor",
+    name: "Leather armor",
+    volume: 0,
+    price: 100,
+    weight: 5,
+    rarity: "uncommon",
+    resistance: {
+      defense: 0,
+      phyDefense: 0,
+      elemDefense: 0,
+      piercing: 0,
+      slashing: 1,
+      blunt: 0,
+      poison: 0,
+      fire: 0,
+      ice: 0,
+    },
   },
   1000: {
     type: "weapon",
@@ -898,7 +919,7 @@ var allItems = {
     weight: 0,
     rarity: "common",
     power: [1, 0, 0],
-    attackType: "blunt",
+    attackType: ["blunt", "blunt", "blunt"],
     weaponType: "mace",
     attackStyle: ["melee", "melee", "melee"],
   },
@@ -1001,7 +1022,7 @@ function createCharacter() {
 function initSessionStorage() {
   save("allTraits", specialsTraitsManager);
   save("statusTurn", "narration");
-  save("baseUnit", baseUnit)
+  save("baseUnit", baseUnit);
   save("allItems", allItems);
   save("crewMembers", crewMembers);
   // Number of people player has, thus number of people he can use.
@@ -1045,8 +1066,8 @@ function initSessionStorage() {
     row2: [],
     row3: [],
   });
-  save("groupOfEnemies", { row1: [], row2: [], row3: [] })
-  save("lootTable", lootTable)
+  save("groupOfEnemies", { row1: [], row2: [], row3: [] });
+  save("lootTable", lootTable);
 }
 
 function goPlay() {

@@ -416,8 +416,8 @@ function save(varName, value) {
   let listCrewImages = {
 	male: 15,
 	female: 51,
-	legionary: 24,
-	bandit: 13,
+	legionary: 34,
+	bandit: 25,
   };
   
   var listOfNames = {

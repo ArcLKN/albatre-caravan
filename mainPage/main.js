@@ -1423,14 +1423,12 @@ function concludeBattle(victory) {
     let newText = document.createElement("p");
     newText.textContent = "You obtained " + String(lootMoney) + " debens!";
     lootDiv.appendChild(newText);
-    console.log(inventory);
     for (let eachId in lootInventory) {
       if (eachId in inventory) {
         inventory[eachId]["volume"] += 1;
       } else {
         inventory[eachId] = { volume: 1 };
       }
-      console.log("Item", eachId);
       ItemName = allItems[eachId]["name"];
       let newText = document.createElement("p");
       newText.textContent = `You obtained ${lootInventory[eachId]} ${ItemName}!`;
@@ -1452,7 +1450,7 @@ function concludeBattle(victory) {
           );
       }
     }
-    money = max(0, money - lootMoney * 2);
+    money = Math.max(0, money - lootMoney * 2);
     let newText = document.createElement("p");
     newText.textContent = "You lost " + String(lootMoney * 2) + " debens!";
     lootDiv.appendChild(newText);
@@ -1464,27 +1462,28 @@ function concludeBattle(victory) {
   for (let i = 1; i < 4; i++) {
     for (let eachGatherer in gatherer["row" + String(i)]) {
       if (i == 1) {
-        for (let eachCrew in crewMembers) {
+        for (let eachCrew in crewTotal) {
           if (
-            crewMembers[eachCrew]["id"] ==
+            crewTotal[eachCrew]["id"] ==
             gatherer["row" + String(i)][eachGatherer]["id"]
           ) {
-            crewMembers[eachCrew]["injuries"] += 1;
-            if (crewMembers[eachCrew]["injuries"] > 2) {
+            crewTotal[eachCrew]["injuries"] += 1;
+            if (crewTotal[eachCrew]["injuries"] > 2) {
               numberOfDeath++;
             } else {
-              numberOfInjured++;
+              numberOfInjured += 1;
             }
+            break;
           }
         }
       }
-      for (let i = 1; i < 4; i++) {
+      for (let y = 1; y < 4; y++) {
         if (isAlive) {
           break;
         }
-        for (let eachUnit in copy_playerTeam["row" + String(i)]) {
+        for (let eachUnit in copy_playerTeam["row" + String(y)]) {
           if (
-            copy_playerTeam["row" + String(i)][eachUnit]["id"] ==
+            copy_playerTeam["row" + String(y)][eachUnit]["id"] ==
             gatherer["row" + String(i)][eachGatherer]["id"]
           ) {
             isAlive = true;
@@ -1493,13 +1492,13 @@ function concludeBattle(victory) {
         }
       }
       if (!isAlive) {
-        for (let eachCrew in crewMembers) {
+        for (let eachCrew in crewTotal) {
           if (
-            crewMembers[eachCrew]["id"] ==
+            crewTotal[eachCrew]["id"] ==
             gatherer["row" + String(i)][eachGatherer]["id"]
           ) {
-            crewMembers[eachCrew]["injuries"] += 2;
-            if (crewMembers[eachCrew]["injuries"] > 2) {
+            crewTotal[eachCrew]["injuries"] += 2;
+            if (crewTotal[eachCrew]["injuries"] > 2) {
               numberOfDeath++;
             } else {
               numberOfInjured++;
@@ -1512,21 +1511,23 @@ function concludeBattle(victory) {
   let newText = document.createElement("p");
   newText.textContent = `${numberOfInjured} units have been injured!`;
   lootDiv.appendChild(newText);
-  newText = document.createElement("p");
-  newText.textContent = `${numberOfDeath} crew members have died!`;
-  lootDiv.appendChild(newText);
-  crewMembers.filter((e) => e.injuries <= 2);
+  if (numberOfDeath > 0) {
+    newText = document.createElement("p");
+    newText.textContent = `${numberOfDeath} crew members have died!`;
+    lootDiv.appendChild(newText);
+  }
+  crewTotal.filter((e) => e.injuries <= 2);
   let numberOfBandageUsed;
   let totalBandagesUsed = 0;
-  for (let eachCrew in crewMembers) {
+  for (let eachCrew in crewTotal) {
     if (!inventory["11"]["volume"] > 0) {
       break;
     }
-    numberOfBandageUsed = min(
-      crewMembers[eachCrew]["injuries"],
+    numberOfBandageUsed = Math.min(
+      crewTotal[eachCrew]["injuries"],
       inventory["11"]["volume"]
     );
-    crewMembers[eachCrew]["injuries"] -= numberOfBandageUsed;
+    crewTotal[eachCrew]["injuries"] -= numberOfBandageUsed;
     inventory["11"]["volume"] -= numberOfBandageUsed;
     totalBandagesUsed += numberOfBandageUsed;
   }
@@ -1544,6 +1545,13 @@ function concludeBattle(victory) {
     changeMenu("turnX");
   });
   actionMenu.appendChild(finishBattleButton);
+  for (let i = 1; i < 4; i++) {
+    for (let eachGatherer in gatherer["row" + String(i)]) {
+      crewMembers.push(gatherer["row" + String(i)][eachGatherer]);
+    }
+    gatherer["row" + String(i)] = [];
+  }
+  console.log(gatherer);
 }
 
 function yourTurn(phase) {

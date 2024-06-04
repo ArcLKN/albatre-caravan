@@ -85,7 +85,7 @@ h2 {
     margin: 16px 0;
 }
 
-#roleFood, #roleWater, #roleScout, #roleGuard, #roleCarrier{
+#roleFood, #roleWater, #roleScout, #roleGuard, #roleCarrier, #roleMorale , #roleRow1, #roleRow2, #roleRow3 {
     width: 88px;
     height: 88px;
     padding: 16px;

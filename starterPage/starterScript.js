@@ -11,7 +11,7 @@ function save(varName, value) {
 }
 
 let listCrewImages = {
-  male: 15,
+  male: 37,
   female: 51,
 };
 

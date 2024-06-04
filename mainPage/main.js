@@ -414,7 +414,7 @@ function save(varName, value) {
   
   // Create randomized person.
   let listCrewImages = {
-	male: 15,
+	male: 37,
 	female: 51,
 	legionary: 34,
 	bandit: 25,

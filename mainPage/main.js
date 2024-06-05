@@ -1644,7 +1644,7 @@ function yourTurn(phase) {
         ["ressourcesConsumption", false],
         ["travel", "false"],
       ]);
-    });  
+    });
   }
 }
 
@@ -1660,8 +1660,8 @@ function erasePreviousDestinations() {
 function turnX() {
   updateRessourcesDisplay();
   let originalWaterYield = playerLocation.gatheringValues.waterYield; // storing the water yeilds to be used in the endrain function
-  triggerEvent();//determining if there is an event at the start of the turn
-  
+  triggerEvent(); //determining if there is an event at the start of the turn
+
   ["turnX", "turnX_button"].forEach((e) => tempIDs.push(e));
 
   var node = document.getElementById("actionMenu");
@@ -1704,9 +1704,9 @@ function showEventInfo() {
   var node = document.getElementById("actionMenu");
 
   // Clear the turn information elements
-  node.innerHTML = '';
+  node.innerHTML = "";
 
-  //changes the background image to the eventb ackground
+  //changes the background image to the event background
   if (document.getElementById("center-image")) {
     var centerImage = document.getElementById("center-image");
     centerImage.src = currentEvent[1]; // Change image to currentEvent[1]
@@ -1867,8 +1867,8 @@ function manageEndTurnEvent() {
       return manageArmy();
     }
   }
-  endRain();//returns the water yeilds to normal at the end of turn
-  revertPrices();//returns prices back to the original when turn ends
+  endRain(); //returns the water yeilds to normal at the end of turn
+  revertPrices(); //returns prices back to the original when turn ends
   return changeMenu("turnX");
 }
 
@@ -2375,17 +2375,13 @@ function toggleHidden() {
   }
 }
 
-
 //Adding Events
-
-
-
 
 // Calculate what events will occur during the turn
 function calculateProbabilities() {
   var travelEvent = Math.random();
   var cityEvent = Math.random();
-  
+
   // Return the probabilities
   return { travelEvent, cityEvent };
 }
@@ -2395,64 +2391,67 @@ function triggerEvent() {
   console.log("event trigger");
   const probabilities = calculateProbabilities();
   const cityEvent = probabilities.cityEvent;
-  const travelEvent=probabilities.travelEvent;
-  
+  const travelEvent = probabilities.travelEvent;
 
-  if (["village", "nil_shore", "fluvial_city", "desert_city"].includes(playerLocation.type)) {
-      console.log("Player is in a safe location.");
-      if (0 < cityEvent && cityEvent <= 0.1) {
-          console.log("robbed");
-          getRobbed();
-      } else if (0.1 < cityEvent && cityEvent <= 0.3) {
-          console.log("holiday");
-          itsHoliday();
-      } else if (0.3 < cityEvent && cityEvent <= 0.5) {
-          console.log("death");
-          randomIllnessAndDeath();
-      } else {
-          getRobbed();
-          console.log("no event this turn");
-      }
+  if (
+    ["village", "nil_shore", "fluvial_city", "desert_city"].includes(
+      playerLocation.type
+    )
+  ) {
+    console.log("Player is in a safe location.");
+    if (0 < cityEvent && cityEvent <= 0.1) {
+      console.log("robbed");
+      getRobbed();
+    } else if (0.1 < cityEvent && cityEvent <= 0.3) {
+      console.log("holiday");
+      itsHoliday();
+    } else if (0.3 < cityEvent && cityEvent <= 0.5) {
+      console.log("death");
+      randomIllnessAndDeath();
+    } else {
+      getRobbed();
+      console.log("no event this turn");
+    }
   } else if (playerLocation.type === "desert") {
-      if (0 < cityEvent && cityEvent <= 0.1) {
-          console.log("rain");
-          startRain();
-      } else if (0.1 < cityEvent && cityEvent <= 0.2) {
-          console.log("ruin");
-          findRuin();
-      } else if (0.2 < cityEvent && cityEvent <= 0.3) {
-          console.log("wanderer");
-          findOasis();
-      } else if (0.3 < cityEvent && cityEvent <= 0.4) {
-          console.log("oasis");
-           findOasis();
-      } else if (0.4 < cityEvent && cityEvent <= 0.5) {
-          console.log("illness");
-          randomIllnessAndDeath();
-      } else {
-          console.log("no event this turn");
-          findOasis();
-      }
+    if (0 < cityEvent && cityEvent <= 0.1) {
+      console.log("rain");
+      startRain();
+    } else if (0.1 < cityEvent && cityEvent <= 0.2) {
+      console.log("ruin");
+      findRuin();
+    } else if (0.2 < cityEvent && cityEvent <= 0.3) {
+      console.log("wanderer");
+      findOasis();
+    } else if (0.3 < cityEvent && cityEvent <= 0.4) {
+      console.log("oasis");
+      findOasis();
+    } else if (0.4 < cityEvent && cityEvent <= 0.5) {
+      console.log("illness");
+      randomIllnessAndDeath();
+    } else {
+      console.log("no event this turn");
+      findOasis();
+    }
   }
 }
 
 // Define the rain event
 function startRain() {
-  const message = 'It\'s Raining! Water yields have increased during this turn!';
-  const background = '../Images/EventBackgrounds/rain.png'; // Path to rain-related image
+  const message = "It's Raining! Water yields have increased during this turn!";
+  const background = "../Images/EventBackgrounds/rain.png"; // Path to rain-related image
 
   if (playerLocation.gatheringValues.waterYield !== undefined) {
-      originalWaterYield = playerLocation.gatheringValues.waterYield;
-      playerLocation.gatheringValues.waterYield += 2;
+    originalWaterYield = playerLocation.gatheringValues.waterYield;
+    playerLocation.gatheringValues.waterYield += 2;
   }
   setCenterImage(background);
   displayMessage(message);
 }
 
 function endRain() {
-  const background = 'path/to/default_weather_image.jpg'; // Revert to a default weather image
+  const background = "path/to/default_weather_image.jpg"; // Revert to a default weather image
   if (playerLocation.gatheringValues.waterYield !== undefined) {
-      playerLocation.gatheringValues.waterYield = originalWaterYield;
+    playerLocation.gatheringValues.waterYield = originalWaterYield;
   }
   setCenterImage(background);
 }
@@ -2463,16 +2462,15 @@ let originalPrices = {};
 function randomIllnessAndDeath() {
   killPeople(1);
   const message = "Someone in your party died for no reason.";
-  const background1 = '../Images/EventBackgrounds/desertDeath.png';//display when in desert
-  const background2 = '../Images/EventBackgrounds/cityDeath.png';//display when not in desert
+  const background1 = "../Images/EventBackgrounds/desertDeath.png"; //display when in desert
+  const background2 = "../Images/EventBackgrounds/cityDeath.png"; //display when not in desert
   updateRessourcesDisplay();
-  if(playerLocation=="desert"){
-    setCenterImage(background1)
+  if (playerLocation == "desert") {
+    setCenterImage(background1);
+  } else {
+    setCenterImage(background2);
   }
-  else{
-    setCenterImage(background2)
-  }
-  
+
   displayMessage(message);
 }
 function itsHoliday() {
@@ -2480,20 +2478,20 @@ function itsHoliday() {
   const background = "../Images/EventBackgrounds/holiday.png";
 
   // Store the original prices before applying the discount
- // originalPrices = getOriginalPrices(allItems);
+  // originalPrices = getOriginalPrices(allItems);
 
   // Apply the discount to all items in existence
   for (let item in allItems) {
-      if (allItems.hasOwnProperty(item)) {
-          allItems[item].price *= 0.8;
-      }
+    if (allItems.hasOwnProperty(item)) {
+      allItems[item].price *= 0.8;
+    }
   }
   displayMessage(message);
-  setCenterImage(background)
+  setCenterImage(background);
 }
 function findRuin() {
   console.log("looted ruin");
-  const background="../Images/EventBackgrounds/ruin.png"
+  const background = "../Images/EventBackgrounds/ruin.png";
   const message = "Your crew found a ruin and retrieved 100 gold!";
   money += 100;
   updateRessourcesDisplay();
@@ -2501,12 +2499,12 @@ function findRuin() {
   displayMessage(message);
 }
 function getRobbed() {
-  console.log('got robbed')
+  console.log("got robbed");
   money -= 100;
   const message = "You just got pickpocketed!";
   const background = "../Images/EventBackgrounds/pickpocket.png";
   updateRessourcesDisplay();
-  displayMessage("You have been robbed of 100 gold!")
+  displayMessage("You have been robbed of 100 gold!");
   setCenterImage(background);
 }
 function findOasis() {
@@ -2517,7 +2515,6 @@ function findOasis() {
   updateRessourcesDisplay();
   displayMessage(message);
   setCenterImage(background);
- 
 }
 
 function setCenterImage(background) {
@@ -2538,6 +2535,6 @@ function displayMessage(message) {
   newText.textContent = "Would you like to move?";
   node.appendChild(newText);
   newText.addEventListener("click", function () {
-      changeMenu(this.id);
+    changeMenu(this.id);
   });
 }

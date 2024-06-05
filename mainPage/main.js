@@ -34,6 +34,7 @@ function loadSessionStorage() {
   specialsTraitsManager = JSON.parse(sessionStorage.getItem("allTraits"));
   groupOfEnemies = JSON.parse(sessionStorage.getItem("groupOfEnemies"));
   lootTable = JSON.parse(sessionStorage.getItem("lootTable"));
+  audioCurrentTime = parseInt(sessionStorage.getItem("audioCurrentTime"));
 }
 
 // All the variables we want to save and share through every JS files.
@@ -55,6 +56,7 @@ function saveSessionStorage() {
   save("playerLocation", playerLocation);
   save("gatherer", gatherer);
   save("groupOfEnemies", groupOfEnemies);
+  save("audioCurrentTime", audioCurrentTime);
 }
 
 // Simply used to capitalize a word. let capitalizedWord = Capitalize(the_word_you_want_to_capitalize);
@@ -338,6 +340,23 @@ function returnLocationData(location) {
       locationEntry = locations[i];
       return locationEntry;
     }
+  }
+}
+
+function toggleMusic() {
+  let audio = document.getElementById("BackgroundAudio");
+  let icon = document.getElementById("bxSound");
+  if (audio.paused) {
+    //audio.src = "../Audio/cinematic-soundtrack-ancient-egypt-869.mp3";
+    audio.currentTime = audioCurrentTime;
+    audio.play();
+    icon.classList.remove("bx-volume-mute");
+    icon.classList.add("bx-volume-full");
+  } else {
+    audioCurrentTime = audio.currentTime;
+    audio.pause();
+    icon.classList.add("bx-volume-mute");
+    icon.classList.remove("bx-volume-full");
   }
 }
 
@@ -2236,7 +2255,7 @@ function renderItems(filterType = "all") {
                                 <div class="modal-text">
                                     ${
                                       item.type === "weapon"
-                                        ? `Type: ${item.type}<br>Attack Style: ${item.attackType}<br>Value: ${item.value}<br>Weight: ${item.weight}<br>Quantity: ${quantity}<br>Description: ${item.description}`
+                                        ? `Type: ${item.type}<br>Weapon type: ${item.weaponType}<br>Attack strength: ${item.power}<br>Attack Type: ${item.attackType}<br>Attack Style: ${item.attackStyle}<br>Value: ${item.value}<br>Weight: ${item.weight}<br>Quantity: ${quantity}<br>Description: ${item.description}`
                                         : ""
                                     }
                                     ${

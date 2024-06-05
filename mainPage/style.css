@@ -158,6 +158,17 @@ div.strangeButton {
   justify-content: center;
 }
 
+.speaker-button {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  width: 4vw;
+  height: 4vh;
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
 .strangeButton:hover {
   height: 9vh;
   width: 9vh;

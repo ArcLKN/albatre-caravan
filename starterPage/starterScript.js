@@ -1079,6 +1079,7 @@ function initSessionStorage() {
   });
   save("groupOfEnemies", { row1: [], row2: [], row3: [] });
   save("lootTable", lootTable);
+  save("audioCurrentTime", 0);
 }
 
 function goPlay() {

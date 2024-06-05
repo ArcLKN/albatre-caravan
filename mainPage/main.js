@@ -2428,6 +2428,7 @@ function triggerEvent() {
 }
 
 function procEvent(eventName) {
+  removeTempIDs();
   let message;
   let background;
   if (eventName == "rain") {
@@ -2471,7 +2472,7 @@ function procEvent(eventName) {
   eventText.setAttribute("id", "eventText");
   eventText.textContent = message;
   node.appendChild(eventText);
-
+  tempIDs.push("turnX_button");
   var newButton = document.createElement("button");
   newButton.setAttribute("id", "turnX_button");
   newButton.innerHTML = "Next";

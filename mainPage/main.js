@@ -1733,7 +1733,7 @@ function showEventInfo() {
   // Clear the turn information elements
   node.innerHTML = "";
 
-  //changes the background image to the eventb ackground
+  //changes the background image to the event background
   if (document.getElementById("center-image")) {
     var centerImage = document.getElementById("center-image");
     centerImage.src = currentEvent[1]; // Change image to currentEvent[1]

@@ -34,6 +34,7 @@ function loadSessionStorage() {
   specialsTraitsManager = JSON.parse(sessionStorage.getItem("allTraits"));
   groupOfEnemies = JSON.parse(sessionStorage.getItem("groupOfEnemies"));
   lootTable = JSON.parse(sessionStorage.getItem("lootTable"));
+  audioCurrentTime = parseInt(sessionStorage.getItem("audioCurrentTime"));
 }
 
 // All the variables we want to save and share through every JS files.
@@ -55,6 +56,7 @@ function saveSessionStorage() {
   save("playerLocation", playerLocation);
   save("gatherer", gatherer);
   save("groupOfEnemies", groupOfEnemies);
+  save("audioCurrentTime", audioCurrentTime);
 }
 
 // Simply used to capitalize a word. let capitalizedWord = Capitalize(the_word_you_want_to_capitalize);
@@ -80,17 +82,17 @@ var locations = [
     doEnemySpawn: true,
     enemyType: {
       legionary: {
-        luck: 0.7,
+        luck: 0.15,
         minSize: 3,
         maxSize: 50,
-        playerCaravanSizeFactor: 0.25,
+        playerCaravanSizeFactor: 0.15,
         bribable: true,
       },
       bandit: {
-        luck: 1,
+        luck: 0.2,
         minSize: 5,
         maxSize: 50,
-        playerCaravanSizeFactor: 0.15,
+        playerCaravanSizeFactor: 0.25,
       },
     },
     description:
@@ -132,6 +134,10 @@ var locations = [
       7: {
         volume: 3,
         price: 500,
+      },
+      11: {
+        volume: 10,
+        price: 25,
       },
     },
   },
@@ -175,11 +181,19 @@ var locations = [
         volume: 2,
         price: 1000,
       },
+      11: {
+        volume: 30,
+        price: 40,
+      },
     },
     sellableGoods: {
       6: {
         volume: 50,
         price: 40,
+      },
+      11: {
+        volume: 20,
+        price: 20,
       },
     },
   },
@@ -220,6 +234,10 @@ var locations = [
         volume: 20,
         price: 100,
       },
+      11: {
+        volume: 30,
+        price: 20,
+      },
     },
     sellableGoods: {
       2: {
@@ -241,7 +259,14 @@ var locations = [
     name: "Oasis",
     isTradable: false,
     doEnemySpawn: true,
-    enemyType: { legionary: 1 },
+    enemyType: {
+      bandit: {
+        luck: 0.2,
+        minSize: 5,
+        maxSize: 50,
+        playerCaravanSizeFactor: 0.25,
+      },
+    },
     description:
       "In the middle of the desert it's the closest thing to what you could call Paradise.",
     gatheringValues: {
@@ -314,6 +339,23 @@ function returnLocationData(location) {
       locationEntry = locations[i];
       return locationEntry;
     }
+  }
+}
+
+function toggleMusic() {
+  let audio = document.getElementById("BackgroundAudio");
+  let icon = document.getElementById("bxSound");
+  if (audio.paused) {
+    //audio.src = "../Audio/cinematic-soundtrack-ancient-egypt-869.mp3";
+    audio.currentTime = audioCurrentTime;
+    audio.play();
+    icon.classList.remove("bx-volume-mute");
+    icon.classList.add("bx-volume-full");
+  } else {
+    audioCurrentTime = audio.currentTime;
+    audio.pause();
+    icon.classList.add("bx-volume-mute");
+    icon.classList.remove("bx-volume-full");
   }
 }
 
@@ -1363,12 +1405,13 @@ function concludeBattle(victory) {
   tempIDs.push("nbrTurnBattle");
   removeTempIDs();
   document.querySelectorAll('[class="unitList"]').forEach((e) => e.remove());
+  let lootDiv = document.createElement("div");
+  lootDiv.setAttribute("id", "lootDiv");
+  actionMenu.appendChild(lootDiv);
+  let lootMoney = 0;
   if (victory) {
     let lootInventory = {};
-    let lootMoney = 0;
-    let lootDiv = document.createElement("div");
-    lootDiv.setAttribute("id", "lootDiv");
-    actionMenu.appendChild(lootDiv);
+
     for (let eachRow in groupOfEnemies) {
       for (let eachEnemy in groupOfEnemies[eachRow]) {
         for (let eachLoot in lootTable[
@@ -1405,20 +1448,117 @@ function concludeBattle(victory) {
     let newText = document.createElement("p");
     newText.textContent = "You obtained " + String(lootMoney) + " debens!";
     lootDiv.appendChild(newText);
-    console.log(inventory);
     for (let eachId in lootInventory) {
       if (eachId in inventory) {
         inventory[eachId]["volume"] += 1;
       } else {
         inventory[eachId] = { volume: 1 };
       }
-      console.log("Item", eachId);
       ItemName = allItems[eachId]["name"];
       let newText = document.createElement("p");
       newText.textContent = `You obtained ${lootInventory[eachId]} ${ItemName}!`;
       lootDiv.appendChild(newText);
     }
+  } else {
+    // Perte de morale et d'argent.
+    for (let eachRow in groupOfEnemies) {
+      for (let eachEnemy in groupOfEnemies[eachRow]) {
+        lootMoney +=
+          lootTable[groupOfEnemies[eachRow][eachEnemy]["charaType"]][
+            "minMoney"
+          ] +
+          Math.round(
+            Math.random() *
+              lootTable[groupOfEnemies[eachRow][eachEnemy]["charaType"]][
+                "maxMoney"
+              ]
+          );
+      }
+    }
+    money = Math.max(0, money - lootMoney * 2);
+    let newText = document.createElement("p");
+    newText.textContent = "You lost " + String(lootMoney * 2) + " debens!";
+    lootDiv.appendChild(newText);
   }
+
+  let isAlive = false;
+  let numberOfInjured = 0;
+  let numberOfDeath = 0;
+  for (let i = 1; i < 4; i++) {
+    for (let eachGatherer in gatherer["row" + String(i)]) {
+      if (i == 1) {
+        for (let eachCrew in crewTotal) {
+          if (
+            crewTotal[eachCrew]["id"] ==
+            gatherer["row" + String(i)][eachGatherer]["id"]
+          ) {
+            crewTotal[eachCrew]["injuries"] += 1;
+            if (crewTotal[eachCrew]["injuries"] > 2) {
+              numberOfDeath++;
+            } else {
+              numberOfInjured += 1;
+            }
+            break;
+          }
+        }
+      }
+      for (let y = 1; y < 4; y++) {
+        if (isAlive) {
+          break;
+        }
+        for (let eachUnit in copy_playerTeam["row" + String(y)]) {
+          if (
+            copy_playerTeam["row" + String(y)][eachUnit]["id"] ==
+            gatherer["row" + String(i)][eachGatherer]["id"]
+          ) {
+            isAlive = true;
+            break;
+          }
+        }
+      }
+      if (!isAlive) {
+        for (let eachCrew in crewTotal) {
+          if (
+            crewTotal[eachCrew]["id"] ==
+            gatherer["row" + String(i)][eachGatherer]["id"]
+          ) {
+            crewTotal[eachCrew]["injuries"] += 2;
+            if (crewTotal[eachCrew]["injuries"] > 2) {
+              numberOfDeath++;
+            } else {
+              numberOfInjured++;
+            }
+          }
+        }
+      }
+    }
+  }
+  let newText = document.createElement("p");
+  newText.textContent = `${numberOfInjured} units have been injured!`;
+  lootDiv.appendChild(newText);
+  if (numberOfDeath > 0) {
+    newText = document.createElement("p");
+    newText.textContent = `${numberOfDeath} crew members have died!`;
+    lootDiv.appendChild(newText);
+  }
+  crewTotal.filter((e) => e.injuries <= 2);
+  let numberOfBandageUsed;
+  let totalBandagesUsed = 0;
+  for (let eachCrew in crewTotal) {
+    if (!inventory["11"]["volume"] > 0) {
+      break;
+    }
+    numberOfBandageUsed = Math.min(
+      crewTotal[eachCrew]["injuries"],
+      inventory["11"]["volume"]
+    );
+    crewTotal[eachCrew]["injuries"] -= numberOfBandageUsed;
+    inventory["11"]["volume"] -= numberOfBandageUsed;
+    totalBandagesUsed += numberOfBandageUsed;
+  }
+  newText = document.createElement("p");
+  newText.textContent = `${totalBandagesUsed} bandages have been used to heal crew members! You have ${inventory["11"]["volume"]} left.`;
+  lootDiv.appendChild(newText);
 
   document.getElementById("center-image").classList.remove("hidden");
   let finishBattleButton = document.createElement("button");
@@ -1430,6 +1570,13 @@ function concludeBattle(victory) {
     changeMenu("turnX");
   });
   actionMenu.appendChild(finishBattleButton);
+  for (let i = 1; i < 4; i++) {
+    for (let eachGatherer in gatherer["row" + String(i)]) {
+      crewMembers.push(gatherer["row" + String(i)][eachGatherer]);
+    }
+    gatherer["row" + String(i)] = [];
+  }
+  groupOfEnemies = { row1: [], row2: [], row3: [] };
 }
 
 function yourTurn(phase) {
@@ -2136,7 +2283,7 @@ function renderItems(filterType = "all") {
                                 <div class="modal-text">
                                     ${
                                       item.type === "weapon"
-                                        ? `Type: ${item.type}<br>Attack Style: ${item.attackType}<br>Value: ${item.value}<br>Weight: ${item.weight}<br>Quantity: ${quantity}<br>Description: ${item.description}`
+                                        ? `Type: ${item.type}<br>Weapon type: ${item.weaponType}<br>Attack strength: ${item.power}<br>Attack Type: ${item.attackType}<br>Attack Style: ${item.attackStyle}<br>Value: ${item.value}<br>Weight: ${item.weight}<br>Quantity: ${quantity}<br>Description: ${item.description}`
                                         : ""
                                     }
                                     ${

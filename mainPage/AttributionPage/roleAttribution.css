@@ -6,18 +6,26 @@
     font-family: 'Poppins', sans-serif;
 }
 
+body {
+    background-image: url('https://i.pinimg.com/originals/52/d3/98/52d398c64fb20ade7ef35e6733515ca1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    overflow: hidden;
+  }
+
 /* GLOBAL TABS */
 #roleTab {
     width: 100%;
     height: 100vh;
     display: flex;
-    background-color: blue;
+    background-color: rgba(46, 40, 40, 0.6);
 }
 
 #role {
     width: 40%;
     height: 100%;
-    background-color: green;
+    background-color: rgba(24, 24, 24, 0);
     display: flex;
     flex-direction: column;
     padding: 24px 32px;
@@ -26,7 +34,7 @@
 #crewMembers {
     width: 60%;
     height: 100%;
-    background-color: pink;
+    background-color: rgba(24, 24, 24, 0);
     padding: 24px 32px;
 }
 
@@ -38,8 +46,13 @@ h2 {
     color: white;
 }
 
+.role-title {
+    margin-top: 32px;
+}
+
 .global-ressources {
     display: flex;
+    color: white;
 }
 
 .left-ressources, .right-ressources {
@@ -54,23 +67,42 @@ h2 {
 
 #role button {
     border: none;
-    padding: 16px;
-    width: 12vh;
-    height: 12vh;
 }
 
 #role button:hover {
     background-color: darkgrey;
+    outline: solid darkgrey;
+    transition: .3s ease;
 }
 
 #role button:focus {
     background-color: grey;
 }
 
+#role-bis {
+    display: flex;
+    align-items: center;
+    margin: 16px 0;
+}
+
+#roleFood, #roleWater, #roleScout, #roleGuard, #roleCarrier, #roleMorale , #roleRow1, #roleRow2, #roleRow3 {
+    width: 88px;
+    height: 88px;
+    padding: 16px;
+    margin-right: 32px;
+    text-align: center;
+}
+
 /* CREW */
 
-/* SCROLLBAR */
+.description {
+    color: white;
+}
 
+/* SCROLLBAR */
+#crewMembers {
+    overflow-y: scroll;
+}
 
 /* SELECT AND DESELECT BUTTONS */
 
@@ -165,10 +197,14 @@ h2 {
 }
 
 #confirm {
-  background-color: white;
+  background-color: rgba(24, 24, 24, 0);
+  color: white;
+  outline: solid white;
   border-radius: 50px;
+  width: 208px;
+  padding: 12px;
+  margin: 16px 0;
 }
-
 
 .active {
     background-color: grey;

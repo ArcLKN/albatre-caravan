@@ -34,8 +34,9 @@ body {
 
 /* Possible destinations text */
 h1 {
-  font-size: 40px;
-  font-weight: 800;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 8px;
 }
 
 /* Resources bar */
@@ -155,6 +156,17 @@ div.strangeButton {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.speaker-button {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  width: 4vw;
+  height: 4vh;
+  display: flex;
+  align-items: center;
+  justify-content: center
 }
 
 .strangeButton:hover {

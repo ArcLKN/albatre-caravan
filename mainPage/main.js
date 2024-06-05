@@ -80,17 +80,17 @@ var locations = [
     doEnemySpawn: true,
     enemyType: {
       legionary: {
-        luck: 0.7,
+        luck: 0.15,
         minSize: 3,
         maxSize: 50,
-        playerCaravanSizeFactor: 0.25,
+        playerCaravanSizeFactor: 0.15,
         bribable: true,
       },
       bandit: {
-        luck: 1,
+        luck: 0.2,
         minSize: 5,
         maxSize: 50,
-        playerCaravanSizeFactor: 0.15,
+        playerCaravanSizeFactor: 0.25,
       },
     },
     description:
@@ -257,7 +257,14 @@ var locations = [
     name: "Oasis",
     isTradable: false,
     doEnemySpawn: true,
-    enemyType: { legionary: 1 },
+    enemyType: {
+      bandit: {
+        luck: 0.2,
+        minSize: 5,
+        maxSize: 50,
+        playerCaravanSizeFactor: 0.25,
+      },
+    },
     description:
       "In the middle of the desert it's the closest thing to what you could call Paradise.",
     gatheringValues: {
@@ -1551,7 +1558,7 @@ function concludeBattle(victory) {
     }
     gatherer["row" + String(i)] = [];
   }
-  console.log(gatherer);
+  groupOfEnemies = { row1: [], row2: [], row3: [] };
 }
 
 function yourTurn(phase) {

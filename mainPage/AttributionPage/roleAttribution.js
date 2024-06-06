@@ -98,6 +98,7 @@ function displayResources() {
       nbrWeapons += inventory[index]["volume"];
     } else if (allItems[index]["type"] == "mount") {
       nbrMounts += inventory[index]["volume"];
+      portage += inventory[index]["volume"] * allItems[index]["carryValue"];
     } else if (allItems[index]["type"] == "carrier") {
       portage += inventory[index]["volume"] * allItems[index]["carryValue"];
     } else if (allItems[index]["type"] == "food") {
@@ -279,6 +280,7 @@ function equipItem(itemId, memberId) {
 }
 
 function showItemInventory(itemType, itemId) {
+  console.log(inventory);
   document.querySelectorAll('[class="inventory"]').forEach((e) => e.remove());
   let inventoryDiv = document.createElement("div");
   inventoryDiv.classList.add("inventory");

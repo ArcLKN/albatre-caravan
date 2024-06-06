@@ -365,6 +365,14 @@ var locations = [
         volume: 40,
         price: 8,
       },
+      13: {
+        volume: 10,
+        price: 30,
+      },
+      14: {
+        volume: 10,
+        price: 10,
+      },
     },
   },
 ];
@@ -494,7 +502,7 @@ function prepareNarration() {
   }
   centerImage.src = "../Images/cine-1-7.png";
   currentTextNumber = 1;
-  currentTextPos = 15; // 0 By Default DEBUG
+  currentTextPos = 0; // 0 By Default DEBUG 15
 
   var node = document.getElementById("actionMenu");
 
@@ -562,6 +570,7 @@ let listCrewImages = {
   female: 51,
   legionary: 34,
   bandit: 25,
+  scorpio: 1,
 };
 
 var listOfNames = {
@@ -1394,9 +1403,10 @@ function initBattle() {
   let enemySide = document.createElement("div");
   enemySide.classList.add("unitList");
   middleMenu.appendChild(playerSide);
-  let vsNode = document.createElement("p");
+  let vsNode = document.createElement("h1");
   vsNode.textContent = "VS";
   vsNode.setAttribute("id", "vsNode");
+  tempIDs.push("vsNode");
   middleMenu.appendChild(vsNode);
   middleMenu.appendChild(enemySide);
   console.log("log: start create tables team");
@@ -1705,6 +1715,14 @@ function yourTurn(phase) {
     newButton.addEventListener("click", function () {
       changeMenu(this.id);
     });
+    var newButton = document.createElement("button");
+    tempIDs.push("yourTurn_trade");
+    newButton.setAttribute("id", "yourTurn_trade");
+    newButton.textContent = "Recruit a new crew member (400 debens)";
+    node.appendChild(newButton);
+    newButton.addEventListener("click", function () {
+      recruitRandomUnit(this.id);
+    });
   } else if (phase == "crewAssignment") {
     tempIDs.push("yourTurn_deploy");
     var newButton = document.createElement("button");
@@ -1786,6 +1804,9 @@ function turnX() {
   var newButton = document.createElement("button");
   newButton.setAttribute("id", "turnX_button");
   newButton.innerHTML = "Next";
+  if (money >= 10000) {
+    return victoryGame();
+  }
   if (doEvent) {
     newButton.addEventListener("click", function () {
       procEvent(doEvent);
@@ -2144,8 +2165,11 @@ function manageDeployDistribution() {
 }
 
 function Defeat(option) {
-  backgroundImageLocation = document.getElementById("backgroundImage");
-  backgroundImageLocation.src = "../Images/game_over.png";
+  document.getElementById("backgroundImage").src = "../Images/desertDeath.jpg";
+  var dyingText = document.createElement("h1");
+  dyingText.setAttribute("id", "dyingText");
+  dyingText.innerHTML = `DEFEAT`;
+  document.getElementById("actionMenu").appendChild(dyingText);
   tempIDs.push("dyingText");
   var dyingText = document.createElement("p");
   dyingText.setAttribute("id", "dyingText");
@@ -2487,17 +2511,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-function toggleHidden() {
-  const centerImage = document.getElementById("center-image");
-  if (centerImage.classList.contains("hidden")) {
-    // If it's hidden, remove the 'hidden' class
-    centerImage.classList.remove("hidden");
-  } else {
-    // If it's not hidden, add the 'hidden' class
-    centerImage.classList.add("hidden");
-  }
-}
-
 //Adding Events
 
 // Calculate what events will occur during the turn
@@ -2581,6 +2594,30 @@ function procEvent(eventName) {
   node.appendChild(newButton);
 
   updateRessourcesDisplay();
+}
+
+function victoryGame() {
+  document.getElementById("backgroundImage").src =
+    "../Images/desertVictory.jpg";
+  var winningTitle = document.createElement("h1");
+  winningTitle.innerHTML = `VICTORY`;
+  document.getElementById("actionMenu").appendChild(winningTitle);
+  tempIDs.push("dyingText");
+  let winningText = document.createElement("p");
+  winningText.innerHTML = `You won on turn ${String(numberOfTurns)}.`;
+  document.getElementById("actionMenu").appendChild(winningText);
+  winningText = document.createElement("p");
+  winningText.innerHTML = `You succeed buying the freedom of your daughter that was taken by the king of egypt and fled in a majestic boat to celebrate this event.`;
+  document.getElementById("actionMenu").appendChild(winningText);
+}
+
+function recruitRandomUnit() {
+  if (money >= 400) {
+    money -= 400;
+    updateRessourcesDisplay();
+    let newCrewMember = createCharacter();
+    crewTotal.push(newCrewMember);
+  }
 }
 
 tutorialLaunch = document.getElementById("didacticiel");

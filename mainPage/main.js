@@ -2132,6 +2132,8 @@ function manageDeployDistribution() {
 }
 
 function Defeat(option) {
+  backgroundImageLocation = document.getElementById("backgroundImage");
+  backgroundImageLocation.src = "../Images/game_over.png";
   tempIDs.push("dyingText");
   var dyingText = document.createElement("p");
   dyingText.setAttribute("id", "dyingText");

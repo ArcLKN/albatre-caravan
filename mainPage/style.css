@@ -192,6 +192,7 @@ div.strangeButton {
 }
 
 #center-image {
+  object-fit: cover;
   margin-top: 16px;
   width: 50%;
   height: 100%;

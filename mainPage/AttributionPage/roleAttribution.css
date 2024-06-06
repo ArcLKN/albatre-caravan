@@ -144,7 +144,7 @@ h2 {
 
 .inventory {
     box-sizing: border-box;
-    background-color: gainsboro;
+    background-color: rgb(87, 87, 87);
     padding: 20px 32px;
     display: flex;
     align-items: center;

@@ -456,9 +456,21 @@ function computeFood() {
   return foodNbr;
 }
 
+function computeGoods() {
+  let goodNbr = 0;
+  for (let i in inventory) {
+    if (allItems[i]["type"] == "goods") {
+      console.log(i);
+      goodNbr += inventory[i]["volume"];
+    }
+  }
+  return goodNbr;
+}
+
 function updateRessourcesDisplay() {
   document.getElementById("nb_water").textContent = String(water);
   document.getElementById("nb_food").textContent = String(computeFood());
+  document.getElementById("nb_goods").textContent = String(computeGoods());
   document.getElementById("nb_money").textContent = String(money);
   document.getElementById("nb_morale").textContent = String(Math.round(morale));
   console.log(crewTotal);

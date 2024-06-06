@@ -1403,9 +1403,10 @@ function initBattle() {
   let enemySide = document.createElement("div");
   enemySide.classList.add("unitList");
   middleMenu.appendChild(playerSide);
-  let vsNode = document.createElement("p");
+  let vsNode = document.createElement("h1");
   vsNode.textContent = "VS";
   vsNode.setAttribute("id", "vsNode");
+  tempIDs.push("vsNode");
   middleMenu.appendChild(vsNode);
   middleMenu.appendChild(enemySide);
   console.log("log: start create tables team");

@@ -787,6 +787,14 @@ let lootTable = {
     minMoney: 0,
     maxMoney: 20,
   },
+  scorpio: {
+    items: {
+      13: 0.1,
+      14: 0.2,
+    },
+    minMoney: 0,
+    maxMoney: 0,
+  },
 };
 
 var baseCrewNumber = 20;
@@ -809,7 +817,7 @@ var allItems = {
     type: "food",
     name: "Food",
     foodValue: 1,
-    quantity: 0,
+    volume: 0,
     value: 10,
     description: "Miam miam",
     weight: 1,
@@ -818,7 +826,7 @@ var allItems = {
   2: {
     type: "weapon",
     name: "bow",
-    quantity: 0,
+    volume: 0,
     value: 10,
     power: [1, 2, 3],
     attackType: ["blunt", "piercing", "piercing"],
@@ -830,7 +838,7 @@ var allItems = {
   },
   3: {
     type: "weapon",
-    quantity: 0,
+    volume: 0,
     value: 10,
     name: "spear",
     power: [2, 3, 0],
@@ -843,7 +851,7 @@ var allItems = {
   },
   4: {
     type: "weapon",
-    quantity: 0,
+    volume: 0,
     value: 100,
     name: "sword",
     power: [3, 2, 0],
@@ -901,7 +909,7 @@ var allItems = {
   },
   9: {
     type: "weapon",
-    quantity: 0,
+    volume: 0,
     value: 50,
     name: "Gladius",
     power: [3, 2, 0],
@@ -943,7 +951,7 @@ var allItems = {
   12: {
     type: "weapon",
     name: "Nomad Bow",
-    quantity: 0,
+    volume: 0,
     value: 40,
     power: [1, 3, 2],
     attackType: ["blunt", "piercing", "piercing"],
@@ -952,6 +960,22 @@ var allItems = {
     description: "Powerful bow at close range but less at longer range.",
     weight: 1,
     rarity: "uncommon",
+  },
+  13: {
+    type: "goods",
+    name: "Scorpion Venom",
+    volume: 0,
+    price: 30,
+    weight: 1,
+    rarity: "Uncommon",
+  },
+  14: {
+    type: "goods",
+    name: "Scorpion Tail",
+    volume: 0,
+    price: 10,
+    weight: 1,
+    rarity: "common",
   },
   800: {
     type: "weapon",

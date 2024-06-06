@@ -53,8 +53,8 @@ function displayInventory() {
 
     for (let eachItem in eInventaire) {
       let thisItem = allItems[eachItem];
-      console.log("Item", eachItem, thisItem);
-      console.log(thisItem);
+      // console.log("Item", eachItem, thisItem);
+      // console.log(thisItem);
       let itemVolume;
       let itemPrice;
       if (e == "player") {
@@ -63,6 +63,7 @@ function displayInventory() {
           continue;
         }
         itemVolume = eInventaire[eachItem]["volume"];
+        console.log(itemVolume);
         itemPrice = playerLocation["sellableGoods"][eachItem]["price"];
       } else {
         itemVolume = playerLocation["buyableGoods"][eachItem]["volume"];
@@ -92,7 +93,14 @@ function displayInventory() {
 
       var divprix = document.createElement("div");
       divprix.classList.add("prix");
-      divprix.innerText = itemPrice + "$";
+
+      const currencyIcon = document.createElement("i");
+      currencyIcon.className = "bx bx-coin";
+      currencyIcon.style.color = "#ffffff";
+
+      // Mettez à jour le contenu du div avec le prix suivi de l'icône de la monnaie
+      divprix.innerText = itemPrice + " ";
+      divprix.appendChild(currencyIcon);
 
       nouvelleDiv.appendChild(image);
       nouvelleDiv.appendChild(divname);
@@ -177,17 +185,17 @@ function sellItem(thisItem, newValue) {
 }
 function buyItem(thisItem, newValue) {
   let thisInput = document.getElementById(thisItem + "ShopInput");
-  console.log(thisInput);
+  //console.log(thisInput);
   let resultatNode = document.getElementById("finali");
-  console.log(resultatNode);
+  //console.log(resultatNode);
   resultatNode.textContent =
     parseInt(resultatNode.textContent) -
     (newValue - previousShopValues[thisItem]) *
       playerLocation["buyableGoods"][thisItem]["price"];
-  console.log(resultatNode.textContent);
+  //console.log(resultatNode.textContent);
   changeTriangle();
   previousShopValues[thisItem] = newValue;
-  console.log(newValue);
+  //console.log(newValue);
 
   var divquantitéM = document.getElementById(thisItem + "ShopQtt");
   var displayQ = divquantitéM.querySelector(".display-quantity");
@@ -316,8 +324,8 @@ function checkTransaction() {
 
 loadSessionStorage();
 var inventaireMagasin = playerLocation["buyableGoods"];
-console.log(inventaire);
-console.log(inventaireMagasin);
+//console.log(inventaire);
+//console.log(inventaireMagasin);
 displayInventory();
 defPreviousValues();
 
@@ -346,7 +354,8 @@ function displayNew() {
 
   // Update argent
   argent = argent + res;
-  money.textContent = argent;
+  money.textContent = argent; //money=argent qu'on a
+  
 
   ["player", "shop"].forEach((e) => {
     let eInventaire;

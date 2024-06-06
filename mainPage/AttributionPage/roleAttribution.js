@@ -503,10 +503,10 @@ function createMemberAndAssign(menu = "") {
       let ressourceText = document.createElement("p");
       if (ressourcesObtained > 0) {
         ressourceText.innerHTML = "+";
-        ressourceText.style.color = "green";
+        ressourceText.style.color = "LightGreen";
       } else if (ressourcesObtained < 0) {
         ressourceText.innerHTML = "-";
-        ressourceText.style.color = "red";
+        ressourceText.style.color = "LightPink";
       } else {
         ressourceText.innerHTML = "";
         ressourceText.style.color = "grey";

@@ -456,7 +456,7 @@ function onLoad() {
     });
     if (bonus >= 0) {
       bonus = "+" + bonus;
-      bonusNode.style.color = "green";
+      bonusNode.style.color = "LightGreen";
     } else {
       bonusNode.style.color = "red";
     }
@@ -1719,7 +1719,7 @@ function turnX() {
     });
     if (bonus >= 0) {
       bonus = "+" + bonus;
-      bonusNode.style.color = "green";
+      bonusNode.style.color = "LightGreen";
     } else {
       bonusNode.style.color = "red";
     }

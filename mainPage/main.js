@@ -150,14 +150,14 @@ var locations = [
     },
   },
   {
-    image: "../Images/desert_location.png",
+    image: "../Images/desert_location.jpg",
     type: "desert",
     name: "Desert",
     isTradable: false,
     doEnemySpawn: true,
     enemyType: {
       scorpio: {
-        luck: 0.1,
+        luck: 1,
         minSize: 2,
         maxSize: 5,
         playerCaravanSizeFactor: 0.1,
@@ -365,6 +365,14 @@ var locations = [
         volume: 40,
         price: 8,
       },
+      13: {
+        volume: 10,
+        price: 30,
+      },
+      14: {
+        volume: 10,
+        price: 10,
+      },
     },
   },
 ];
@@ -456,9 +464,21 @@ function computeFood() {
   return foodNbr;
 }
 
+function computeGoods() {
+  let goodNbr = 0;
+  for (let i in inventory) {
+    if (allItems[i]["type"] == "goods") {
+      console.log(i);
+      goodNbr += inventory[i]["volume"];
+    }
+  }
+  return goodNbr;
+}
+
 function updateRessourcesDisplay() {
   document.getElementById("nb_water").textContent = String(water);
   document.getElementById("nb_food").textContent = String(computeFood());
+  document.getElementById("nb_goods").textContent = String(computeGoods());
   document.getElementById("nb_money").textContent = String(money);
   document.getElementById("nb_morale").textContent = String(Math.round(morale));
   console.log(crewTotal);
@@ -853,6 +873,7 @@ var listOfNames = {
       "Valerius",
       "Varus",
     ],
+    scorpio: ["Red", "Green", "Black", "Yellow"],
   },
   surname: ["Joestar", "Neith"],
 };
@@ -926,6 +947,11 @@ function inputTrait(newTraitName, newUnit) {
   let newTrait = specialsTraitsManager[newTraitName];
   newUnit["special"][newTraitName] = true;
   for (let property in newTrait) {
+    console.log(newTraitName, property, "weapon", property == "weapon");
+    if (property == "weapon") {
+      newUnit[property] = newTrait[property];
+      continue;
+    }
     if (typeof newTrait[property] == "object") {
       for (let subProperty in newTrait[property]) {
         newUnit[property][subProperty] += newTrait[property][subProperty];
@@ -969,7 +995,8 @@ function createCharacter(charaType = null) {
     newUnit["charaType"] = charaType;
     if (charaType in listOfNames["firstname"]) {
       newUnit["name"] =
-        "Legionary " +
+        Capitalize(charaType) +
+        " " +
         listOfNames["firstname"][charaType][
           Math.floor(listOfNames["firstname"][charaType].length * Math.random())
         ];
@@ -1004,6 +1031,11 @@ function createCharacter(charaType = null) {
       }
       newUnit["special"][newTraitName] = true;
       for (let property in newTrait) {
+        console.log(charaType, property, "weapon");
+        if (property in ["weapon", "armor"]) {
+          newUnit[property] = newTrait[property];
+          continue;
+        }
         if (typeof newTrait[property] == "object") {
           for (let subProperty in newTrait[property]) {
             newUnit[property][subProperty] += newTrait[property][subProperty];
@@ -1857,10 +1889,12 @@ function areUSure(directions) {
 // TO BE MODIFIED -> maybe not the same inner HTML
 function changeLocation(button_id) {
   console.log("CHANGE LOCATION");
+
   // slice (cut the string in several part, here it deletes the 5 first caracters) the button id to get the right string.
   playerLocation = JSON.parse(
     JSON.stringify(returnLocationData(button_id.slice(5)))
   );
+  document.getElementById("backgroundImage").src = playerLocation["image"];
   document.getElementById("locationName").textContent = playerLocation["name"];
   changeMenu("ressourcesConsumption", true);
 }
@@ -2118,6 +2152,11 @@ function manageDeployDistribution() {
 }
 
 function Defeat(option) {
+  document.getElementById("backgroundImage").src = "../Images/desertDeath.jpg";
+  var dyingText = document.createElement("h1");
+  dyingText.setAttribute("id", "dyingText");
+  dyingText.innerHTML = `DEFEAT`;
+  document.getElementById("actionMenu").appendChild(dyingText);
   tempIDs.push("dyingText");
   var dyingText = document.createElement("p");
   dyingText.setAttribute("id", "dyingText");
@@ -2141,6 +2180,7 @@ function manageArmy() {
   console.log("MANAGE ARMY");
 
   let enemyType;
+  console.log(playerLocation);
   let enemyTypeRand = Math.random();
   for (let enemyInLocation in playerLocation["enemyType"]) {
     if (enemyTypeRand <= playerLocation["enemyType"][enemyInLocation]["luck"]) {
@@ -2448,7 +2488,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const centerImage = document.getElementById("center-image");
 
   inventoryButton.addEventListener("click", function () {
-    
     inventoryPage.classList.toggle("hidden");
     inventoryPage.classList.toggle("visible");
     // Call the function initially
@@ -2484,7 +2523,7 @@ function triggerEvent() {
       eventName = playerLocation["possibleEvents"][eachEvent]["name"];
     }
   }
-
+  console.log("EVENT", eventName);
   return eventName;
 }
 

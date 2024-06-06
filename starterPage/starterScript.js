@@ -745,7 +745,7 @@ specialsTraitsManager = {
       phyDefense: 1,
     },
   },
-  scorpion: {
+  scorpio: {
     health: -5,
     resistance: {
       phyDefense: -1,

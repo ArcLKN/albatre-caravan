@@ -461,18 +461,18 @@ buttton is clicked*/
 
 /* Background color based on item rarity */
 .inventory-item.rarity-common {
-  background-color: #867e7e4f; /* Light gray for common items */
+  background-color: #a9a9a98f; /* Light gray for common items */
 }
 
 .inventory-item.rarity-rare {
-  background-color: #0e1df354; /* Light blue for rare items */
+  background-color: #0e1df38f; /* Light blue for rare items */
 }
 
 .inventory-item.rarity-legendary {
-  background-color: #ffb30053; /* Gold for legendary items */
+  background-color: #ffb30083; /* Gold for legendary items */
 }
 
 .inventory-item.rarity-epic {
-  background-color: #5300a14f; /* Tomato red for epic items */
+  background-color: #5300a190; /* Tomato red for epic items */
 }
 

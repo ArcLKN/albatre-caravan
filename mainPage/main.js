@@ -2448,7 +2448,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const centerImage = document.getElementById("center-image");
 
   inventoryButton.addEventListener("click", function () {
-    toggleHidden();
+    
     inventoryPage.classList.toggle("hidden");
     inventoryPage.classList.toggle("visible");
     // Call the function initially
@@ -2459,16 +2459,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-function toggleHidden() {
-  const centerImage = document.getElementById("center-image");
-  if (centerImage.classList.contains("hidden")) {
-    // If it's hidden, remove the 'hidden' class
-    centerImage.classList.remove("hidden");
-  } else {
-    // If it's not hidden, add the 'hidden' class
-    centerImage.classList.add("hidden");
-  }
-}
+
 
 //Adding Events
 

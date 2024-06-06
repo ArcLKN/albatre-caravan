@@ -471,6 +471,9 @@ function prepareNarration() {
   );
   if (document.getElementById("center-image")) {
     centerImage = document.getElementById("center-image");
+    if (centerImage.classList.contains("hidden")) {
+      centerImage.classList.remove("hidden");
+    }
   } else {
     let middleMenu = document.getElementById("middle menu");
     centerImage = document.createElement("div");
@@ -1357,7 +1360,9 @@ function initBattle() {
 
   console.log("Group of Enemies", groupOfEnemies);
   let actionBar = document.getElementById("actionMenu");
-  document.getElementById("center-image").classList.add("hidden");
+  if (!document.getElementById("center-image").classList.contains("hidden")) {
+    document.getElementById("center-image").classList.add("hidden");
+  }
 
   let middleMenu = document.getElementById("middle menu");
   let playerSide = document.createElement("div");
@@ -1646,7 +1651,6 @@ function concludeBattle(victory) {
   newText.textContent = `${totalBandagesUsed} bandages have been used to heal crew members! You have ${inventory["11"]["volume"]} left.`;
   lootDiv.appendChild(newText);
 
-  document.getElementById("center-image").classList.remove("hidden");
   let finishBattleButton = document.createElement("button");
   finishBattleButton.textContent = "End result";
   tempIDs.push("finishBattleButton");
@@ -1916,7 +1920,8 @@ function changeTextNarration() {
   if (++currentTextPos >= textList["id_" + String(currentTextNumber)].length) {
     removeTempIDs();
     centerImage = document.getElementById("center-image");
-    centerImage.src = "../Images/Illustration.jpg";
+    centerImage.classList.add("hidden");
+    //centerImage.src = "";
     changeMenu("turnX");
   } else if (
     currentTextPos ==
@@ -2530,6 +2535,7 @@ function procEvent(eventName) {
 
   let centerImage = document.getElementById("center-image");
   if (centerImage && background) {
+    centerImage.classList.remove("hidden");
     centerImage.src = background;
   }
   tempIDs.push("eventText");

@@ -1794,6 +1794,9 @@ function turnX() {
   var newButton = document.createElement("button");
   newButton.setAttribute("id", "turnX_button");
   newButton.innerHTML = "Next";
+  if (money >= 10000) {
+    return victoryGame();
+  }
   if (doEvent) {
     newButton.addEventListener("click", function () {
       procEvent(doEvent);
@@ -2583,4 +2586,18 @@ function procEvent(eventName) {
   node.appendChild(newButton);
 
   updateRessourcesDisplay();
+}
+
+function victoryGame() {
+  document.getElementById("backgroundImage").src =
+    "../Images/desertVictory.jpg";
+  var winningTitle = document.createElement("h1");
+  winningTitle.setAttribute("id", "winningTitle");
+  winningTitle.innerHTML = `VICTORY`;
+  document.getElementById("actionMenu").appendChild(winningTitle);
+  tempIDs.push("dyingText");
+  var winningText = document.createElement("p");
+  winningText.setAttribute("id", "winningText");
+  winningText.innerHTML = `You won on turn ${String(numberOfTurns)}.`;
+  document.getElementById("actionMenu").appendChild(winningText);
 }

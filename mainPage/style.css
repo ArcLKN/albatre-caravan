@@ -265,6 +265,29 @@ div.strangeButton {
 	margin: 0px 10px 0px 10px;
 }
 
+#didacticiel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  position: fixed;
+  top: 4px;
+  right: 16px;
+}
+
+.bx-file-blank {
+  padding-left: 8px;
+}
+
+#tutorialBox {
+  height: 50vh !important;
+  width: 92vw !important;
+  overflow-y: scroll !important;
+  display: flex;
+  flex-direction: column;
+}
+
 /*adding inventory stuff*/
 /*sets the inventory page as hidden, this status should change when the inventory
 buttton is clicked*/

@@ -2582,3 +2582,10 @@ function procEvent(eventName) {
 
   updateRessourcesDisplay();
 }
+
+tutorialLaunch = document.getElementById("didacticiel");
+tutorialLaunch.addEventListener("click", function () {
+  tutorialContainer = document.createElement("div");
+  tutorialContainer.setAttribute("id", "tutorialBox");
+  document.middleMenu.appendChild(tutorialContainer);
+});

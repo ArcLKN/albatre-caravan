@@ -482,4 +482,6 @@ buttton is clicked*/
   max-height:60px;
 }
 
-
+.bx-volume-mute {
+  padding-left: 8px;
+}

@@ -502,7 +502,7 @@ function prepareNarration() {
   }
   centerImage.src = "../Images/cine-1-7.png";
   currentTextNumber = 1;
-  currentTextPos = 15; // 0 By Default DEBUG
+  currentTextPos = 0; // 0 By Default DEBUG 15
 
   var node = document.getElementById("actionMenu");
 
@@ -2501,8 +2501,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-
-
 //Adding Events
 
 // Calculate what events will occur during the turn
@@ -2592,12 +2590,13 @@ function victoryGame() {
   document.getElementById("backgroundImage").src =
     "../Images/desertVictory.jpg";
   var winningTitle = document.createElement("h1");
-  winningTitle.setAttribute("id", "winningTitle");
   winningTitle.innerHTML = `VICTORY`;
   document.getElementById("actionMenu").appendChild(winningTitle);
   tempIDs.push("dyingText");
-  var winningText = document.createElement("p");
-  winningText.setAttribute("id", "winningText");
+  let winningText = document.createElement("p");
   winningText.innerHTML = `You won on turn ${String(numberOfTurns)}.`;
+  document.getElementById("actionMenu").appendChild(winningText);
+  winningText = document.createElement("p");
+  winningText.innerHTML = `You succeed buying the freedom of your daughter that was taken by the king of egypt and fled in a majestic boat to celebrate this event.`;
   document.getElementById("actionMenu").appendChild(winningText);
 }

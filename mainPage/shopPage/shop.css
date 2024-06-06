@@ -1,128 +1,96 @@
-body {
-    background-image: url('../shopPage/inventoryPage.png');
-    background-size: cover; /* Adjusts the background image to cover the entire container */
-    background-repeat: no-repeat; /* Prevents the background image from repeating */
-    background-position: center; /* Centers the background image */
-    height: 100vh; /* Ensures the body takes the full height of the viewport */
-    margin: 0; /* Removes default margin */
-    font-family: Arial, sans-serif; /* Optional: Sets a default font for the page */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+.dark-background {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(46, 40, 40, 0.6);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
 }
-.all {
+
+body {
+    background-image: url('../../Images/ancient-egypt-wallpaper.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.all{
     display: flex;
     flex-direction: row;
-    position: relative;
+    position: relative; 
+}
+
+
+.you{
+    height: 100%;
+    width: 50%;
+ 
     
 }
 
-.you, .buyer {
-    background-color: white;
+.buyer{
     height: 100%;
     width: 50%;
+
+    
 }
 
-.buyer {
-    border-left: 1px black solid;
-}
-
-.nameYou, .nameBuyer {
+.nameYou, .nameBuyer{
     height: 5%;
     text-align: center;
+    color: white;
+    
 }
 
-.inventory-item {
+.BigItem{
     display: flex;
     flex-direction: row;
     height: 8vh;
     width: 100%;
+    background-color: rgba(115, 115, 115, 0.3);
     justify-content: space-around;
     align-items: center;
     text-align: center;
-    border-bottom: 1px black solid;
-    padding: 10px;
-    border-radius: 8px;
+    margin-bottom: 10px;
+    color: white
+    
 }
 
-.inventory-item img {
+
+img{
     height: 50px;
     width: 30px;
-    margin: 0 2%;
+    margin: 0 2% 0 2%;
+   
 }
 
-.inventory-item .item-title {
-    font-size: 20px;
-    text-align: left;
-    margin-left: 10px;
-    flex-grow: 1;
-    color: black;
-}
-
-.inventory-item .basic-info {
-    font-size: 13px;
-    text-align: center;
+.container, .containerMagasin{
     display: flex;
-    align-items: center;
-    color: black;
-}
-
-.inventory-item .basic-info p {
-    margin: 0 5px 0 0;
-}
-
-.inventory-item .basic-info i {
-    width: 13px;
-    height: 13px;
-    margin-bottom: 3px;
-    margin-left: 5px;
-}
-/* Background color based on item rarity */
-.inventory-item.rarity-common {
-  background-color: #867e7e4f; /* Light gray for common items */
-}
-
-.inventory-item.rarity-rare {
-  background-color: #0e1df354; /* Light blue for rare items */
-}
-
-.inventory-item.rarity-legendary {
-  background-color: #ffb30062; /* Gold for legendary items */
-}
-
-.inventory-item.rarity-epic {
-  background-color: #5300a14f; /* Tomato red for epic items */
-}
-
-
-.input {
-    min-height: 10px;
-    width: 50px;
-    height: 2vh;
-    font-size: 13px;
-}
-
-.container, .containerMagasin {
-    height: 50vh !important;
-    width: 40vw !important;
-    overflow-y: scroll !important;
-    display: flex;
-    flex-direction: column;
-    gap: 5px; /* Gap between grid items */
-    align-content:center;
-    border-radius: 3px; /* Rounded border for the container */
-    padding: 20px; /* Padding inside the container */
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    
 }
 
-#generate {
+#generate{
+ 
     position: absolute;
-    top: 80%;
+    top: 60%;
     left: 45%;
     width: 10%;
     height: 10%;
+    
     text-align: center;
+    
 }
 
-#final {
+#final{
     position: absolute;
     top: 110%;
     left: 45%;
@@ -130,16 +98,35 @@ body {
     height: 10%;
     color: white;
     text-align: center;
+    
 }
 
-h1 {
+
+.quantité0, .quantité1, .quantité2, .Mquantité0, .Mquantité1, .Mquantité2{
+    margin: 10% 0 0 0;
+}
+
+input{
+    min-height: 10px;
+    width: 50px;
+    height: 2vh;
+    font-size: 13px;
+}
+
+.name{
+    font-size: 20px;
+}
+
+h1{
     margin-bottom: 5%;
 }
 
-#transa, #res {
-    background-color: rgb(255, 255, 49);
+#transa, #res{
+
     font-size: 20px;
+
 }
+
 
 #triangle {
     width: 0;
@@ -149,11 +136,14 @@ h1 {
     position: absolute;
     top: 110%;
     left: 40%;
+
 }
 
 #res {
-    background-color: brown;
+    background-color: white;
     font-size: 25px;
+    color: black;
+
 }
 
 #recap {
@@ -163,12 +153,13 @@ h1 {
     height: 50vh;
     top: 10%;
     left: 25%;
-    background-color: white;
+    background-color:white;
     text-align: center;
-    border: 1px black solid;
+
+
 }
 
-#compute {
+#compute{
     position: absolute;
     top: 55vh;
     width: 10%;
@@ -176,26 +167,27 @@ h1 {
     font-size: 20px;
     text-align: center;
     margin-top: 20px;
+  
 }
 
-#compute:hover {
+#compute:hover{
     background-color: grey;
 }
 
-.bottom {
-    display: flex;
-    flex-direction: row;
-    position: absolute;
-    top: 80%;
-    left: 25%;
-}
 
-#terminer, #continue {
+#terminer {
+    font-family: 'Poppins', sans-serif;
     width: 65%;
     height: 15%;
     font-size: 15px;
+    position: absolute;
+    top: 80%;
+    left: 17%;
+    
 }
 
-#continue {
-    margin-left: 120%;
-}
+/* #continue{ */
+    /* margin-left: 120%; */
+/* } */
+
+

@@ -1869,10 +1869,12 @@ function areUSure(directions) {
 // TO BE MODIFIED -> maybe not the same inner HTML
 function changeLocation(button_id) {
   console.log("CHANGE LOCATION");
+
   // slice (cut the string in several part, here it deletes the 5 first caracters) the button id to get the right string.
   playerLocation = JSON.parse(
     JSON.stringify(returnLocationData(button_id.slice(5)))
   );
+  document.getElementById("backgroundImage").src = playerLocation["image"];
   document.getElementById("locationName").textContent = playerLocation["name"];
   changeMenu("ressourcesConsumption", true);
 }

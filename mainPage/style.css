@@ -478,7 +478,7 @@ buttton is clicked*/
 }
 
 
-#dest_desert, #dest_nil_shore, #dest_fluvial_city, #dest_desert_city, #dest_oasis, #dest_village {
+#dest_desert, #dest_nil_shore, #dest_fluvial_city, #dest_desert_city, #dest_oasis, #dest_village, #nomad_camp {
   max-height:60px;
 }
 

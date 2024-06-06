@@ -780,11 +780,13 @@ var allItems = {
   0: {
     type: "carrier",
     name: "Camel",
+    value: 500,
     volume: 2,
     price: 1000,
     carryValue: 100,
     weight: 0,
     rarity: "common",
+    imgFile: "../Images/ItemImages/camel.png"
   },
   1: {
     type: "food",
@@ -794,11 +796,12 @@ var allItems = {
     value: 10,
     description: "Miam miam",
     weight: 1,
-    rarity: "common",
+    rarity: "rare",
+    imgFile: "../Images/ItemImages/food.png"
   },
   2: {
     type: "weapon",
-    name: "bow",
+    name: "Bow",
     quantity: 0,
     value: 10,
     power: [1, 2, 3],
@@ -807,7 +810,8 @@ var allItems = {
     attackStyle: ["melee", "distance", "distance"],
     description: "Classic wooden bow.",
     weight: 1,
-    rarity: "common",
+    rarity: "rare",
+    imgFile: "../Images/ItemImages/bow.png"
   },
   3: {
     type: "weapon",
@@ -820,13 +824,14 @@ var allItems = {
     attackStyle: ["melee", "melee", "distance"],
     description: "Classic wooden bow.",
     weight: 1,
-    rarity: "common",
+    rarity: "rare",
+    imgFile: "../Images/ItemImages/spear.png"
   },
   4: {
     type: "weapon",
     quantity: 0,
-    value: 100,
-    name: "sword",
+    value: 10,
+    name: "Sword",
     power: [3, 2, 0],
     attackType: ["slashing", "slashing", "piercing"],
     weaponType: "sword",
@@ -834,6 +839,7 @@ var allItems = {
     description: "Classic wooden bow.",
     weight: 1,
     rarity: "common",
+    imgFile: "../Images/ItemImages/sword.png"
   },
   5: {
     type: "food",
@@ -842,32 +848,40 @@ var allItems = {
     volume: 100,
     price: 6,
     weight: 1,
+    value: 3,
     rarity: "common",
+    imgFile: "../Images/ItemImages/rations.png"
   },
   6: {
     type: "goods",
     name: "Papyrus",
     volume: 50,
+    value:5,
     price: 20,
     weight: 1,
     rarity: "common",
+    imgFile: "../Images/ItemImages/papyrus.png"
   },
   7: {
     type: "mount",
     name: "Horse",
     volume: 0,
+    value: 250,
     price: 500,
     carryValue: 30,
     weight: 0,
     rarity: "common",
+    imgFile: "../Images/ItemImages/horse.png"
   },
   8: {
     type: "armor",
-    name: "Lorica segmentata",
+    name: "Lorica Segmentata",
     volume: 0,
+    value: 250,
     price: 500,
     weight: 5,
-    rarity: "uncommon",
+    rarity: "legendary",
+    imgFile: "../Images/ItemImages/lorcia_segmentata.png",
     resistance: {
       defense: 0,
       phyDefense: 1,
@@ -877,8 +891,8 @@ var allItems = {
       blunt: 0,
       poison: 0,
       fire: 0,
-      ice: 0,
-    },
+      ice: 0
+    }
   },
   9: {
     type: "weapon",
@@ -889,18 +903,20 @@ var allItems = {
     attackType: ["slashing", "slashing", "piercing"],
     weaponType: "sword",
     attackStyle: ["melee", "melee", "distance"],
-    description:
-      "Sword stolen from a dead legionary. It is made of fine metal.",
+    description: "Sword stolen from a dead legionary. It is made of fine metal.",
     weight: 1,
-    rarity: "uncommon",
+    rarity: "epic",
+    imgFile: "../Images/ItemImages/gladius.png"
   },
   10: {
     type: "armor",
-    name: "Leather armor",
+    name: "Leather Armor",
     volume: 0,
+    value: 50,
     price: 100,
     weight: 5,
-    rarity: "uncommon",
+    rarity: "rare",
+    imgFile: "../Images/ItemImages/leather.png",
     resistance: {
       defense: 0,
       phyDefense: 0,
@@ -910,34 +926,39 @@ var allItems = {
       blunt: 0,
       poison: 0,
       fire: 0,
-      ice: 0,
-    },
+      ice: 0
+    }
   },
   11: {
     type: "other",
-    name: "bandage",
+    name: "Bandage",
     volume: 0,
     price: 20,
     weight: 0,
-    rarity: "common",
+    rarity: "rare",
+    imgFile: "../Images/ItemImages/bandage.png"
   },
   1000: {
     type: "weapon",
     name: "Hand",
+    value: "priceless",
     weight: 0,
     rarity: "common",
     power: [1, 0, 0],
     attackType: ["blunt", "blunt", "blunt"],
     weaponType: "mace",
-    attackStyle: ["melee", "melee", "melee"],
+    attackStyle: ["melee", "melee", "melee"]
   },
   1001: {
     type: "armor",
-    name: "Cloth",
+    name: "Cloth Armor",
+    value: 25,
     weight: 0,
     rarity: "common",
-  },
+    imgFile: "../Images/ItemImages/cloth.png"
+  }
 };
+
 //changed volume to "amount" since we already have a volume for each
 baseInventory = {
   0: { volume: 1 },

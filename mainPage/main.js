@@ -2045,7 +2045,7 @@ function manageCarrier() {
 // Function that is executed when a battle is triggered.
 function manageArmy() {
   console.log("MANAGE ARMY");
-  //
+
   let enemyType;
   let enemyTypeRand = Math.random();
   for (let enemyInLocation in playerLocation["enemyType"]) {
@@ -2054,6 +2054,7 @@ function manageArmy() {
       break;
     }
   }
+  
   let numberOfEnnemy;
   numberOfEnnemy =
     playerLocation["enemyType"][enemyType]["minSize"] +
@@ -2410,7 +2411,6 @@ function triggerEvent() {
           console.log("death");
           randomIllnessAndDeath();
       } else {
-          getRobbed();
           console.log("no event this turn");
       }
   } else if (playerLocation.type === "desert") {
@@ -2424,14 +2424,14 @@ function triggerEvent() {
           console.log("wanderer");
           findOasis();
       } else if (0.3 < cityEvent && cityEvent <= 0.4) {
-          console.log("oasis");
-           findOasis();
+          console.log("wanderer");
+           
       } else if (0.4 < cityEvent && cityEvent <= 0.5) {
           console.log("illness");
           randomIllnessAndDeath();
       } else {
           console.log("no event this turn");
-          findOasis();
+          
       }
   }
 }
@@ -2461,6 +2461,7 @@ function endRain() {
 let originalPrices = {};
 
 function randomIllnessAndDeath() {
+  console.log("random death triggered")
   killPeople(1);
   const message = "Someone in your party died for no reason.";
   const background1 = '../Images/EventBackgrounds/desertDeath.png';//display when in desert
@@ -2483,6 +2484,7 @@ function itsHoliday() {
  // originalPrices = getOriginalPrices(allItems);
 
   // Apply the discount to all items in existence
+  //this doesnt do anything idk why
   for (let item in allItems) {
       if (allItems.hasOwnProperty(item)) {
           allItems[item].price *= 0.8;
@@ -2490,6 +2492,12 @@ function itsHoliday() {
   }
   displayMessage(message);
   setCenterImage(background)
+}
+function revertPrices() {
+  for (let item in originalPrices) {
+      allItems[item].price = originalPrices[item];
+  }
+  originalPrices = {}; // Clear the originalPrices object after reverting
 }
 function findRuin() {
   console.log("looted ruin");
@@ -2529,13 +2537,9 @@ function setCenterImage(background) {
 
 function displayMessage(message) {
   let node = document.getElementById("actionMenu");
-  let eventText = document.createElement("p");
-  eventText.textContent = message;
-  node.appendChild(eventText);
-
   let newText = document.createElement("p");
   newText.setAttribute("id", "eventStatement");
-  newText.textContent = "Would you like to move?";
+  newText.textContent = message;
   node.appendChild(newText);
   newText.addEventListener("click", function () {
       changeMenu(this.id);

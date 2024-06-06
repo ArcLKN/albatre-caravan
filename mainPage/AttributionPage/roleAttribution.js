@@ -626,6 +626,8 @@ function onLoad() {
   let confirmationBtn = document.getElementById("confirm");
 
   if (statusTurn == "deployUnits") {
+    document.body.style.backgroundImage =
+      "url('../../Images/carrier_attribution.png')";
     confirmationBtn.addEventListener("click", () => {
       statusTurn = "gatherResolution";
       saveSessionStorage();
@@ -696,6 +698,8 @@ function onLoad() {
     });
     createMemberAndAssign("scout");
   } else if (statusTurn == "deployCarrier") {
+    document.body.style.backgroundImage =
+      "url('../../Images/carrier_attribution.png')";
     confirmationBtn.addEventListener("click", () => {
       statusTurn = "deployCarrier";
       saveSessionStorage();
@@ -713,6 +717,8 @@ function onLoad() {
     });
     createMemberAndAssign("carrier");
   } else if (statusTurn == "fight") {
+    document.body.style.backgroundImage =
+      "url('../../Images/army_attribution.png')";
     confirmationBtn.addEventListener("click", () => {
       statusTurn = "beginFight";
       saveSessionStorage();

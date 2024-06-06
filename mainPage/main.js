@@ -145,6 +145,15 @@ var locations = [
     type: "desert",
     name: "Desert",
     isTradable: false,
+    doEnemySpawn: true,
+    enemyType: {
+      scorpio: {
+        luck: 0.1,
+        minSize: 2,
+        maxSize: 5,
+        playerCaravanSizeFactor: 0.1,
+      },
+    },
     description: "Bunch of sand.",
     gatheringValues: {},
     possibleEvents: [],
@@ -154,6 +163,7 @@ var locations = [
       { type: "desert", luck: 1 },
       { type: "oasis", luck: 0.1 },
       { type: "desert_city", luck: 0.1 },
+      { type: "nomad_camp", luck: 0.1 },
     ],
   },
   {
@@ -194,6 +204,14 @@ var locations = [
       11: {
         volume: 20,
         price: 20,
+      },
+      9: {
+        volume: 5,
+        price: 140,
+      },
+      8: {
+        volume: 3,
+        price: 300,
       },
     },
   },
@@ -279,7 +297,46 @@ var locations = [
       { type: "nil_shore", luck: 1 },
       { type: "desert", luck: 1 },
       { type: "fluvial_city", luck: 0.2 },
+      { type: "nomad_camp", luck: 0.2 },
     ],
+  },
+  {
+    type: "nomad_camp",
+    name: "Nomad Camp",
+    isTradable: true,
+    doEnemySpawn: false,
+    description:
+      "A temporary camp of nomadic tribes. A place to exchange stories and exotic goods with passing travelers.",
+    gatheringValues: {},
+    possibleDestinations: [
+      { type: "nil_shore", luck: 0.2 },
+      { type: "desert", luck: 1 },
+      { type: "desert_city", luck: 0.1 },
+    ],
+    buyableGoods: {
+      5: {
+        volume: 20,
+        price: 10,
+      },
+      0: {
+        volume: 1,
+        price: 1800,
+      },
+      12: {
+        volume: 3,
+        price: 90,
+      },
+      11: {
+        volume: 10,
+        price: 24,
+      },
+    },
+    sellableGoods: {
+      5: {
+        volume: 40,
+        price: 8,
+      },
+    },
   },
 ];
 var enemyList = [

@@ -365,6 +365,14 @@ var locations = [
         volume: 40,
         price: 8,
       },
+      13: {
+        volume: 10,
+        price: 30,
+      },
+      14: {
+        volume: 10,
+        price: 10,
+      },
     },
   },
 ];
@@ -2144,6 +2152,11 @@ function manageDeployDistribution() {
 }
 
 function Defeat(option) {
+  document.getElementById("backgroundImage").src = "../Images/desertDeath.jpg";
+  var dyingText = document.createElement("h1");
+  dyingText.setAttribute("id", "dyingText");
+  dyingText.innerHTML = `DEFEAT`;
+  document.getElementById("actionMenu").appendChild(dyingText);
   tempIDs.push("dyingText");
   var dyingText = document.createElement("p");
   dyingText.setAttribute("id", "dyingText");

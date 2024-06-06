@@ -71,7 +71,7 @@ var neededPorterage; // Weight of all the items transported by the caravan.
 function moraleYieldDef() {}
 // The severals yields decrease by one if harvested each turn.
 var enemyType;
-let baseEnemyCounterLuck = 1;
+let baseEnemyCounterLuck = 0.1;
 var enemyNumber;
 var possibleDestinations;
 var locations = [
@@ -82,14 +82,14 @@ var locations = [
     doEnemySpawn: true,
     enemyType: {
       legionary: {
-        luck: 0.15,
+        luck: 0.75,
         minSize: 3,
         maxSize: 50,
         playerCaravanSizeFactor: 0.15,
         bribable: true,
       },
       bandit: {
-        luck: 0.2,
+        luck: 1,
         minSize: 5,
         maxSize: 50,
         playerCaravanSizeFactor: 0.25,
@@ -101,7 +101,10 @@ var locations = [
       waterYield: 3,
       foodYield: 2,
     },
-    possibleEvents: [],
+    possibleEvents: [
+      { name: "rain", prob: 0.05 },
+      { name: "ruin", prob: 0.05 },
+    ],
     possibleDestinations: [
       { type: "village", luck: 0.5 },
       { type: "nil_shore", luck: 1 },
@@ -120,7 +123,10 @@ var locations = [
       waterYield: 2,
       moraleYield: true,
     },
-    possibleEvents: [],
+    possibleEvents: [
+      { name: "itsHoliday", prob: 0.05 },
+      { name: "robbed", prob: 0.1 },
+    ],
     possibleDestinations: [
       { type: "village", luck: 0.1 },
       { type: "nil_shore", luck: 0.8 },
@@ -156,7 +162,12 @@ var locations = [
     },
     description: "Bunch of sand.",
     gatheringValues: {},
-    possibleEvents: [],
+    possibleEvents: [
+      { name: "rain", prob: 0.05 },
+      { name: "ruin", prob: 0.05 },
+      { name: "randomIllnessAndDeath", prob: 0.05 },
+      { name: "wanderer", prob: 0.05 },
+    ],
     possibleDestinations: [
       { type: "village", luck: 0.1 },
       { type: "nil_shore", luck: 0.3 },
@@ -175,7 +186,11 @@ var locations = [
     gatheringValues: {
       moraleYield: true,
     },
-    possibleEvents: [],
+    possibleEvents: [
+      { name: "itsHoliday", prob: 0.1 },
+      { name: "robbed", prob: 0.1 },
+      { name: "randomIllnessAndDeath", prob: 0.05 },
+    ],
     possibleDestinations: [
       { type: "nil_shore", luck: 0.3 },
       { type: "desert", luck: 1 },
@@ -225,7 +240,11 @@ var locations = [
       waterYield: 3,
       moraleYield: true,
     },
-    possibleEvents: [],
+    possibleEvents: [
+      { name: "itsHoliday", prob: 0.1 },
+      { name: "robbed", prob: 0.1 },
+      { name: "randomIllnessAndDeath", prob: 0.05 },
+    ],
     possibleDestinations: [
       { type: "village", luck: 0.1 },
       { type: "nil_shore", luck: 1 },
@@ -279,7 +298,7 @@ var locations = [
     doEnemySpawn: true,
     enemyType: {
       bandit: {
-        luck: 0.2,
+        luck: 1,
         minSize: 5,
         maxSize: 50,
         playerCaravanSizeFactor: 0.25,
@@ -291,7 +310,10 @@ var locations = [
       waterYield: 3,
       foodYield: 3,
     },
-    possibleEvents: [],
+    possibleEvents: [
+      { name: "rain", prob: 0.05 },
+      { name: "ruin", prob: 0.05 },
+    ],
     possibleDestinations: [
       { type: "village", luck: 0.5 },
       { type: "nil_shore", luck: 1 },
@@ -345,7 +367,6 @@ var enemyList = [
     health: 0,
   },
 ];
-var probabilityRandomOasis = 0.1;
 
 var moralDecrease = 0.05;
 var listOfNames = {
@@ -1717,6 +1738,8 @@ function erasePreviousDestinations() {
 
 function turnX() {
   updateRessourcesDisplay();
+  let originalWaterYield = playerLocation.gatheringValues.waterYield; // storing the water yeilds to be used in the endrain function
+  let doEvent = triggerEvent(); //determining if there is an event at the start of the turn
   ["turnX", "turnX_button"].forEach((e) => tempIDs.push(e));
 
   var node = document.getElementById("actionMenu");
@@ -1728,9 +1751,15 @@ function turnX() {
   var newButton = document.createElement("button");
   newButton.setAttribute("id", "turnX_button");
   newButton.innerHTML = "Next";
-  newButton.addEventListener("click", function () {
-    changeMenu("special");
-  });
+  if (doEvent) {
+    newButton.addEventListener("click", function () {
+      procEvent(doEvent);
+    });
+  } else {
+    newButton.addEventListener("click", function () {
+      changeMenu("special");
+    });
+  }
 
   node.appendChild(newText);
   node.appendChild(newButton);
@@ -1755,7 +1784,31 @@ function turnX() {
   });
   statusTurn = "deployUnits";
 }
+function showEventInfo() {
+  var node = document.getElementById("actionMenu");
 
+  // Clear the turn information elements
+  node.innerHTML = "";
+
+  //changes the background image to the event background
+  if (document.getElementById("center-image")) {
+    var centerImage = document.getElementById("center-image");
+    centerImage.src = currentEvent[1]; // Change image to currentEvent[1]
+  }
+  // Create and display the event information
+  var eventInfo = document.createElement("p");
+  eventInfo.setAttribute("id", "event");
+  eventInfo.textContent = currentEvent[0];
+  node.appendChild(eventInfo);
+
+  var eventButton = document.createElement("button");
+  eventButton.setAttribute("id", "eventInfoButton");
+  eventButton.innerHTML = "Next";
+  eventButton.addEventListener("click", function () {
+    changeMenu("special"); // Or any other function to handle the next step
+  });
+  node.appendChild(eventButton);
+}
 function areUSure(directions) {
   var node = document.getElementById("actionMenu");
 
@@ -2074,7 +2127,7 @@ function manageCarrier() {
 // Function that is executed when a battle is triggered.
 function manageArmy() {
   console.log("MANAGE ARMY");
-  //
+
   let enemyType;
   let enemyTypeRand = Math.random();
   for (let enemyInLocation in playerLocation["enemyType"]) {
@@ -2083,6 +2136,7 @@ function manageArmy() {
       break;
     }
   }
+  
   let numberOfEnnemy;
   numberOfEnnemy =
     playerLocation["enemyType"][enemyType]["minSize"] +
@@ -2402,4 +2456,88 @@ function toggleHidden() {
     // If it's not hidden, add the 'hidden' class
     centerImage.classList.add("hidden");
   }
+}
+
+//Adding Events
+
+// Calculate what events will occur during the turn
+function calculateProbabilities() {
+  var travelEvent = Math.random();
+  var cityEvent = Math.random();
+
+  // Return the probabilities
+  return { travelEvent, cityEvent };
+}
+
+// Trigger event based on calculated probabilities
+function triggerEvent() {
+  console.log("event trigger");
+  let luck;
+  let eventName = null;
+  for (let eachEvent in playerLocation["possibleEvents"]) {
+    luck = Math.random();
+    console.log(luck, playerLocation["possibleEvents"][eachEvent]["name"]);
+    if (luck <= playerLocation["possibleEvents"][eachEvent]["prob"]) {
+      eventName = playerLocation["possibleEvents"][eachEvent]["name"];
+    }
+  }
+
+  return eventName;
+}
+
+function procEvent(eventName) {
+  removeTempIDs();
+  let message;
+  let background;
+  if (eventName == "rain") {
+    playerLocation["gatheringValues"]["waterYield"] += 2;
+    message = "It's Raining! Water yields have increased during this turn!";
+    background = "../Images/EventBackgrounds/rain.png"; // Path to rain-related image
+  } else if (eventName == "randomIllnessAndDeath") {
+    killPeople(1);
+    playerLocation["gatheringValues"]["waterYield"] += 2;
+    message = "Someone in your party died for no reason.";
+    if (playerLocation["type"] == "desert") {
+      background = "../Images/EventBackgrounds/desertDeath.png";
+    } else {
+      background = "../Images/EventBackgrounds/cityDeath.png"; //display when not in desert
+    }
+  } else if (eventName == "itsHoliday") {
+    for (let eachItem in playerLocation["buyableGoods"]) {
+      playerLocation["buyableGoods"][eachItem]["price"] = Math.round(
+        0.8 * playerLocation["buyableGoods"][eachItem]["price"]
+      );
+    }
+    message = "It's a holiday! Everything is 20% off!";
+    background = "../Images/EventBackgrounds/holiday.png";
+  } else if (eventName == "ruin") {
+    background = "../Images/EventBackgrounds/ruin.png";
+    message = "Your crew found a ruin and retrieved 100 gold!";
+    money += 100;
+  } else if (eventName == "robbed") {
+    money -= 100;
+    message = "You just got pickpocketed!";
+    background = "../Images/EventBackgrounds/pickpocket.png";
+  }
+  let node = document.getElementById("actionMenu");
+
+  let centerImage = document.getElementById("center-image");
+  if (centerImage && background) {
+    centerImage.src = background;
+  }
+  tempIDs.push("eventText");
+  let eventText = document.createElement("p");
+  eventText.setAttribute("id", "eventText");
+  eventText.textContent = message;
+  node.appendChild(eventText);
+  tempIDs.push("turnX_button");
+  var newButton = document.createElement("button");
+  newButton.setAttribute("id", "turnX_button");
+  newButton.innerHTML = "Next";
+  newButton.addEventListener("click", function () {
+    changeMenu("special");
+  });
+  node.appendChild(newButton);
+
+  updateRessourcesDisplay();
 }

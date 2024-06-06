@@ -680,7 +680,7 @@ function onLoad() {
       roleDiv.appendChild(newButton);
     }
 
-    let roleList = ["scout", "guard"];
+    let roleList = ["scout"];
     roleList.forEach((e) => {
       let newButton = document.createElement("button");
       newButton.setAttribute("id", "role" + Capitalize(e));

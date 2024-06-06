@@ -570,6 +570,7 @@ let listCrewImages = {
   female: 51,
   legionary: 34,
   bandit: 25,
+  scorpio: 1,
 };
 
 var listOfNames = {

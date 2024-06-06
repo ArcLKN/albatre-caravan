@@ -193,6 +193,18 @@ div.strangeButton {
 
 #center-image {
   margin-top: 16px;
+  width: 50%;
+}
+
+#backgroundImage {
+  margin-top: 16px;
+
+  z-index: 1;
+  position: absolute;
+  object-fit: cover;
+  width: 100%;
+  height: 56%;
+
 }
 
 #actionMenu {

@@ -78,6 +78,7 @@ var locations = [
   {
     type: "nil_shore",
     name: "Nil shore",
+    image: "../Images/nil_shore_location.png",
     isTradable: false,
     doEnemySpawn: true,
     enemyType: {

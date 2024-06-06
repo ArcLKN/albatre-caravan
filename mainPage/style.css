@@ -194,12 +194,13 @@ div.strangeButton {
 #center-image {
   margin-top: 16px;
   width: 50%;
+  height: 100%;
 }
 
 #backgroundImage {
   margin-top: 16px;
 
-  z-index: 1;
+  z-index: -1;
   position: absolute;
   object-fit: cover;
   width: 100%;

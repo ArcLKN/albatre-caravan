@@ -76,9 +76,9 @@ var enemyNumber;
 var possibleDestinations;
 var locations = [
   {
+    image: "../Images/nil_shore_location.png",
     type: "nil_shore",
     name: "Nil shore",
-    image: "../Images/nil_shore_location.png",
     isTradable: false,
     doEnemySpawn: true,
     enemyType: {
@@ -114,6 +114,7 @@ var locations = [
     ],
   },
   {
+    image: "../Images/village_location.png",
     type: "village",
     name: "Village",
     isTradable: true,
@@ -149,6 +150,7 @@ var locations = [
     },
   },
   {
+    image: "../Images/nil_shore_location.png",
     type: "desert",
     name: "Desert",
     isTradable: false,
@@ -179,6 +181,7 @@ var locations = [
     ],
   },
   {
+    image: "../Images/desert_city_location.png",
     type: "desert_city",
     name: "Desert city",
     isTradable: true,
@@ -232,6 +235,7 @@ var locations = [
     },
   },
   {
+    image: "../Images/fluvial_city_location.png",
     type: "fluvial_city",
     name: "Fluvial City",
     isTradable: true,
@@ -293,6 +297,7 @@ var locations = [
     },
   },
   {
+    image: "../Images/oasis_location.png",
     type: "oasis",
     name: "Oasis",
     isTradable: false,
@@ -324,6 +329,7 @@ var locations = [
     ],
   },
   {
+    image: "../Images/nomad_camp_location.png",
     type: "nomad_camp",
     name: "Nomad Camp",
     isTradable: true,
@@ -2137,7 +2143,7 @@ function manageArmy() {
       break;
     }
   }
-  
+
   let numberOfEnnemy;
   numberOfEnnemy =
     playerLocation["enemyType"][enemyType]["minSize"] +

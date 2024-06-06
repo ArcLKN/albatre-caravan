@@ -1715,6 +1715,14 @@ function yourTurn(phase) {
     newButton.addEventListener("click", function () {
       changeMenu(this.id);
     });
+    var newButton = document.createElement("button");
+    tempIDs.push("yourTurn_trade");
+    newButton.setAttribute("id", "yourTurn_trade");
+    newButton.textContent = "Recruit a new crew member (400 debens)";
+    node.appendChild(newButton);
+    newButton.addEventListener("click", function () {
+      recruitRandomUnit(this.id);
+    });
   } else if (phase == "crewAssignment") {
     tempIDs.push("yourTurn_deploy");
     var newButton = document.createElement("button");
@@ -2601,4 +2609,13 @@ function victoryGame() {
   winningText = document.createElement("p");
   winningText.innerHTML = `You succeed buying the freedom of your daughter that was taken by the king of egypt and fled in a majestic boat to celebrate this event.`;
   document.getElementById("actionMenu").appendChild(winningText);
+}
+
+function recruitRandomUnit() {
+  if (money >= 400) {
+    money -= 400;
+    updateRessourcesDisplay();
+    let newCrewMember = createCharacter();
+    crewTotal.push(newCrewMember);
+  }
 }

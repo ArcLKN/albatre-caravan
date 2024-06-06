@@ -150,7 +150,7 @@ var locations = [
     },
   },
   {
-    image: "../Images/desert_location.png",
+    image: "../Images/desert_location.jpg",
     type: "desert",
     name: "Desert",
     isTradable: false,

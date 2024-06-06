@@ -98,6 +98,7 @@ function displayResources() {
       nbrWeapons += inventory[index]["volume"];
     } else if (allItems[index]["type"] == "mount") {
       nbrMounts += inventory[index]["volume"];
+      portage += inventory[index]["volume"] * allItems[index]["carryValue"];
     } else if (allItems[index]["type"] == "carrier") {
       portage += inventory[index]["volume"] * allItems[index]["carryValue"];
     } else if (allItems[index]["type"] == "food") {

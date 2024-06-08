@@ -382,12 +382,16 @@ function displayNew() {
       eInventaire = inventaireMagasin;
     }
     for (let eachItem in eInventaire) {
+      if (!playerLocation["sellableGoods"][eachItem]) {
+        continue;
+      }
       let itemVolume;
       let itemPrice;
       let newItem = document.createElement("p");
       newItem.classList.add("text");
       if (e == "player") {
         inputID = eachItem + "Input";
+        console.log("inputID", inputID);
         let quantitySold = parseInt(document.getElementById(inputID).value);
         newItem.textContent =
           allItems[eachItem]["name"] +

@@ -21,6 +21,7 @@ function loadSessionStorage() {
   gatherer = JSON.parse(sessionStorage.getItem("gatherer"));
   statusTurn = sessionStorage.getItem("statusTurn");
   allItems = JSON.parse(sessionStorage.getItem("allItems"));
+  console.log("INV", inventaire);
 }
 
 // All the variables we want to save and share through every JS files.
@@ -63,7 +64,7 @@ function displayInventory() {
           continue;
         }
         itemVolume = eInventaire[eachItem]["volume"];
-        console.log(itemVolume);
+        console.log(thisItem["name"], eachItem, itemVolume);
         itemPrice = playerLocation["sellableGoods"][eachItem]["price"];
       } else {
         itemVolume = playerLocation["buyableGoods"][eachItem]["volume"];
@@ -112,7 +113,18 @@ function displayInventory() {
       inputquantité.value = 0;
       inputquantité.min = 0;
       if (e == "player") {
+        console.log(
+          "player",
+          Math.min(
+            itemVolume,
+            playerLocation["sellableGoods"][eachItem]["volume"]
+          )
+        );
         inputquantité.setAttribute("id", eachItem + "Input");
+        inputquantité.max = Math.min(
+          itemVolume,
+          playerLocation["sellableGoods"][eachItem]["volume"]
+        );
         inputquantité.oninput = function () {
           sellItem(eachItem, this.value);
           inputquantité.max = Math.min(
@@ -120,6 +132,8 @@ function displayInventory() {
             playerLocation["sellableGoods"][eachItem]["volume"]
           );
         };
+        console.log(inputquantité);
+        console.log(inputquantité);
       } else {
         inputquantité.setAttribute("id", eachItem + "ShopInput");
         inputquantité.oninput = function () {
@@ -127,6 +141,7 @@ function displayInventory() {
         };
         inputquantité.max = itemVolume;
       }
+      console.log(inputquantité);
       nouvelleDiv.appendChild(inputquantité);
       if (e == "player") {
         var parent = document.getElementById("container");
@@ -355,7 +370,6 @@ function displayNew() {
   // Update argent
   argent = argent + res;
   money.textContent = argent; //money=argent qu'on a
-  
 
   ["player", "shop"].forEach((e) => {
     let eInventaire;

@@ -1647,7 +1647,7 @@ function concludeBattle(victory) {
             crewTotal[eachCrew]["id"] ==
             gatherer["row" + String(i)][eachGatherer]["id"]
           ) {
-            crewTotal[eachCrew]["injuries"] += 2;
+            crewTotal[eachCrew]["injuries"] += 1;
             if (crewTotal[eachCrew]["injuries"] > 2) {
               numberOfDeath++;
             } else {
